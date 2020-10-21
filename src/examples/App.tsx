@@ -22,7 +22,7 @@ export const App = ({todos, createTodo, deleteTodo, updateTodo}: AppProps) => (
   <div className="sample__app flex">
     <TodoList todos={todos} createTodo={createTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} className="flex-item flex-fit" />
     <pre className="flex-item flex-grow">
-        {JSON.stringify(todos, undefined, 1)}
-      </pre>
+      {JSON.stringify(todos, undefined, 1)}
+    </pre>
   </div>
 );

@@ -1,11 +1,13 @@
 # Vanilla State Management / JSX rendering / Styled Components example with sample Todo app
 
-Simple vanilla, dependency free demo of:
-- JSX functional component rendering with simple hooks
-- Redux style state management
-- Styled Component implementation
+> Simple vanilla, dependency free demo of:
+>
+> - JSX functional component rendering with simple hooks
+> - Redux style state management
+> - Styled Component implementation (dependency on [stylis](https://github.com/thysultan/stylis.js) for parsing rules)
 
 Intended as an illustration of how the basics of React / Redux / Styled Components work under the hood.
+**Not intended for production use**.
 
 View [demo](https://matt-dunn.github.io/demo-state-styled-render/).
 
