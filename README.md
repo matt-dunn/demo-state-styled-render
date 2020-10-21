@@ -2,6 +2,10 @@
 
 Simple vanilla, dependency free demo of JSX functional components rendering with simple hooks and redux style state management. Intended as an illustration of the basics of React / Redux under the hood.
 
+View [demo](https://matt-dunn.github.io/demo-state-styled-render/).
+
+---
+
 Includes the following features:
 
 - Redux style state management
