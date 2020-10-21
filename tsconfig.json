@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": false,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "declaration": false,
+    "noImplicitAny": true,
+    "module": "esNext",
+    "target": "es5",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "lib": ["es2015", "dom"],
+    "strict": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDeclarationOnly": false,
+    "baseUrl": "./",
+    "paths": {
+    },
+    "jsx": "preserve"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "presets": [
+    [
+    "@babel/env",
+      {
+        "useBuiltIns": "usage",
+        "corejs": {
+          "version": 3,
+          "proposals": true
+        },
+        "debug": false,
+        "targets": {
+          "browsers": [
+            "last 3 versions"
+          ]
+        }
+      }
+    ],
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    "@babel/plugin-syntax-jsx",
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+        "packages": "./packages"
+      }
+    }]
+  ]
+}
