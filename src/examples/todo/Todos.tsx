@@ -8,6 +8,7 @@
 /** @jsx h **/
 
 import {h} from "packages/render";
+import myStyled from "packages/myStyled";
 
 import {DeleteTodo, UpdateTodo} from "./duck";
 import {TodoItems} from "./types";
@@ -19,11 +20,21 @@ type TodosProps = {
   updateTodo: UpdateTodo;
 }
 
+const Todos$ = myStyled("ul")`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const TodosItem$ = myStyled("li")`
+  padding: 0.25rem 0;
+`;
+
 export const Todos = ({todos, updateTodo, deleteTodo}: TodosProps) =>
-  <ul className="todos__list">
+  <Todos$>
     {todos.map(todo =>
-      <li className="todos__list__item">
+      <TodosItem$>
         <Todo todo={todo} updateTodo={updateTodo} deleteTodo={deleteTodo}/>
-      </li>
+      </TodosItem$>
     )}
-  </ul>;
+  </Todos$>;

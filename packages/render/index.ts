@@ -16,13 +16,13 @@ type NodeBase<T = string, P = any> = {
   props: P;
 }
 
-type Node<T = string, P = any> = {
+export type Node<T = string, P = any> = {
   children?: Children<T>;
 } & NodeBase<T, P>
 
-type FC<P = any, N = Node> = (props: P) => N;
+export type FC<P = any, N = Node> = (props: P) => N;
 
-type NodeType<P = Record<string, unknown>> = string | FC<P, Node>;
+type NodeType<P = any> = string | FC<P>;
 
 interface HTMLElementMap extends HTMLElement{
   [key: string]: any
@@ -151,7 +151,7 @@ const updateTree = (el: HTMLElement, node: Node, prevNode?: Node, index = 0) => 
   }
 };
 
-type UseState = <S = Record<string, unknown>>(initialState: S) => [S, (newValue: S) => S];
+type UseState = <S = any>(initialState: S) => [S, (newValue: S) => S];
 
 type MxContainer = {
   index: number;
@@ -169,7 +169,7 @@ export const Mx: MxContainer = {
   currentState: undefined,
   currentTree: undefined,
   renderTree: undefined as unknown as () => void,
-  useState: <S = Record<string, unknown>>(initialState: S) => {
+  useState: <S = any>(initialState: S) => {
     const activeIndex = Mx.index;
 
     if (Mx.state[activeIndex] === undefined) {
