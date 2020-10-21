@@ -14,16 +14,42 @@ jobs:
         node-version: [10.x]
 
     steps:
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - uses: actions/checkout@v2.0.0
-    - name: Install
-      run: yarn install
-    - name: Build
-      run: yarn ci
-    env:
-      CI: true
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install & Build
+        run: |
+          yarn install
+          yarn ci
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Bundle
+        env:
+          BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: yarn bundle
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./gh-pages
+
+      - name: Preview details
+        if: github.event_name == 'pull_request'
+        uses: harupy/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          filename: preview-template.md
 
