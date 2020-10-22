@@ -5,9 +5,9 @@
  * @licence MIT
  */
 
-/** @jsx h **/
+/** @jsx createElement **/
 
-import {classnames, h, useState} from "packages/render";
+import {createElement, useState} from "packages/render";
 import myStyled from "packages/myStyled";
 
 import {Todos} from "./Todos";

@@ -24,6 +24,8 @@ export type FC<P = any, N = Node> = (props: P) => N;
 
 type NodeType<P = any> = string | FC<P>;
 
+type Key = string | number | null;
+
 interface HTMLElementMap extends HTMLElement{
   [key: string]: any
 }
@@ -32,9 +34,15 @@ type Props = {
   [key: string]: any
 };
 
-export const h = (type: NodeType, props: Props, ...children: Node[]): Node => typeof type === "function" ? type({...props, children}) : {type, props, children};
+export const createNode = (type: NodeType, props: Props, ...children: Node[]): Node => typeof type === "function" ? type({...props, children}) : {type, props, children};
 
-(global as any).h = h;
+export const createFragment = ({children, ...props}: {children: Node[]}): Node & {key: Key} => ({type: "#fragment", props: props, children:children, key: null});
+
+(global as any).createElement = createNode;
+(global as any).createFragment = createFragment;
+
+export {createNode as createElement};
+export {createFragment as Fragment};
 
 const propertyMap = (name: string) => {
   if (name === "className") {
@@ -88,7 +96,7 @@ const createElement = (node: Node): (HTMLElement | Text) => {
 
     setAttributes(el, node?.props);
 
-    (node.children || [])
+    flattenChildren(node.children || [])
       .map(node => {
         if (Array.isArray(node)) {
           return node.map(createElement);
@@ -131,6 +139,19 @@ const updateChildren = (el: HTMLElement, children: Children, prevChildren: Child
   }
 };
 
+const flattenChildren = (children: Children): Children => children.reduce((children, child) => {
+  if (child.type === "#fragment") {
+    return [
+      ...children,
+      ...child.children || []
+    ];
+  }
+  return [
+    ...children,
+    child
+  ];
+}, [] as Children);
+
 const updateTree = (el: HTMLElement, node: Node, prevNode?: Node, index = 0) => {
   if (prevNode === undefined) {
     el.appendChild(createElement(node));
@@ -145,7 +166,7 @@ const updateTree = (el: HTMLElement, node: Node, prevNode?: Node, index = 0) => 
       prevNode.props
     );
 
-    updateChildren(el, node.children || [], prevNode.children || [], index);
+    updateChildren(el, flattenChildren(node.children || []), flattenChildren(prevNode.children || []), index);
   } else if (el.childNodes[index].nodeValue !== node) {
     el.childNodes[index].nodeValue = node;
   }
@@ -163,7 +184,7 @@ type MxContainer = {
   render: <S>(store: Store<S>, actions: Actions) => (component: FC) => (mountPoint: HTMLElement) => void;
 }
 
-export const Mx: MxContainer = {
+const Mx: MxContainer = {
   index: 0,
   state: [],
   currentState: undefined,
@@ -217,6 +238,8 @@ export const Mx: MxContainer = {
     return Mx.renderTree();
   }
 };
+
+export default Mx;
 
 const useState = Mx.useState;
 

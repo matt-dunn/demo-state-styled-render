@@ -5,7 +5,7 @@
  * @licence MIT
  */
 
-import {Mx} from "packages/render";
+import Mx from "packages/render";
 import {createStore} from "packages/state";
 
 import {TodoItems} from "./examples/todo";

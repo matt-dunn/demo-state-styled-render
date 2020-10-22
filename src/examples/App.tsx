@@ -5,9 +5,9 @@
  * @licence MIT
  */
 
-/** @jsx h **/
+/** @jsx createElement **/
 
-import {h} from "packages/render";
+import {createElement} from "packages/render";
 import {TodoItems, TodoList} from "./todo";
 import {CreateTodo, DeleteTodo, UpdateTodo} from "./todo/duck";
 

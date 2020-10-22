@@ -5,9 +5,9 @@
  * @licence MIT
  */
 
-/** @jsx h **/
+/** @jsx createElement **/
 
-import {h} from "packages/render";
+import {createElement} from "packages/render";
 import myStyled from "packages/myStyled";
 
 import {TodoItem} from "./types";

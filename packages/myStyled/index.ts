@@ -4,7 +4,7 @@ import {
   ClientServerStylesheet, createStylesheet, AnyRules,
 } from "./stylesheet";
 
-import {Node, FC, h} from "packages/render";
+import {Node, FC, createElement} from "packages/render";
 
 export interface MyStyledComponentProps {
     className?: string;
@@ -50,7 +50,7 @@ const myStyled = <P>(Component: MyStyledComponent<P>): MyStyled<P, MyStyledTempl
 
     const prevClassName = updateRule(undefined, props, globalStylesheet);
 
-    return h(Component, { ...props, className: [className, prevClassName].join(" ") }, ...children || []);
+    return createElement(Component, { ...props, className: [className, prevClassName].join(" ") }, ...children || []);
   };
 };
 
