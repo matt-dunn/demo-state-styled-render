@@ -152,7 +152,7 @@ const flattenChildren = (children: Children): Children => children.reduce((child
   if (child.type === "#fragment") {
     return [
       ...children,
-      ...child.children || []
+      ...flattenChildren(child.children || [])
     ];
   }
   return [
