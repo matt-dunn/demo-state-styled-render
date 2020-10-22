@@ -30,11 +30,12 @@ const TodosItem$ = myStyled("li")`
   padding: 0.25rem 0;
 `;
 
-export const Todos = ({todos, updateTodo, deleteTodo}: TodosProps) =>
+export const Todos = ({todos, updateTodo, deleteTodo}: TodosProps) => (
   <Todos$>
     {todos.map(todo =>
       <TodosItem$>
         <Todo todo={todo} updateTodo={updateTodo} deleteTodo={deleteTodo}/>
       </TodosItem$>
     )}
-  </Todos$>;
+  </Todos$>
+);

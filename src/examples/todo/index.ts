@@ -9,3 +9,4 @@ export * from "./Todo";
 export * from "./Todos";
 export * from "./TodoList";
 export * from "./types";
+export * from "./duck";

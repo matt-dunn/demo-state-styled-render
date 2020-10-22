@@ -114,9 +114,8 @@ export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefi
       const { sheet } = myStyles[myStyles.length - 1];
 
       if (sheet) {
-        // TODO: fix unknown - cast...
         return ClientStylesheet(
-          sheet as unknown as CSSStyleSheet,
+          sheet,
           hashes,
         );
       }
@@ -130,9 +129,8 @@ export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefi
 
     document.head.appendChild(style);
 
-    // TODO: fix unknown - cast...
     return ClientStylesheet(
-      style.sheet as unknown as CSSStyleSheet,
+      style.sheet as CSSStyleSheet,
     );
   }
 

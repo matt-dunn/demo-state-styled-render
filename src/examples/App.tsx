@@ -8,8 +8,8 @@
 /** @jsx createElement **/
 
 import {createElement} from "packages/render";
-import {TodoItems, TodoList} from "./todo";
-import {Actions as TodoActions} from "./todo/duck";
+
+import {TodoItems, TodoList, Actions as TodoActions} from "./todo";
 
 type AppProps = {
   todos: TodoItems;
@@ -19,7 +19,7 @@ type AppProps = {
 }
 
 export const App = ({todos, createTodo, deleteTodo, updateTodo}: AppProps) => (
-  <div className="sample__app flex">
+  <div className="flex">
     <TodoList todos={todos} createTodo={createTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} className="flex-item flex-fit" />
     <pre className="flex-item flex-grow">
       {JSON.stringify(todos, undefined, 1)}

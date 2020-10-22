@@ -9,9 +9,7 @@ import Mx from "packages/render";
 import {createStore} from "packages/state";
 
 import {TodoItems} from "./examples/todo";
-
 import todoReducer, {actions as todoActions} from "./examples/todo/duck";
-
 import {App} from "./examples/App";
 
 type AppState = {

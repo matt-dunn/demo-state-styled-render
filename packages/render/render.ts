@@ -5,8 +5,9 @@
  * @licence MIT
  */
 
+import {Actions, Store} from "packages/state";
+
 import {FC, Node} from "./types";
-import {Actions, Store} from "../state";
 import {updateTree} from "./element";
 
 type UseState = <S = any>(initialState: S) => [S, (newValue: S) => S];

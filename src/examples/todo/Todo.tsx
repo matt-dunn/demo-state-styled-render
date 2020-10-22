@@ -46,8 +46,8 @@ const TodoTitle$ = myStyled("div")`
   }
 `;
 
-export const Todo = ({todo: {id, text, complete}, deleteTodo, updateTodo}: TodoProps) =>
-  <Todo$ className="todos__item">
+export const Todo = ({todo: {id, text, complete}, deleteTodo, updateTodo}: TodoProps) => (
+  <Todo$>
     <label onClick={(e) => {
       e.preventDefault();
       updateTodo({id, text, complete: !complete});
@@ -72,4 +72,5 @@ export const Todo = ({todo: {id, text, complete}, deleteTodo, updateTodo}: TodoP
     }}>
       Delete
     </button>
-  </Todo$>;
+  </Todo$>
+);

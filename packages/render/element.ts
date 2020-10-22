@@ -9,9 +9,11 @@ import {Children, Key, Node, NodeType, Props} from "./types";
 import {isNode} from "./utils";
 import {setAttributes, updateAttributes} from "./attributes";
 
+const NODE_TYPE_FRAGMENT = "#fragment";
+
 export const createNode = (type: NodeType, props: Props, ...children: Node[]): Node => typeof type === "function" ? type({...props, children}) : {type, props, children};
 
-export const createFragment = ({children, ...props}: {children: Node[]}): Node & {key: Key} => ({type: "#fragment", props: props, children:children, key: null});
+export const createFragment = ({children, ...props}: {children: Node[]}): Node & {key: Key} => ({type: NODE_TYPE_FRAGMENT, props: props, children:children, key: null});
 
 (global as any).createElement = createNode;
 (global as any).createFragment = createFragment;
@@ -69,7 +71,7 @@ const updateChildren = (el: HTMLElement, children: Children, prevChildren: Child
 };
 
 const flattenChildren = (children: Children): Children => children.reduce((children, child) => {
-  if (child.type === "#fragment") {
+  if (child.type === NODE_TYPE_FRAGMENT) {
     return [
       ...children,
       ...flattenChildren(child.children || [])
