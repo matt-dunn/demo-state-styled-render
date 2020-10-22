@@ -6,6 +6,7 @@
  */
 
 /** @jsx createElement **/
+/** @jsxFrag createFragment **/
 
 import {createElement, useState} from "packages/render";
 import myStyled from "packages/myStyled";
@@ -37,12 +38,12 @@ const TodoList$ = myStyled("section")`
   }
 `;
 
-const TodoListHeader$ = myStyled("header")`
+const TodoListForm$ = myStyled("form")`
   border-bottom: 1px solid #eee;
   margin-bottom: 1rem;
 `;
 
-const TodoListValue$ = myStyled("div")`
+const TodoListHeader$ = myStyled("header")`
   display: flex;
   align-items: center;
 
@@ -63,13 +64,13 @@ export const TodoList = ({todos, createTodo, deleteTodo, updateTodo, className}:
 
   return (
     <TodoList$ className={className}>
-      <form onSubmit={e => {
+      <TodoListForm$ onSubmit={(e: Event) => {
         e.preventDefault();
         createTodo(value);
         setValue("");
       }}>
-        <TodoListHeader$>
-          <TodoListValue$>
+        <>
+          <TodoListHeader$>
             <label>
               Todo
               <input value={value} type="text" onInput={(e: any) => {
@@ -77,10 +78,10 @@ export const TodoList = ({todos, createTodo, deleteTodo, updateTodo, className}:
               }}/>
             </label>
             <button type="submit" className="btn btn-primary" disabled={!value || undefined}>Add</button>
-          </TodoListValue$>
+          </TodoListHeader$>
           <p>You have <strong>{todos.length}</strong> todo{todos.length !== 1 && "s" || ""}</p>
-        </TodoListHeader$>
-      </form>
+        </>
+      </TodoListForm$>
       <main>
         <Todos todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo} />
       </main>

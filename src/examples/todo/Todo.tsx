@@ -6,6 +6,7 @@
  */
 
 /** @jsx createElement **/
+/** @jsxFrag createFragment **/
 
 import {createElement} from "packages/render";
 import myStyled from "packages/myStyled";
@@ -38,10 +39,10 @@ const Todo$ = myStyled("article")`
 `;
 
 const TodoTitle$ = myStyled("div")`
-  > *:first-child {
-  word-break: break-word;
-  display: flex;
-  align-items: baseline;
+  &, > *:first-child {
+    word-break: break-word;
+    display: flex;
+    align-items: baseline;
   }
 `;
 
@@ -52,17 +53,17 @@ export const Todo = ({todo: {id, text, complete}, deleteTodo, updateTodo}: TodoP
       updateTodo({id, text, complete: !complete});
     }}>
       <TodoTitle$>
-      {complete ?
-        <del>
-          <input type="checkbox" checked={complete}/>
-          {text}
-        </del>
-        :
-        <span>
-          <input type="checkbox" checked={complete}/>
-          {text}
-        </span>
-      }
+        {complete ?
+          <del>
+            <input type="checkbox" checked={complete}/>
+            {text}
+          </del>
+          :
+          <>
+            <input type="checkbox" checked={complete}/>
+            {text}
+          </>
+        }
       </TodoTitle$>
     </label>
     <button className="btn btn-sm" onClick={(e) => {
