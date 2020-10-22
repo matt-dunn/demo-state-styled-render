@@ -9,13 +9,13 @@
 
 import {createElement} from "packages/render";
 import {TodoItems, TodoList} from "./todo";
-import {CreateTodo, DeleteTodo, UpdateTodo} from "./todo/duck";
+import {Actions as TodoActions} from "./todo/duck";
 
 type AppProps = {
   todos: TodoItems;
-  createTodo: CreateTodo;
-  deleteTodo: DeleteTodo;
-  updateTodo: UpdateTodo
+  createTodo: TodoActions["createTodo"];
+  deleteTodo: TodoActions["deleteTodo"];
+  updateTodo: TodoActions["updateTodo"]
 }
 
 export const App = ({todos, createTodo, deleteTodo, updateTodo}: AppProps) => (

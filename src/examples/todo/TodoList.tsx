@@ -13,13 +13,13 @@ import myStyled from "packages/myStyled";
 
 import {Todos} from "./Todos";
 import {TodoItems} from "./types";
-import {CreateTodo, DeleteTodo, UpdateTodo} from "./duck";
+import {Actions as TodoActions} from "./duck";
 
 type TodoListProps = {
   todos: TodoItems;
-  createTodo: CreateTodo;
-  deleteTodo: DeleteTodo;
-  updateTodo: UpdateTodo;
+  createTodo: TodoActions["createTodo"];
+  deleteTodo: TodoActions["deleteTodo"];
+  updateTodo: TodoActions["updateTodo"];
   className?: string;
 }
 

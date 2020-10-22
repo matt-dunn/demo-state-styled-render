@@ -15,18 +15,20 @@ export const createTodo = createAction("TODO:CREATE", (text: string, complete?: 
   complete: complete ?? false
 }));
 
-export type CreateTodo = typeof createTodo;
-
 export const deleteTodo = createAction("TODO:DELETE", (id: string): string => id);
-
-export type DeleteTodo = typeof deleteTodo;
 
 export const updateTodo = createAction("TODO:UPDATE", (todo: TodoItem): TodoItem => todo);
 
-export type UpdateTodo = typeof updateTodo;
+export const actions = {
+  createTodo,
+  deleteTodo,
+  updateTodo,
+};
+
+export type Actions = typeof actions;
 
 export default createReducer<TodoItem[], any>({
-  [getType(createTodo)]: (state, { payload }: ReturnType<CreateTodo>) => [...state, payload],
-  [getType(deleteTodo)]: (state, { payload }: ReturnType<DeleteTodo>) => state.filter(({id}) => id !== payload),
-  [getType(updateTodo)]: (state, { payload }: ReturnType<UpdateTodo>) => state.map(t => t.id === payload.id ? payload : t),
+  [getType(createTodo)]: (state, { payload }: ReturnType<Actions["createTodo"]>) => [...state, payload],
+  [getType(deleteTodo)]: (state, { payload }: ReturnType<Actions["deleteTodo"]>) => state.filter(({id}) => id !== payload),
+  [getType(updateTodo)]: (state, { payload }: ReturnType<Actions["updateTodo"]>) => state.map(todo => todo.id === payload.id ? payload : todo),
 });

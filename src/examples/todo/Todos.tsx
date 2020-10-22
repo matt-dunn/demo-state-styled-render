@@ -10,14 +10,14 @@
 import {createElement} from "packages/render";
 import myStyled from "packages/myStyled";
 
-import {DeleteTodo, UpdateTodo} from "./duck";
+import {Actions as TodoActions} from "./duck";
 import {TodoItems} from "./types";
 import {Todo} from "./Todo";
 
 type TodosProps = {
   todos: TodoItems;
-  deleteTodo: DeleteTodo;
-  updateTodo: UpdateTodo;
+  deleteTodo: TodoActions["deleteTodo"];
+  updateTodo: TodoActions["updateTodo"];
 }
 
 const Todos$ = myStyled("ul")`

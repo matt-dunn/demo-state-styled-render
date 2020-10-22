@@ -10,7 +10,7 @@ import {createStore} from "packages/state";
 
 import {TodoItems} from "./examples/todo";
 
-import todoReducers, {createTodo, deleteTodo, updateTodo} from "./examples/todo/duck";
+import todoReducer, {actions as todoActions} from "./examples/todo/duck";
 
 import {App} from "./examples/App";
 
@@ -26,7 +26,7 @@ const initialState: AppState = {
 };
 
 const rootReducer = {
-  todos: todoReducers
+  todos: todoReducer
 };
 
 const store = createStore(rootReducer)(initialState);
@@ -36,7 +36,5 @@ const el = document.createElement("div");
 document.body.append(el);
 
 Mx.render(store, {
-  createTodo,
-  deleteTodo,
-  updateTodo
+  ...todoActions
 })(App)(el);
