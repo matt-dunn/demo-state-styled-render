@@ -44,9 +44,18 @@ export const createFragment = ({children, ...props}: {children: Node[]}): Node &
 export {createNode as createElement};
 export {createFragment as Fragment};
 
+type MappedProps = {
+  [key: string]: string;
+}
+
+const mappedProps: MappedProps = {
+  "className": "class",
+  "htmlFor": "for",
+};
+
 const propertyMap = (name: string) => {
-  if (name === "className") {
-    return "class";
+  if (mappedProps[name]) {
+    return mappedProps[name];
   } else if (/^on/.test(name)) {
     return name.toLowerCase();
   }
