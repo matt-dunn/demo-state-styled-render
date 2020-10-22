@@ -9,15 +9,15 @@ import {createAction, createReducer, getType} from "packages/state";
 
 import {TodoItem} from "./types";
 
-export const createTodo = createAction("TODO:CREATE", (text: string, complete?: boolean): TodoItem => ({
+export const createTodo = createAction("todo/CREATE", (text: string, complete?: boolean): TodoItem => ({
   id: Date.now().toString(),
   text,
   complete: complete ?? false
 }));
 
-export const deleteTodo = createAction("TODO:DELETE", (id: string): string => id);
+export const deleteTodo = createAction("todo/DELETE", (id: string): string => id);
 
-export const updateTodo = createAction("TODO:UPDATE", (todo: TodoItem): TodoItem => todo);
+export const updateTodo = createAction("todo/UPDATE", (todo: TodoItem): TodoItem => todo);
 
 export const actions = {
   createTodo,
