@@ -19,5 +19,5 @@ Includes the following features:
 - Functional component JSX rendering
 - Simple implementation of a React style hooks:
     - very simple implementation of ```useState```
-- DOM tree diff with updates applied only to changed elements / attributes <small>(Does not have all performance optimisations including memo functionality for props / event hooks or detection for cascading re-renders etc.)</small>
+- DOM tree diff with updates applied only to changed elements / attributes (Does not have all performance optimisations including memo functionality for props / event hooks or detection for cascading re-renders etc.)
 - Styled Components implementation
