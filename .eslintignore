@@ -2,3 +2,5 @@ node_modules
 dist
 etc
 gh-pages
+*rc.js
+*.config.js

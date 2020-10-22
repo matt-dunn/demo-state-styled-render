@@ -1,3 +1,10 @@
+/** !
+ * Copyright (c) 2020, Matt Dunn
+ *
+ * @author Matt Dunn (https://matt-dunn.github.io/)
+ * @licence MIT
+ */
+
 import { createHash } from "./hash";
 import { parseRule, generateClassName, updateSheetRule } from "./utils";
 import {

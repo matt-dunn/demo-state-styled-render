@@ -1,4 +1,10 @@
-/* eslint-disable */
+/** !
+ * Copyright (c) 2020, Matt Dunn
+ *
+ * @author Matt Dunn (https://matt-dunn.github.io/)
+ * @licence MIT
+ */
+
 const charsLength = 52;
 
 const getAlphabeticChar = (code: number): string => String.fromCharCode(code + (code > 25 ? 39 : 97));
