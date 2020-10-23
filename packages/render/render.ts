@@ -55,14 +55,11 @@ export const Mx: MxContainer = {
       [key]: (...args: any[]) => store.dispatch(action(...args))
     }), {});
 
-    const render = (c: Node) => {
-      updateTree(mountPoint, c, Mx.currentTree);
-
-      Mx.currentTree = c;
-    };
-
     Mx.renderTree = () => {
-      render(component({...Mx.currentState, ...dispatchActions}));
+      const currentTree = component({...Mx.currentState, ...dispatchActions});
+      updateTree(mountPoint, currentTree, Mx.currentTree);
+
+      Mx.currentTree = currentTree;
       Mx.index = 0;
     };
 
