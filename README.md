@@ -1,6 +1,6 @@
 # Vanilla TypeScript State Management / JSX rendering / Styled Components implementation
 
-> Simple vanilla, dependency free demo of:
+> Simple vanilla, dependency free implementation of:
 >
 > - JSX functional component rendering with simple hooks
 > - Redux style state management

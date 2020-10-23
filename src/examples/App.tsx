@@ -23,14 +23,16 @@ export const App = ({todos, createTodo, deleteTodo, updateTodo}: AppProps) => (
   <div className="container-lg container-main">
     <Header/>
     <article>
-      <p>
-        Simple vanilla, dependency free demo of:
-      </p>
-      <ul>
-        <li><a href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/render" target="_blank" rel="noopener noreferrer">JSX functional component rendering with simple hooks</a></li>
-        <li><a href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/state" target="_blank" rel="noopener noreferrer">Redux style state management</a></li>
-        <li><a href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/myStyled" target="_blank" rel="noopener noreferrer">A Styled Component implementation</a></li>
-      </ul>
+      <header className="lead">
+        <p>
+          Simple vanilla, dependency free implementation of:
+        </p>
+        <ul>
+          <li><a href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/render" target="_blank" rel="noopener noreferrer">JSX functional component rendering with simple hooks</a></li>
+          <li><a href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/state" target="_blank" rel="noopener noreferrer">Redux style state management</a></li>
+          <li><a href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/myStyled" target="_blank" rel="noopener noreferrer">A Styled Component implementation</a></li>
+        </ul>
+      </header>
 
       <p>
         Intended as an illustration of how the basics and internals of React / Redux / Styled Components work under the hood
