@@ -14,7 +14,7 @@ import AvatarImage from "../../public/assets/mjd.png";
 
 const Header$ = myStyled("header")`
   align-items: baseline;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
   margin-bottom: 1rem;
   border-bottom: 1px solid #eee;
   background-color: #fff;
@@ -23,15 +23,23 @@ const Header$ = myStyled("header")`
   > h1 {
     flex-grow: 1;
     align-self: center;
-    margin: 0 2rem 0 0;
+    margin: 0 2rem 0.5rem 0;
     padding: 0;
     font-weight: 100;
     font-size: 3rem;
     line-height: 1.2;
+    white-space: nowrap;
+
+    @media (min-width: 576px) {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (min-width: 576px) {
+    display: flex;
   }
 
   @media (min-width: 768px) {
-    display: flex;
     position: sticky;
     top: 0;
   }
@@ -57,6 +65,7 @@ const Avatar$ = myStyled("aside")`
   h2 {
     display: flex;
     font-weight: lighter;
+    font-size: 2rem;
     margin: 0;
     padding: 0;
 
@@ -81,13 +90,14 @@ const Avatar$ = myStyled("aside")`
     margin: 0;
     padding: 0;
     white-space: nowrap;
+    font-size: 0.85rem;
   }
 `;
 
 export const Header = () => (
   <Header$>
     <h1>
-      Todo App 🙀
+      Todo <wbr/>App <small>🙀</small>
     </h1>
     <Avatar$>
       <a href="https://matt-dunn.github.io/" target="_blank" rel="noopener noreferrer">

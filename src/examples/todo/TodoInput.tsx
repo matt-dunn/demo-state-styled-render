@@ -19,11 +19,13 @@ type TodoInputProps = {
 const TodoListForm$ = myStyled("form")`
   display: flex;
   align-items: center;
+  margin-bottom: 0.75rem;
 
   > label {
     display: flex;
     flex-grow: 1;
     align-items: center;
+    margin: 0;
   }
 
   input[type=text] {
@@ -43,7 +45,7 @@ export const TodoInput = ({createTodo}: TodoInputProps) => {
     }}>
       <label>
         Todo
-        <input value={value} type="text" placeholder="Add new todo" onInput={(e: any) => {
+        <input value={value} type="text" placeholder="Add new todo" className="form-control" onInput={(e: any) => {
           setValue(e.target.value);
         }}/>
       </label>

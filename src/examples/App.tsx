@@ -16,13 +16,13 @@ type AppProps = {
   todos: TodoItems;
   createTodo: TodoActions["createTodo"];
   deleteTodo: TodoActions["deleteTodo"];
-  updateTodo: TodoActions["updateTodo"]
+  updateTodo: TodoActions["updateTodo"];
 }
 
 export const App = ({todos, createTodo, deleteTodo, updateTodo}: AppProps) => (
-  <div>
+  <div className="container-lg container-main">
     <Header/>
-    <article className="container">
+    <article>
       <p>
         Simple vanilla, dependency free demo of:
       </p>
@@ -37,9 +37,9 @@ export const App = ({todos, createTodo, deleteTodo, updateTodo}: AppProps) => (
         and <strong>not intended for production use</strong>.
       </p>
     </article>
-    <main className="flex container">
-      <TodoList todos={todos} createTodo={createTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} className="flex-item flex-fit" />
-      <pre className="flex-item flex-grow">
+    <main className="d-flex flex-md-row flex-column">
+      <TodoList todos={todos} createTodo={createTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} className="mr-md-2 mb-3 flex-grow-1 align-self-start col-md" />
+      <pre className="ml-md-2 flex-grow-1 col-md">
         {JSON.stringify(todos, undefined, 1)}
       </pre>
     </main>

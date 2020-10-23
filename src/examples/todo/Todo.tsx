@@ -31,18 +31,19 @@ const Todo$ = myStyled("article")`
   label {
     flex-grow: 1;
     margin-right: 1rem;
+    word-break: break-word;
+    display: flex;
+    align-items: baseline;
+  }
+  
+  del {
+    word-break: break-word;
+    display: flex;
+    align-items: baseline;
   }
 
   input[type="checkbox"] {
     margin: 0 0.5rem 0 0;
-  }
-`;
-
-const TodoTitle$ = myStyled("div")`
-  &, > *:first-child {
-    word-break: break-word;
-    display: flex;
-    align-items: baseline;
   }
 `;
 
@@ -52,21 +53,19 @@ export const Todo = ({todo: {id, text, complete}, deleteTodo, updateTodo}: TodoP
       e.preventDefault();
       updateTodo({id, text, complete: !complete});
     }}>
-      <TodoTitle$>
-        {complete ?
-          <del>
-            <input type="checkbox" checked={complete}/>
-            {text}
-          </del>
-          :
-          <>
-            <input type="checkbox" checked={complete}/>
-            {text}
-          </>
-        }
-      </TodoTitle$>
+      {complete ?
+        <del>
+          <input type="checkbox" checked={complete}/>
+          {text}
+        </del>
+        :
+        <>
+          <input type="checkbox" checked={complete}/>
+          {text}
+        </>
+      }
     </label>
-    <button className="btn btn-sm" onClick={(e) => {
+    <button className="btn btn-sm btn-outline-secondary" onClick={(e) => {
       e.preventDefault();
       deleteTodo(id);
     }}>

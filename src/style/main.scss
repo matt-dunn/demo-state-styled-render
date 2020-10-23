@@ -5,101 +5,12 @@
  * @licence MIT
  */
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: left;
-  background-color: #fff;
-  color: #212529;
-}
-
-code {
-  font-family: "courier new", monospace;
-  font-size: 1rem;
-}
+@import "bootstrap";
 
 pre {
   white-space: pre-wrap;
   word-break: break-word;
   font-size: 0.85rem;
   background-color: #f5f5f5;
-  padding: 0.25rem;
-  margin: 0;
-}
-
-.flex {
-  align-items: flex-start;
-
-  &-item {
-    margin: 0 0 1rem 0;
-
-    &:last-child {
-      margin: 0;
-    }
-  }
-
-  &-fit {
-    flex-grow: 0;
-    flex-shrink: 0;
-  }
-
-  &-grow {
-    flex-grow: 1;
-  }
-
-  @media (min-width: 768px) {
-    display: flex;
-
-    .flex-item {
-      width: 50%;
-      margin: 0 1rem 1rem 0;
-
-      &:last-child {
-        margin: 0;
-      }
-    }
-  }
-}
-
-.container {
-  padding: 0 1rem;
-  margin-bottom: 1rem;
-}
-
-.text-muted {
-  color: lighten(#212529, 20%);
-}
-
-.btn,
-input[type="text"] {
-  font-size: 1rem;
-  font-family: inherit;
-  font-weight: normal;
-  padding: 0.375rem 0.75rem;
-}
-
-.btn {
-  background-color: transparent;
-  border: 1px solid #ccc;
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.25rem;
-
-  &.btn-primary {
-    border-color: transparent;
-    color: #fff;
-    background-color: #007bff;
-  }
-
-  &.btn-sm {
-    font-size: 0.875rem;
-    padding: 0.25rem 0.5rem;
-  }
-
-  &[disabled] {
-    opacity: 0.35;
-  }
+  padding: 0.25rem !important;
 }

@@ -25,7 +25,7 @@ type TodoListProps = {
 
 const TodoList$ = myStyled("section")`
   padding: 1rem;
-  max-width: 30rem;
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
 `;
