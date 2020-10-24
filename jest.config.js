@@ -9,9 +9,9 @@ module.exports = {
     "<rootDir>",
     "<rootDir>/packages/"
   ],
-  // transform: {
-  //   "\\.[jt]sx?$": "ts-jest"
-  // },
+  transform: {
+    "\\.[jt]sx?$": "ts-jest"
+  },
   verbose: true,
   projects: [
   ],
