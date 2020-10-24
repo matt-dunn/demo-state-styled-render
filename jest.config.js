@@ -1,5 +1,4 @@
 module.exports = {
-  preset: "ts-jest",
   testEnvironment: "node",
   roots: [
     "<rootDir>/src",
@@ -10,7 +9,7 @@ module.exports = {
     "<rootDir>/packages/"
   ],
   transform: {
-    "\\.[jt]sx?$": "ts-jest"
+    "\\.[jt]sx?$": "babel-jest"
   },
   verbose: true,
   projects: [
@@ -38,10 +37,5 @@ module.exports = {
     "node_modules",
   ],
   snapshotSerializers: [
-  ],
-  // globals: {
-  //   "ts-jest": {
-  //     tsconfig: "tsconfig.json"
-  //   }
-  // }
+  ]
 };
