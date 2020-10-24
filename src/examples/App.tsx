@@ -23,7 +23,7 @@ export const App = ({todos, createTodo, deleteTodo, updateTodo}: AppProps) => (
   <div className="container-lg container-main">
     <Header/>
     <article>
-      <header className="lead">
+      <header>
         <p>
           Simple vanilla, dependency free implementation of:
         </p>
