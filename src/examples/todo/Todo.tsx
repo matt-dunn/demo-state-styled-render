@@ -8,7 +8,7 @@
 /** @jsx createElement **/
 /** @jsxFrag createFragment **/
 
-import {createElement} from "packages/render";
+import {createElement, createFragment} from "packages/render";
 import myStyled from "packages/myStyled";
 
 import {TodoItem} from "./types";

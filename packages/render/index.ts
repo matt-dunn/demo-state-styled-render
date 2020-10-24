@@ -11,4 +11,4 @@ export {Node, FC} from "./types";
 
 export {classnames} from "./utils";
 
-export {createElement} from "./element";
+export {createElement, createFragment, updateTree} from "./element";

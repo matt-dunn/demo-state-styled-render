@@ -46,7 +46,7 @@ module.exports =  {
         ], 2],
         "@typescript-eslint/no-explicit-any": [0, {ignoreRestArgs: true}],
         "@typescript-eslint/explicit-module-boundary-types": 0,
-        "@typescript-eslint/no-unused-vars": [2, {varsIgnorePattern: "createElement"}],
+        "@typescript-eslint/no-unused-vars": [2, {varsIgnorePattern: "createElement|createFragment"}],
         "semi": 2,
         "semi-spacing": [2, {"before": false, "after": true}],
         "quotes": [2, "double", "avoid-escape"],

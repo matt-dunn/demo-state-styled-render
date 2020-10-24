@@ -11,7 +11,7 @@ import {setAttributes, updateAttributes} from "./attributes";
 
 const NODE_TYPE_FRAGMENT = "#fragment";
 
-export const createNode = (type: NodeType, props: Props, ...children: Node[]): Node => typeof type === "function" ? type({...props, children}) : {type, props, children};
+export const createNode = (type: NodeType, props: Props = {}, ...children: Node[]): Node => typeof type === "function" ? type({...props, children}) : {type, props, children};
 
 export const createFragment = ({children, ...props}: {children: Node[]}): Node & {key: Key} => ({type: NODE_TYPE_FRAGMENT, props: props, children:children, key: null});
 
