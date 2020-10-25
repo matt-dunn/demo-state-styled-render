@@ -5,6 +5,7 @@
  * @licence MIT
  */
 
-import {ActionCreator, typeSymbol} from "./types";
+import { ActionCreator, typeSymbol } from "./types";
 
-export const getType = <P>(actionCreator: ActionCreator<any, P>): string => actionCreator[typeSymbol];
+export const getType = <P>(actionCreator: ActionCreator<any, P>): string =>
+  actionCreator[typeSymbol];

@@ -7,7 +7,7 @@
 
 /** @jsx jsx **/
 
-import {jsx} from "packages/render";
+import { jsx } from "packages/render";
 import myStyled from "packages/myStyled";
 
 import AvatarImage from "./assets/mjd.png";
@@ -69,14 +69,14 @@ const Avatar$ = myStyled("aside")`
 
 export const Avatar = () => (
   <Avatar$>
-    <a href="https://matt-dunn.github.io/" target="_blank" rel="noopener noreferrer">
-      <h2>
-        Matt Dunn
-      </h2>
+    <a
+      href="https://matt-dunn.github.io/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <h2>Matt Dunn</h2>
 
-      <p>
-        Senior User Interface / Full Stack Developer
-      </p>
+      <p>Senior User Interface / Full Stack Developer</p>
     </a>
   </Avatar$>
 );

@@ -6,28 +6,28 @@
  */
 
 export type CSSRule = {
-    cssText: string;
-    selectorText: string;
-}
+  cssText: string;
+  selectorText: string;
+};
 
 export type OtherRule = {
-    cssText: string;
-    cssRules?: CSSRule[];
-}
+  cssText: string;
+  cssRules?: CSSRule[];
+};
 
 export type AnyRule = CSSRule | OtherRule;
 export type AnyRules = AnyRule[];
 
 export interface StylesheetPartial<T> {
-    rules: T;
-    deleteRule: (index: number) => void;
-    insertRule: (cssText: string, index?: number) => number;
+  rules: T;
+  deleteRule: (index: number) => void;
+  insertRule: (cssText: string, index?: number) => number;
 }
 
 export interface ClientServerStylesheet<T> {
-    hashes: string[];
-    collectHash: (hash: string) => number;
-    sheet: StylesheetPartial<T>;
+  hashes: string[];
+  collectHash: (hash: string) => number;
+  sheet: StylesheetPartial<T>;
 }
 
 // export const StyleContext = React.createContext<ClientServerStylesheet<AnyRules> | undefined>(undefined);
@@ -38,12 +38,20 @@ const AnyRule = (cssText: string): AnyRule => {
 
     return {
       cssText,
-      cssRules: match && match.groups && match.groups.selectorText.slice(0, -1).split("}").map(rule => rule && AnyRule(`${rule}}`)).filter(rule => rule),
+      cssRules:
+        match &&
+        match.groups &&
+        match.groups.selectorText
+          .slice(0, -1)
+          .split("}")
+          .map((rule) => rule && AnyRule(`${rule}}`))
+          .filter((rule) => rule),
     } as OtherRule;
   }
   const match = cssText.match(/(?<selectorText>.*?)\{/);
 
-  const selectorText = match && match.groups && match.groups.selectorText.trim();
+  const selectorText =
+    match && match.groups && match.groups.selectorText.trim();
 
   return {
     cssText,
@@ -82,7 +90,10 @@ const StylesheetPartial = (): StylesheetPartial<AnyRules> => {
 //   };
 // };
 
-const ClientStylesheet = (sheet: StylesheetPartial<CSSRuleList>, hashes: string[] = []): ClientServerStylesheet<CSSRuleList> => {
+const ClientStylesheet = (
+  sheet: StylesheetPartial<CSSRuleList>,
+  hashes: string[] = []
+): ClientServerStylesheet<CSSRuleList> => {
   const collectHash = (hash: string) => hashes.push(hash);
 
   return {
@@ -92,21 +103,30 @@ const ClientStylesheet = (sheet: StylesheetPartial<CSSRuleList>, hashes: string[
   };
 };
 
-export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefined => {
+export const createStylesheet = ():
+  | ClientServerStylesheet<CSSRuleList>
+  | undefined => {
   if (typeof document !== "undefined") {
-    const myStyles = document.querySelectorAll<HTMLStyleElement>("style[data-my-styled]");
+    const myStyles = document.querySelectorAll<HTMLStyleElement>(
+      "style[data-my-styled]"
+    );
 
     if (myStyles.length > 0) {
-      const hashes = Array.prototype.slice.call(myStyles).reduce((hash, style) => {
-        const styleHashes = style.getAttribute("data-my-styled");
-        if (styleHashes) {
-          return hash.concat(styleHashes.split(" "));
-        }
-        return hash;
-      }, []);
+      const hashes = Array.prototype.slice
+        .call(myStyles)
+        .reduce((hash, style) => {
+          const styleHashes = style.getAttribute("data-my-styled");
+          if (styleHashes) {
+            return hash.concat(styleHashes.split(" "));
+          }
+          return hash;
+        }, []);
 
       myStyles.forEach((style) => {
-        if (!style.parentElement || style.parentElement.tagName.toUpperCase() !== "HEAD") {
+        if (
+          !style.parentElement ||
+          style.parentElement.tagName.toUpperCase() !== "HEAD"
+        ) {
           document.getElementsByTagName("head")[0].appendChild(style);
         }
       });
@@ -114,10 +134,7 @@ export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefi
       const { sheet } = myStyles[myStyles.length - 1];
 
       if (sheet) {
-        return ClientStylesheet(
-          sheet,
-          hashes,
-        );
+        return ClientStylesheet(sheet, hashes);
       }
     }
 
@@ -129,9 +146,7 @@ export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefi
 
     document.head.appendChild(style);
 
-    return ClientStylesheet(
-      style.sheet as CSSStyleSheet,
-    );
+    return ClientStylesheet(style.sheet as CSSStyleSheet);
   }
 
   return undefined;

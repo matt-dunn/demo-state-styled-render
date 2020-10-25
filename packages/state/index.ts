@@ -5,7 +5,7 @@
  * @licence MIT
  */
 
-export {Actions, Store} from "./types";
+export { Actions, Store } from "./types";
 
 export * from "./createAction";
 export * from "./createReducer";

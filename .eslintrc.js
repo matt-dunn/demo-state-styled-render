@@ -1,6 +1,7 @@
 module.exports =  {
     parser: "@typescript-eslint/parser",
     plugins: [
+        "prettier",
         "@typescript-eslint",
         "header"
     ],
@@ -18,6 +19,7 @@ module.exports =  {
         },
     },
     extends:  [
+        "prettier",
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
@@ -36,6 +38,7 @@ module.exports =  {
         },
     },
     rules:  {
+        "prettier/prettier": ["error"],
         "header/header": [2, "block", [
             "* !",
             {pattern: / \* Copyright \(c\) \d{4}, .*/, template: ` * Copyright (c) ${new Date().getFullYear()}, Matt Dunn`},

@@ -5,21 +5,45 @@
  * @licence MIT
  */
 
-import {Children, Key, Node, NodeType, Props} from "./types";
-import {isNode} from "./utils";
-import {setAttributes, updateAttributes} from "./attributes";
+import { Children, Key, Node, NodeType, Props } from "./types";
+import { isNode } from "./utils";
+import { setAttributes, updateAttributes } from "./attributes";
 
 const NODE_TYPE_FRAGMENT = "#fragment";
 
-export const jsx = (type: NodeType, props: Props = {}, ...children: Children): Node =>
-  typeof type === "function" ? type({...props, children: children?.length === 1 ? children[0] : children, key: null}) : {type, props, children, key: null};
+export const jsx = (
+  type: NodeType,
+  props: Props = {},
+  ...children: Children
+): Node =>
+  typeof type === "function"
+    ? type({
+        ...props,
+        children: children?.length === 1 ? children[0] : children,
+        key: null,
+      })
+    : { type, props, children, key: null };
 
-export const jsxFrag = ({children, ...props}: {children: Children}): Node & {key: Key} => ({type: NODE_TYPE_FRAGMENT, props: props, children:children, key: null});
+export const jsxFrag = ({
+  children,
+  ...props
+}: {
+  children: Children;
+}): Node & { key: Key } => ({
+  type: NODE_TYPE_FRAGMENT,
+  props: props,
+  children: children,
+  key: null,
+});
 
 (global as any).jsx = jsx;
 (global as any).jsxFrag = jsxFrag;
 
-export const createElement = (type: NodeType, props: Props = {}, children?: Children | Node): Node => {
+export const createElement = (
+  type: NodeType,
+  props: Props = {},
+  children?: Children | Node
+): Node => {
   if (Array.isArray(children)) {
     return jsx(type, props, ...children);
   } else if (children) {
@@ -29,20 +53,20 @@ export const createElement = (type: NodeType, props: Props = {}, children?: Chil
   }
 };
 
-const createDocumentElement = (node: Node): (HTMLElement | Text) => {
+const createDocumentElement = (node: Node): HTMLElement | Text => {
   if (isNode(node)) {
     const el = document.createElement(node.type);
 
     setAttributes(el, node?.props);
 
     flattenChildren(node.children || [])
-      .map(node => {
+      .map((node) => {
         if (Array.isArray(node)) {
           return node.map(createDocumentElement);
         }
         return createDocumentElement(node);
       })
-      .forEach(element => {
+      .forEach((element) => {
         if (Array.isArray(element)) {
           element.forEach(el.appendChild.bind(el));
         } else {
@@ -57,16 +81,30 @@ const createDocumentElement = (node: Node): (HTMLElement | Text) => {
 };
 
 const hasChanged = (node: Node | string, prevNode: Node | string) =>
-  typeof node !== typeof prevNode
-  || typeof node === "string" && node !== prevNode
-  || (isNode(node) && node.type) !== (isNode(prevNode) && prevNode.type);
+  typeof node !== typeof prevNode ||
+  (typeof node === "string" && node !== prevNode) ||
+  (isNode(node) && node.type) !== (isNode(prevNode) && prevNode.type);
 
-const updateChildren = (el: HTMLElement, children: Children, prevChildren: Children, index: number) => {
+const updateChildren = (
+  el: HTMLElement,
+  children: Children,
+  prevChildren: Children,
+  index: number
+) => {
   const nodeChildrenLength = children.length;
   const prevNodeChildrenLength = prevChildren.length;
-  for (let childIndex = 0; childIndex < nodeChildrenLength || childIndex < prevNodeChildrenLength; childIndex++) {
+  for (
+    let childIndex = 0;
+    childIndex < nodeChildrenLength || childIndex < prevNodeChildrenLength;
+    childIndex++
+  ) {
     if (Array.isArray(children[childIndex])) {
-      updateChildren(el, children[childIndex] as unknown as Children, prevChildren[childIndex] as unknown as Children, childIndex);
+      updateChildren(
+        el,
+        (children[childIndex] as unknown) as Children,
+        (prevChildren[childIndex] as unknown) as Children,
+        childIndex
+      );
     } else {
       updateTree(
         el.childNodes[index] as HTMLElement,
@@ -78,20 +116,20 @@ const updateChildren = (el: HTMLElement, children: Children, prevChildren: Child
   }
 };
 
-const flattenChildren = (children: Children): Children => children.reduce((children, child) => {
-  if (child.type === NODE_TYPE_FRAGMENT) {
-    return [
-      ...children,
-      ...flattenChildren(child.children || [])
-    ];
-  }
-  return [
-    ...children,
-    child
-  ];
-}, [] as Children);
+const flattenChildren = (children: Children): Children =>
+  children.reduce((children, child) => {
+    if (child.type === NODE_TYPE_FRAGMENT) {
+      return [...children, ...flattenChildren(child.children || [])];
+    }
+    return [...children, child];
+  }, [] as Children);
 
-export const updateTree = (el: HTMLElement, node: Node, prevNode?: Node, index = 0) => {
+export const updateTree = (
+  el: HTMLElement,
+  node: Node,
+  prevNode?: Node,
+  index = 0
+) => {
   if (prevNode === undefined) {
     el.appendChild(createDocumentElement(node));
   } else if (node === undefined) {
@@ -105,7 +143,12 @@ export const updateTree = (el: HTMLElement, node: Node, prevNode?: Node, index =
       prevNode.props
     );
 
-    updateChildren(el, flattenChildren(node.children || []), flattenChildren(prevNode.children || []), index);
+    updateChildren(
+      el,
+      flattenChildren(node.children || []),
+      flattenChildren(prevNode.children || []),
+      index
+    );
   } else if (el.childNodes[index].nodeValue !== node) {
     el.childNodes[index].nodeValue = node;
   }

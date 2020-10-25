@@ -7,14 +7,14 @@
 
 /** @jsx jsx **/
 
-import {jsx, useState} from "packages/render";
+import { jsx, useState } from "packages/render";
 import myStyled from "packages/myStyled";
 
-import {Actions as TodoActions} from "./duck";
+import { Actions as TodoActions } from "./duck";
 
 type TodoInputProps = {
   createTodo: TodoActions["createTodo"];
-}
+};
 
 const TodoListForm$ = myStyled("form")`
   display: flex;
@@ -34,23 +34,32 @@ const TodoListForm$ = myStyled("form")`
   }
 `;
 
-export const TodoInput = ({createTodo}: TodoInputProps) => {
+export const TodoInput = ({ createTodo }: TodoInputProps) => {
   const [value, setValue] = useState("");
 
   return (
-    <TodoListForm$ onSubmit={(e: any) => {
-      e.preventDefault();
-      createTodo(value);
-      setValue("");
-    }}>
+    <TodoListForm$
+      onSubmit={(e: any) => {
+        e.preventDefault();
+        createTodo(value);
+        setValue("");
+      }}
+    >
       <label>
         Todo
-        <input value={value} type="text" placeholder="Add new todo" className="form-control" onInput={(e: any) => {
-          setValue(e.target.value);
-        }}/>
+        <input
+          value={value}
+          type="text"
+          placeholder="Add new todo"
+          className="form-control"
+          onInput={(e: any) => {
+            setValue(e.target.value);
+          }}
+        />
       </label>
-      <button type="submit" className="btn btn-primary" disabled={!value}>Add</button>
+      <button type="submit" className="btn btn-primary" disabled={!value}>
+        Add
+      </button>
     </TodoListForm$>
   );
 };
-

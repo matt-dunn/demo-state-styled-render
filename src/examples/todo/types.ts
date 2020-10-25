@@ -9,6 +9,6 @@ export type TodoItem = {
   id: string;
   text: string;
   complete?: boolean;
-}
+};
 
 export type TodoItems = TodoItem[];

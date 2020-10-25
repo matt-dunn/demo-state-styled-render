@@ -5,10 +5,10 @@
  * @licence MIT
  */
 
-export {Mx as default, useState} from "./render";
+export { Mx as default, useState } from "./render";
 
-export {Node, Children, FC} from "./types";
+export { Node, Children, FC } from "./types";
 
-export {classnames} from "./utils";
+export { classnames } from "./utils";
 
-export {jsx, jsxFrag, updateTree, createElement} from "./element";
+export { jsx, jsxFrag, updateTree, createElement } from "./element";

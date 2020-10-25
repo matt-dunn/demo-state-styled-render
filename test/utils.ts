@@ -5,35 +5,37 @@
  * @licence MIT
  */
 
-import {Node, updateTree} from "packages/render";
+import { Node, updateTree } from "packages/render";
 
 type ElementWrapper = {
   simulate: (eventName: string) => any;
-}
+};
 
 type Wrapper = {
   find: (selector: string) => ElementWrapper;
-}
+};
 
-type Mount = (node: Node) => {
+type Mount = (
+  node: Node
+) => {
   getDOMNode: () => Element | null;
   getNode: () => Node;
 } & Wrapper;
 
-export interface ElementMap extends Element{
-  [key: string]: any
+export interface ElementMap extends Element {
+  [key: string]: any;
 }
 
 const simulatedEvent = () => ({
   preventDefault: () => undefined,
-  stopPropagation: () => undefined
+  stopPropagation: () => undefined,
 });
 
 const elementWrapper = (el: ElementMap | null | undefined): ElementWrapper => ({
-  simulate: eventName => {
+  simulate: (eventName) => {
     const handler = el?.[`on${eventName}`];
     return handler && handler(simulatedEvent());
-  }
+  },
 });
 
 export const mount: Mount = (node) => {
@@ -48,6 +50,6 @@ export const mount: Mount = (node) => {
       return componentDOM;
     },
     getNode: () => node,
-    find: (selector) => elementWrapper(componentDOM?.querySelector(selector))
+    find: (selector) => elementWrapper(componentDOM?.querySelector(selector)),
   };
 };

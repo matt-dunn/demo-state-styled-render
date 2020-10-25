@@ -5,9 +5,12 @@
  * @licence MIT
  */
 
-import {ActionCreator, PayloadCreator, typeSymbol} from "./types";
+import { ActionCreator, PayloadCreator, typeSymbol } from "./types";
 
-export const createAction = <A extends any[], P>(type: string, payloadCreator: PayloadCreator<A, P>): ActionCreator<A, P> => {
+export const createAction = <A extends any[], P>(
+  type: string,
+  payloadCreator: PayloadCreator<A, P>
+): ActionCreator<A, P> => {
   const action = (...args: A) => ({
     type,
     payload: payloadCreator(...args),

@@ -8,17 +8,17 @@
 /** @jsx jsx **/
 /** @jsxFrag jsxFrag **/
 
-import {jsx, jsxFrag} from "packages/render";
+import { jsx, jsxFrag } from "packages/render";
 import myStyled from "packages/myStyled";
 
-import {TodoItem} from "./types";
-import {Actions as TodoActions} from "./duck";
+import { TodoItem } from "./types";
+import { Actions as TodoActions } from "./duck";
 
 type TodoProps = {
   todo: TodoItem;
   deleteTodo: TodoActions["deleteTodo"];
-  updateTodo: TodoActions["updateTodo"]
-}
+  updateTodo: TodoActions["updateTodo"];
+};
 
 const Todo$ = myStyled("article")`
   display: flex;
@@ -43,28 +43,37 @@ const Todo$ = myStyled("article")`
   }
 `;
 
-export const Todo = ({todo: {id, text, complete}, deleteTodo, updateTodo}: TodoProps) => (
+export const Todo = ({
+  todo: { id, text, complete },
+  deleteTodo,
+  updateTodo,
+}: TodoProps) => (
   <Todo$>
-    <label onClick={(e) => {
-      e.preventDefault();
-      updateTodo({id, text, complete: !complete});
-    }}>
-      {complete ?
+    <label
+      onClick={(e) => {
+        e.preventDefault();
+        updateTodo({ id, text, complete: !complete });
+      }}
+    >
+      {complete ? (
         <del className="text-muted">
-          <input type="checkbox" checked={complete}/>
+          <input type="checkbox" checked={complete} />
           {text}
         </del>
-        :
+      ) : (
         <>
-          <input type="checkbox" checked={complete}/>
+          <input type="checkbox" checked={complete} />
           {text}
         </>
-      }
+      )}
     </label>
-    <button className="btn btn-sm btn-outline-secondary" onClick={(e) => {
-      e.preventDefault();
-      deleteTodo(id);
-    }}>
+    <button
+      className="btn btn-sm btn-outline-secondary"
+      onClick={(e) => {
+        e.preventDefault();
+        deleteTodo(id);
+      }}
+    >
       Delete
     </button>
   </Todo$>

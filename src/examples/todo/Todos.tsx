@@ -7,15 +7,15 @@
 
 /** @jsx jsx **/
 
-import {jsx, Node} from "packages/render";
+import { jsx, Node } from "packages/render";
 import myStyled from "packages/myStyled";
 
-import {TodoItem, TodoItems} from "./types";
+import { TodoItem, TodoItems } from "./types";
 
 type TodosProps = {
   todos: TodoItems;
   children: (todo: TodoItem) => Node;
-}
+};
 
 const Todos$ = myStyled("ul")`
   list-style: none;
@@ -27,12 +27,10 @@ const TodosItem$ = myStyled("li")`
   padding: 0.25rem 0;
 `;
 
-export const Todos = ({todos, children}: TodosProps) => (
+export const Todos = ({ todos, children }: TodosProps) => (
   <Todos$>
-    {todos.map(todo =>
-      <TodosItem$>
-        {children(todo)}
-      </TodosItem$>
-    )}
+    {todos.map((todo) => (
+      <TodosItem$>{children(todo)}</TodosItem$>
+    ))}
   </Todos$>
 );

@@ -5,21 +5,26 @@
  * @licence MIT
  */
 
-import {ActionPayload, Reducers, State, Store, StoreCallback} from "./types";
+import { ActionPayload, Reducers, State, Store, StoreCallback } from "./types";
 
-export const createStore = <S>(reducers: Reducers<S>) => (initialState: S): Store<S> => {
-  let state: State<S> = {...initialState};
+export const createStore = <S>(reducers: Reducers<S>) => (
+  initialState: S
+): Store<S> => {
+  let state: State<S> = { ...initialState };
   let callbacks: StoreCallback<S>[] = [];
 
   return {
     dispatch<P>(action: ActionPayload<P>) {
       const newState = Object.keys(reducers).reduce((currentState, key) => {
-        const updatedState = reducers[key as keyof S](currentState[key as keyof S], action);
+        const updatedState = reducers[key as keyof S](
+          currentState[key as keyof S],
+          action
+        );
 
         if (updatedState !== currentState[key as keyof S]) {
           return {
             ...currentState,
-            [key]: updatedState
+            [key]: updatedState,
           };
         }
 
@@ -27,7 +32,7 @@ export const createStore = <S>(reducers: Reducers<S>) => (initialState: S): Stor
       }, state);
 
       if (newState !== state) {
-        callbacks.forEach(callback => callback(newState, state));
+        callbacks.forEach((callback) => callback(newState, state));
         state = newState;
       }
     },
@@ -36,7 +41,7 @@ export const createStore = <S>(reducers: Reducers<S>) => (initialState: S): Stor
       callbacks = [...callbacks, cb];
     },
     unsubscribe(cb: StoreCallback<S>) {
-      callbacks = callbacks.filter(callback => callback !== cb);
-    }
+      callbacks = callbacks.filter((callback) => callback !== cb);
+    },
   };
 };

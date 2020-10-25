@@ -7,10 +7,10 @@
 
 /** @jsx jsx **/
 
-import {jsx} from "packages/render";
+import { jsx } from "packages/render";
 import myStyled from "packages/myStyled";
 
-import {Avatar} from "./Avatar";
+import { Avatar } from "./Avatar";
 
 const Header$ = myStyled("header")`
   align-items: flex-end;
@@ -50,8 +50,9 @@ const Header$ = myStyled("header")`
 export const Header = () => (
   <Header$>
     <h1>
-      Pure TypeScript implementation of styled JSX functional components and state management
+      Pure TypeScript implementation of styled JSX functional components and
+      state management
     </h1>
-    <Avatar/>
+    <Avatar />
   </Header$>
 );

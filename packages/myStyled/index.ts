@@ -5,4 +5,4 @@
  * @licence MIT
  */
 
-export {myStyled as default} from "./myStyled";
+export { myStyled as default } from "./myStyled";

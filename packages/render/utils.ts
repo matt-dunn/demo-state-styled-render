@@ -5,15 +5,15 @@
  * @licence MIT
  */
 
-import {Node} from "./types";
+import { Node } from "./types";
 
 type MappedProps = {
   [key: string]: string;
-}
+};
 
 const mappedProps: MappedProps = {
-  "className": "class",
-  "htmlFor": "for",
+  className: "class",
+  htmlFor: "for",
 };
 
 export const propertyMap = (name: string) => {
@@ -26,7 +26,9 @@ export const propertyMap = (name: string) => {
   return name;
 };
 
-export const isNode = (node: any): node is Node => typeof node?.type === "string" && Object.prototype.hasOwnProperty.call(node, "props");
+export const isNode = (node: any): node is Node =>
+  typeof node?.type === "string" &&
+  Object.prototype.hasOwnProperty.call(node, "props");
 
-export const classnames = (...classNames: (string | undefined)[]): string => classNames.join(" ");
-
+export const classnames = (...classNames: (string | undefined)[]): string =>
+  classNames.join(" ");

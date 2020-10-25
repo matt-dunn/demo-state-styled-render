@@ -7,17 +7,17 @@
 
 /** @jsx jsx **/
 
-import {jsx} from "packages/render";
-import {mount} from "test/utils";
+import { jsx } from "packages/render";
+import { mount } from "test/utils";
 
-import {Todo} from "../Todo";
+import { Todo } from "../Todo";
 
 const deleteTodo: any = jest.fn();
 const updateTodo: any = jest.fn();
 
 describe("Todo: Example of using mount", () => {
   it("should render incomplete todo", async () => {
-    const fixture = {id: "1", text:"My Todo Item", complete: false};
+    const fixture = { id: "1", text: "My Todo Item", complete: false };
 
     const wrapper = mount(
       <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
@@ -27,7 +27,7 @@ describe("Todo: Example of using mount", () => {
   });
 
   it("should render complete todo", async () => {
-    const fixture = {id: "1", text:"My Todo Item", complete: true};
+    const fixture = { id: "1", text: "My Todo Item", complete: true };
 
     const wrapper = mount(
       <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
@@ -37,7 +37,7 @@ describe("Todo: Example of using mount", () => {
   });
 
   it("should update todo", async () => {
-    const fixture = {id: "1", text:"My Todo Item", complete: false};
+    const fixture = { id: "1", text: "My Todo Item", complete: false };
 
     const wrapper = mount(
       <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
@@ -47,11 +47,15 @@ describe("Todo: Example of using mount", () => {
 
     wrapper.find("label").simulate("click");
 
-    expect(updateTodo).toHaveBeenCalled();
+    expect(updateTodo).toHaveBeenCalledWith({
+      id: "1",
+      text: "My Todo Item",
+      complete: true,
+    });
   });
 
   it("should delete todo", async () => {
-    const fixture = {id: "1", text:"My Todo Item", complete: false};
+    const fixture = { id: "1", text: "My Todo Item", complete: false };
 
     const wrapper = mount(
       <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
@@ -61,6 +65,6 @@ describe("Todo: Example of using mount", () => {
 
     wrapper.find("button").simulate("click");
 
-    expect(deleteTodo).toHaveBeenCalled();
+    expect(deleteTodo).toHaveBeenCalledWith("1");
   });
 });

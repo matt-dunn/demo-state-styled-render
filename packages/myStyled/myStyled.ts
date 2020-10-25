@@ -5,36 +5,62 @@
  * @licence MIT
  */
 
-import {Children, createElement, FC} from "../render";
-import {AnyRules, ClientServerStylesheet, createStylesheet} from "./stylesheet";
-import {generateClassName, parseRule, updateSheetRule} from "./utils";
-import {createHash} from "./hash";
+import { Children, createElement, FC } from "packages/render";
+
+import {
+  AnyRules,
+  ClientServerStylesheet,
+  createStylesheet,
+} from "./stylesheet";
+import { generateClassName, parseRule, updateSheetRule } from "./utils";
+import { createHash } from "./hash";
 
 export interface MyStyledComponentProps {
   className?: string;
-  children?: Children
+  children?: Children;
 }
 
-export type MyStyledComponent<P extends keyof JSX.IntrinsicElements | FC<P> | MyStyledComponentProps> = FC<P> | keyof JSX.IntrinsicElements;
+export type MyStyledComponent<
+  P extends keyof JSX.IntrinsicElements | FC<P> | MyStyledComponentProps
+> = FC<P> | keyof JSX.IntrinsicElements;
 
 export interface MyStyled<P, T> {
   (string: TemplateStringsArray, ...args: T[]): MyStyledComponent<P>;
 }
 
-type MyStyledTemplate<P> = {
-  (props: P): string | false | number | undefined;
-} | string | false | number | undefined;
+type MyStyledTemplate<P> =
+  | {
+      (props: P): string | false | number | undefined;
+    }
+  | string
+  | false
+  | number
+  | undefined;
 
 const globalStylesheet = createStylesheet();
 
-export const myStyled = <P>(Component: MyStyledComponent<P>): MyStyled<Omit<P, "className">, MyStyledTemplate<P>> => (strings, ...args) => {
-  const updateRule = (prevClassName: string | undefined, props: any, stylesheet?: ClientServerStylesheet<CSSRuleList | AnyRules>) => {
+export const myStyled = <P>(
+  Component: MyStyledComponent<P>
+): MyStyled<Omit<P, "className">, MyStyledTemplate<P>> => (
+  strings,
+  ...args
+) => {
+  const updateRule = (
+    prevClassName: string | undefined,
+    props: any,
+    stylesheet?: ClientServerStylesheet<CSSRuleList | AnyRules>
+  ) => {
     if (stylesheet) {
-      const rule = (args.length === 0 && strings.join("")) || parseRule(strings, args, props);
+      const rule =
+        (args.length === 0 && strings.join("")) ||
+        parseRule(strings, args, props);
       const hash = createHash(rule);
       const className = generateClassName(Component, hash);
 
-      if (className === prevClassName || (stylesheet.hashes && stylesheet.hashes.indexOf(hash) !== -1)) {
+      if (
+        className === prevClassName ||
+        (stylesheet.hashes && stylesheet.hashes.indexOf(hash) !== -1)
+      ) {
         return className;
       }
 
@@ -53,10 +79,13 @@ export const myStyled = <P>(Component: MyStyledComponent<P>): MyStyled<Omit<P, "
 
     const prevClassName = updateRule(undefined, props, globalStylesheet);
 
-    return createElement(Component, { ...props, className: [className, prevClassName].join(" ") }, children);
+    return createElement(
+      Component,
+      { ...props, className: [className, prevClassName].join(" ") },
+      children
+    );
   };
 };
-
 
 // @TODO: type this...!
 // const domElements = [
