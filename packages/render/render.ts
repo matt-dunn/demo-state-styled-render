@@ -19,7 +19,7 @@ type MxContainer = {
   currentTree?: Node;
   renderTree: () => void;
   useState: UseState;
-  render: <S>(store: Store<S>, actions: Actions) => (component: FC) => (mountPoint: HTMLElement) => void;
+  render: <S>(store?: Store<S>, actions?: Actions) => (component: FC) => (mountPoint: HTMLElement) => void;
 }
 
 export const Mx: MxContainer = {
@@ -50,9 +50,9 @@ export const Mx: MxContainer = {
     return [currentState, setter];
   },
   render: (store, actions) => component => mountPoint => {
-    const dispatchActions = Object.entries(actions).reduce((actions, [key, action]) => ({
+    const dispatchActions = Object.entries(actions || {}).reduce((actions, [key, action]) => ({
       ...actions,
-      [key]: (...args: any[]) => store.dispatch(action(...args))
+      [key]: (...args: any[]) => store?.dispatch(action(...args))
     }), {});
 
     Mx.renderTree = () => {
@@ -63,9 +63,9 @@ export const Mx: MxContainer = {
       Mx.index = 0;
     };
 
-    Mx.currentState = store.getState();
+    Mx.currentState = store?.getState();
 
-    store.subscribe((state) => {
+    store?.subscribe((state) => {
       Mx.currentState = state;
       Mx.renderTree();
     });
