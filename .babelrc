@@ -26,5 +26,12 @@
         "packages": "./packages"
       }
     }]
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        "@babel/preset-react"
+      ]
+    }
+  }
 }

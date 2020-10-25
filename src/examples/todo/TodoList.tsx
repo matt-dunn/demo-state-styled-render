@@ -5,50 +5,47 @@
  * @licence MIT
  */
 
-/** @jsx h **/
+/** @jsx jsx **/
 
-import {classnames, h, useState} from "packages/render";
+import {jsx} from "packages/render";
+import myStyled from "packages/myStyled";
 
 import {Todos} from "./Todos";
 import {TodoItems} from "./types";
-import {CreateTodo, DeleteTodo, UpdateTodo} from "./duck";
-
-import "./main.scss";
+import {Actions as TodoActions} from "./duck";
+import {TodoInput} from "./TodoInput";
+import {Todo} from "./Todo";
 
 type TodoListProps = {
   todos: TodoItems;
-  createTodo: CreateTodo;
-  deleteTodo: DeleteTodo;
-  updateTodo: UpdateTodo;
+  createTodo: TodoActions["createTodo"];
+  deleteTodo: TodoActions["deleteTodo"];
+  updateTodo: TodoActions["updateTodo"];
   className?: string;
 }
 
-export const TodoList = ({todos, createTodo, deleteTodo, updateTodo, className}: TodoListProps) => {
-  const [value, setValue] = useState("");
+const TodoList$ = myStyled("section")`
+  padding: 1rem;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+`;
 
-  return (
-    <section className={classnames("todos", className)}>
-      <form onSubmit={e => {
-        e.preventDefault();
-        createTodo(value);
-        setValue("");
-      }}>
-        <header className="todos__header">
-          <div className="todos__header__value">
-            <label>
-              Todo
-              <input value={value} type="text" onInput={(e: any) => {
-                setValue(e.target.value);
-              }}/>
-            </label>
-            <button type="submit" className="btn btn-primary" disabled={!value || undefined}>Add</button>
-          </div>
-          <p>You have <strong>{todos.length}</strong> todo{todos.length !== 1 && "s" || ""}</p>
-        </header>
-      </form>
-      <main>
-        <Todos todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-      </main>
-    </section>
-  );
-};
+const TodoListHeader$ = myStyled("header")`
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1rem;
+`;
+
+export const TodoList = ({todos, createTodo, deleteTodo, updateTodo, className}: TodoListProps) => (
+  <TodoList$ className={className}>
+    <TodoListHeader$>
+      <TodoInput createTodo={createTodo}/>
+      <p>You have <strong>{todos.length}</strong> todo{todos.length !== 1 && "s" || ""}</p>
+    </TodoListHeader$>
+    <main>
+      <Todos todos={todos}>
+        {todo => <Todo todo={todo} deleteTodo={deleteTodo} updateTodo={updateTodo}/>}
+      </Todos>
+    </main>
+  </TodoList$>
+);

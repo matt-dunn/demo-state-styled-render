@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Todos: Example of using mount should render component 1`] = `
+<ul
+  class=" ms__hUhVje"
+>
+  <li
+    class=" ms__hsUUbt"
+  >
+    <div>
+      1
+      -
+      My Todo Item 1
+      =
+      Y
+    </div>
+  </li>
+  <li
+    class=" ms__hsUUbt"
+  >
+    <div>
+      2
+      -
+      My Todo Item 2
+      =
+      N
+    </div>
+  </li>
+</ul>
+`;

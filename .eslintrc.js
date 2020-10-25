@@ -1,7 +1,8 @@
 module.exports =  {
     parser: "@typescript-eslint/parser",
     plugins: [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "header"
     ],
     env: {
         es6: true,
@@ -35,8 +36,17 @@ module.exports =  {
         },
     },
     rules:  {
+        "header/header": [2, "block", [
+            "* !",
+            {pattern: / \* Copyright \(c\) \d{4}, .*/, template: ` * Copyright (c) ${new Date().getFullYear()}, Matt Dunn`},
+            " *",
+            " * @author Matt Dunn (https://matt-dunn.github.io/)",
+            " * @licence MIT",
+            " "
+        ], 2],
         "@typescript-eslint/no-explicit-any": [0, {ignoreRestArgs: true}],
         "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/no-unused-vars": [2, {varsIgnorePattern: "jsx|jsxFrag"}],
         "semi": 2,
         "semi-spacing": [2, {"before": false, "after": true}],
         "quotes": [2, "double", "avoid-escape"],

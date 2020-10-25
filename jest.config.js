@@ -1,5 +1,16 @@
 module.exports = {
   testEnvironment: "node",
+  roots: [
+    "<rootDir>/src",
+    "<rootDir>/packages/"
+  ],
+  modulePaths: [
+    "<rootDir>",
+    "<rootDir>/packages/"
+  ],
+  transform: {
+    "\\.[jt]sx?$": "babel-jest"
+  },
   verbose: true,
   projects: [
   ],
@@ -26,5 +37,5 @@ module.exports = {
     "node_modules",
   ],
   snapshotSerializers: [
-  ],
+  ]
 };

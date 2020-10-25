@@ -1,9 +1,9 @@
 {
   "name": "demo-state-styled-render",
   "version": "1.0.0",
-  "description": "Vanilla redux / JSX renderer example",
+  "description": "Pure TypeScript implementation of styled JSX functional components and state management",
   "main": "public/index.html",
-  "repository": "git@github.com:matt-dunn/demo-state-styled-render.io.git",
+  "repository": "git@github.com:matt-dunn/demo-state-styled-render.git",
   "author": "Matt Dunn <matt.j.dunn@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -12,7 +12,7 @@
     "lint:js": "eslint ./ --ext .js,.ts,.jsx,.tsx --fix",
     "lint": "yarn lint:css && yarn lint:js",
     "start": "parcel public/index.html --https",
-    "prebuild": "yarn lint && yarn type-check",
+    "prebuild": "yarn lint && yarn type-check && yarn test",
     "build": "rimraf dist && parcel build public/index.html --public-url ./ --out-dir ./dist --no-cache",
     "serve": "npx http-server dist/ -g -b -S -C ./etc/cert.pem -K ./etc/key.pem",
     "bundle": "node ./etc/scripts/bundle",
@@ -24,6 +24,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/plugin-syntax-jsx": "^7.12.1",
     "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.12.1",
     "@babel/preset-typescript": "^7.10.4",
     "@testing-library/dom": "^7.26.0",
     "@testing-library/jest-dom": "^5.11.4",
@@ -33,10 +34,13 @@
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.0.1",
     "autoprefixer": "^9.8.6",
+    "babel-jest": "^26.6.1",
     "babel-plugin-module-resolver": "^4.0.0",
     "core-js": "^3.6.5",
+    "del": "^6.0.0",
     "eslint": "^7.8.1",
     "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-header": "^3.1.0",
     "eslint-plugin-import": "^2.20.1",
     "jest": "^26.5.3",
     "jsdom": "^16.4.0",
@@ -46,12 +50,16 @@
     "postcss-custom-properties": "^9.1.1",
     "postcss-modules": "^3.2.2",
     "posthtml": "^0.13.3",
+    "recursive-copy": "^2.0.11",
     "sass": "^1.26.8",
     "stylelint": "^13.7.0",
     "stylelint-config-sass-guidelines": "^7.1.0",
     "typescript": "^4.0.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bootstrap": "^4.5.3",
+    "stylis": "^3.5.4"
+  },
   "compress": {
     "test": ".(js|html|css|xml|webmanigest)$",
     "threshold": 1000,
@@ -74,8 +82,5 @@
       "enable_context_modeling": true
     },
     "compressOutput": true
-  },
-  "parcel-plugin-local-plugins": [
-    "./etc/parcel/plugins/hash"
-  ]
+  }
 }
