@@ -50,7 +50,7 @@ const Header$ = myStyled("header")`
 export const Header = () => (
   <Header$>
     <h1>
-      Bespoke implementation of styled JSX functional components and state management
+      Pure TypeScript implementation of styled JSX functional components and state management
     </h1>
     <Avatar/>
   </Header$>

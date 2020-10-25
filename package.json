@@ -1,9 +1,9 @@
 {
   "name": "demo-state-styled-render",
   "version": "1.0.0",
-  "description": "Vanilla redux / JSX renderer example",
+  "description": "Pure TypeScript implementation of styled JSX functional components and state management",
   "main": "public/index.html",
-  "repository": "git@github.com:matt-dunn/demo-state-styled-render.io.git",
+  "repository": "git@github.com:matt-dunn/demo-state-styled-render.git",
   "author": "Matt Dunn <matt.j.dunn@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -82,8 +82,5 @@
       "enable_context_modeling": true
     },
     "compressOutput": true
-  },
-  "parcel-plugin-local-plugins": [
-    "./etc/parcel/plugins/hash"
-  ]
+  }
 }

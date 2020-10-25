@@ -1,4 +1,4 @@
-# Vanilla TypeScript State Management / JSX rendering / Styled Components implementation
+# Pure TypeScript implementation of styled JSX functional components and state management
 
 > Simple vanilla, dependency free implementation of:
 >
@@ -35,15 +35,20 @@ yarn install
 yarn build
 ```
 
+Build artifacts can be found in the ```dist``` directory.
+ 
 ## Development
 
 ```shell script
 yarn start
 ```
 
+The development version of the app will be started at ```https://localhost:1234``` using [Parcel](https://parceljs.org/)
+with live reloading.
+
 ## Test
 
-Run all tests.
+Run all tests using Jest with coverage.
 
 ```shell script
 yarn test
@@ -51,8 +56,8 @@ yarn test
 
 ## CI Workflow
 
-GitHub [workflow](./.github/workflows/ci.yml) to lint, run tests and create gh-pages preview for 
-pull requests and merges into master.
+Uses GitHub [workflow](./.github/workflows/ci.yml) for CI builds; runs tests and creates 
+previews for pull requests and demo app for merges into master.
 
 ---
 
