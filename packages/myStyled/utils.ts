@@ -7,7 +7,7 @@
 
 import Stylis from "stylis";
 
-import { MyStyledComponent } from "./index";
+import { MyStyledComponent } from "./myStyled";
 import { AnyRules, StylesheetPartial } from "./stylesheet";
 
 function isFunction(value: any): value is (...args: any[]) => any {
