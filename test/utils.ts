@@ -9,6 +9,7 @@ import {Node, updateTree} from "packages/render";
 
 type Mount = (node: Node) => {
   getDOMNode: () => Element | null;
+  getNode: () => Node;
 };
 
 export const mount: Mount = (node) => {
@@ -19,6 +20,7 @@ export const mount: Mount = (node) => {
   return {
     getDOMNode() {
       return el.firstElementChild;
-    }
+    },
+    getNode: () => node
   };
 };
