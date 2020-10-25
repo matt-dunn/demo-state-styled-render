@@ -18,28 +18,30 @@ const StyledArticle = myStyled("article")`
     display: flex;
   }
 
-  del {
-    color: #aaa;
-  }
-
-  label {
-    flex-grow: 1;
-  }
-  
-  del {
-    align-items: baseline;
+  header {
+    background-color: #aaa;
+ 
+    h1 {
+      color: #f00;
+    }
   }
 
   input[type="checkbox"] {
-    margin: 0 0.5rem 0 0;
+    margin: 0 0.5rem;
+  }
+
+  p {
+    flex-grow: 1;
   }
 `;
 
 export const MyComponent = () => (
   <StyledArticle>
     <header>
-      <h1>Hello World</h1>
+      <h1>Hello</h1>
     </header>
+    <input type="checkbox" />
+    <p>World</p>
   </StyledArticle>
 );
 ```

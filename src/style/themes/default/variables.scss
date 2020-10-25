@@ -1,0 +1,12 @@
+// Main branding colours:
+$main-bg-color: #fff;
+$main-color: #212529;
+$main-color--secondary: lighten($main-color, 55%);
+$secondary-color: lighten($main-color, 75%);
+
+// Dark theme branding colours:
+$main-bg-color-dark: #343a40;
+$main-color-dark: #fff;
+$main-color-dark--secondary: darken($main-color-dark, 50%);
+$secondary-color-dark: darken($main-color-dark, 65%);
+

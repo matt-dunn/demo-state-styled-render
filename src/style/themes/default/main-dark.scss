@@ -1,0 +1,25 @@
+@import "../../functions/main";
+
+@import "variables";
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --main-bg-color: #{$main-bg-color-dark};
+    --main-bg-color-a: #{convert-hex-to-rgba($main-bg-color-dark, 0.95)};
+    --main-color: #{$main-color-dark};
+    --main-color--secondary: #{$main-color-dark--secondary};
+    --secondary-color: #{$secondary-color-dark};
+    --text-muted: #{darken($main-color-dark, 30%)};
+  }
+
+  a {
+    color: lighten(#007bff, 20%);
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: #007bff;
+    }
+  }
+}
+
