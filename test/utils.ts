@@ -5,21 +5,20 @@
  * @licence MIT
  */
 
-import {Node, updateTree} from "../packages/render";
+import {Node, updateTree} from "packages/render";
 
 type Mount = (node: Node) => {
-  getDOMNode: () => Element;
+  getDOMNode: () => Element | null;
 };
 
 export const mount: Mount = (node) => {
   const el = document.createElement("div");
 
-  updateTree(el as any, node);
+  updateTree(el, node);
 
   return {
     getDOMNode() {
-      return el.firstElementChild as HTMLElement;
+      return el.firstElementChild;
     }
   };
 };
-
