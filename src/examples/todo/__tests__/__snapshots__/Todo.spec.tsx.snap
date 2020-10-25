@@ -2,10 +2,12 @@
 
 exports[`Todo: Example of using mount should render component 1`] = `
 <article
-  class=" ms__kTRzUF"
+  class=" ms__enAiqr"
 >
   <label>
-    <del>
+    <del
+      class="text-muted"
+    >
       <input
         checked="true"
         type="checkbox"

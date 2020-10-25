@@ -16,8 +16,8 @@ const Header$ = myStyled("header")`
   align-items: flex-end;
   padding: 0.5rem 0;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #eee;
-  background-color: #fff;
+  border-bottom: 2px solid var(--secondary-color);
+  background-color: var(--main-bg-color);
   z-index: 1;
   
   > h1 {

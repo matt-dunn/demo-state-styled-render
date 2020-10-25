@@ -1,0 +1,14 @@
+@import "../../functions/main";
+
+@import "variables";
+
+:root {
+  --main-bg-color: #{$main-bg-color};
+  --main-bg-color-a: #{convert-hex-to-rgba($main-bg-color, 0.95)};
+  --main-color: #{$main-color};
+  --main-color--secondary: #{$main-color--secondary};
+  --secondary-color: #{$secondary-color};
+  --text-muted: #{lighten($main-color, 30%)};
+}
+
+@import "main-dark";

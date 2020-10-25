@@ -27,12 +27,12 @@ type TodoListProps = {
 const TodoList$ = myStyled("section")`
   padding: 1rem;
   width: 100%;
-  border: 1px solid #ccc;
+  border: 1px solid var(--secondary-color);
   border-radius: 0.25rem;
 `;
 
 const TodoListHeader$ = myStyled("header")`
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--secondary-color);
   margin-bottom: 1rem;
 `;
 

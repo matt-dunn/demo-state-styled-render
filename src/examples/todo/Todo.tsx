@@ -24,10 +24,6 @@ const Todo$ = myStyled("article")`
   display: flex;
   align-items: flex-start;
 
-  del {
-    color: #aaa;
-  }
-
   label {
     flex-grow: 1;
     margin-right: 1rem;
@@ -54,7 +50,7 @@ export const Todo = ({todo: {id, text, complete}, deleteTodo, updateTodo}: TodoP
       updateTodo({id, text, complete: !complete});
     }}>
       {complete ?
-        <del>
+        <del className="text-muted">
           <input type="checkbox" checked={complete}/>
           {text}
         </del>

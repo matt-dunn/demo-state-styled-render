@@ -74,7 +74,7 @@ export const Avatar = () => (
         Matt Dunn
       </h2>
 
-      <p className="text-muted">
+      <p>
         Senior User Interface / Full Stack Developer
       </p>
     </a>
