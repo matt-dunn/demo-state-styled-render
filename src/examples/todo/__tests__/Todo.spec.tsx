@@ -12,12 +12,22 @@ import {mount} from "test/utils";
 
 import {Todo} from "../Todo";
 
-describe("Todo: Example of using mount", () => {
-  it("should render component", async () => {
-    const fixture = {id: "1", text:"My Todo Item", complete: true};
+const deleteTodo: any = jest.fn();
+const updateTodo: any = jest.fn();
 
-    const deleteTodo: any = jest.fn();
-    const updateTodo: any = jest.fn();
+describe("Todo: Example of using mount", () => {
+  it("should render incomplete todo", async () => {
+    const fixture = {id: "1", text:"My Todo Item", complete: false};
+
+    const wrapper = mount(
+      <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+    );
+
+    expect(wrapper.getDOMNode()).toMatchSnapshot();
+  });
+
+  it("should render complete todo", async () => {
+    const fixture = {id: "1", text:"My Todo Item", complete: true};
 
     const wrapper = mount(
       <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />

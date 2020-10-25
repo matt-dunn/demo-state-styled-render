@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Todo: Example of using mount should render component 1`] = `
+exports[`Todo: Example of using mount should render complete todo 1`] = `
 <article
   class=" ms__enAiqr"
 >
@@ -14,6 +14,24 @@ exports[`Todo: Example of using mount should render component 1`] = `
       />
       My Todo Item
     </del>
+  </label>
+  <button
+    class="btn btn-sm btn-outline-secondary"
+  >
+    Delete
+  </button>
+</article>
+`;
+
+exports[`Todo: Example of using mount should render incomplete todo 1`] = `
+<article
+  class=" ms__enAiqr"
+>
+  <label>
+    <input
+      type="checkbox"
+    />
+    My Todo Item
   </label>
   <button
     class="btn btn-sm btn-outline-secondary"
