@@ -7,8 +7,8 @@
 
 export {Mx as default, useState} from "./render";
 
-export {Node, FC} from "./types";
+export {Node, Children, FC} from "./types";
 
 export {classnames} from "./utils";
 
-export {createElement, createFragment, updateTree} from "./element";
+export {jsx, jsxFrag, updateTree, createElement} from "./element";

@@ -5,9 +5,9 @@
  * @licence MIT
  */
 
-/** @jsx createElement **/
+/** @jsx jsx **/
 
-import {createElement, useState} from "packages/render";
+import {jsx, useState} from "packages/render";
 import myStyled from "packages/myStyled";
 
 import {Actions as TodoActions} from "./duck";

@@ -5,9 +5,9 @@
  * @licence MIT
  */
 
-/** @jsx createElement **/
+/** @jsx jsx **/
 
-import {createElement} from "packages/render";
+import {jsx} from "packages/render";
 
 import {TodoItems, TodoList, Actions as TodoActions} from "./todo";
 import {Header} from "./Header";

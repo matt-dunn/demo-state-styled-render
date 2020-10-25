@@ -11,11 +11,11 @@ import {
   ClientServerStylesheet, createStylesheet, AnyRules,
 } from "./stylesheet";
 
-import {Node, FC, createElement} from "packages/render";
+import {Children, FC, createElement} from "packages/render";
 
 export interface MyStyledComponentProps {
     className?: string;
-    children?: Node[];
+    children?: Children
 }
 
 // export type MyStyledComponent<P extends keyof JSX.IntrinsicElements | FC<P> | MyStyledComponentProps> = FC<P> | keyof JSX.IntrinsicElements;
@@ -57,7 +57,7 @@ const myStyled = <P>(Component: MyStyledComponent<P>): MyStyled<P, MyStyledTempl
 
     const prevClassName = updateRule(undefined, props, globalStylesheet);
 
-    return createElement(Component, { ...props, className: [className, prevClassName].join(" ") }, ...children || []);
+    return createElement(Component, { ...props, className: [className, prevClassName].join(" ") }, children);
   };
 };
 

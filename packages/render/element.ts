@@ -11,17 +11,25 @@ import {setAttributes, updateAttributes} from "./attributes";
 
 const NODE_TYPE_FRAGMENT = "#fragment";
 
-export const createNode = (type: NodeType, props: Props = {}, ...children: Node[]): Node => typeof type === "function" ? type({...props, children}) : {type, props, children};
+export const jsx = (type: NodeType, props: Props = {}, ...children: Children): Node =>
+  typeof type === "function" ? type({...props, children: children?.length === 1 ? children[0] : children}) : {type, props, children};
 
-export const createFragment = ({children, ...props}: {children: Node[]}): Node & {key: Key} => ({type: NODE_TYPE_FRAGMENT, props: props, children:children, key: null});
+export const jsxFrag = ({children, ...props}: {children: Children}): Node & {key: Key} => ({type: NODE_TYPE_FRAGMENT, props: props, children:children, key: null});
 
-(global as any).createElement = createNode;
-(global as any).createFragment = createFragment;
+(global as any).jsx = jsx;
+(global as any).jsxFrag = jsxFrag;
 
-export {createNode as createElement};
-export {createFragment as Fragment};
+export const createElement = (type: NodeType, props: Props = {}, children?: Children | Node): Node => {
+  if (Array.isArray(children)) {
+    return jsx(type, props, ...children);
+  } else if (children) {
+    return jsx(type, props, children);
+  } else {
+    return jsx(type, props);
+  }
+};
 
-const createElement = (node: Node): (HTMLElement | Text) => {
+const createDocumentElement = (node: Node): (HTMLElement | Text) => {
   if (isNode(node)) {
     const el = document.createElement(node.type);
 
@@ -30,9 +38,9 @@ const createElement = (node: Node): (HTMLElement | Text) => {
     flattenChildren(node.children || [])
       .map(node => {
         if (Array.isArray(node)) {
-          return node.map(createElement);
+          return node.map(createDocumentElement);
         }
-        return createElement(node);
+        return createDocumentElement(node);
       })
       .forEach(element => {
         if (Array.isArray(element)) {
@@ -85,11 +93,11 @@ const flattenChildren = (children: Children): Children => children.reduce((child
 
 export const updateTree = (el: HTMLElement, node: Node, prevNode?: Node, index = 0) => {
   if (prevNode === undefined) {
-    el.appendChild(createElement(node));
+    el.appendChild(createDocumentElement(node));
   } else if (node === undefined) {
     el.removeChild(el.childNodes[index]);
   } else if (hasChanged(node, prevNode)) {
-    el.replaceChild(createElement(node), el.childNodes[index]);
+    el.replaceChild(createDocumentElement(node), el.childNodes[index]);
   } else if (isNode(node)) {
     updateAttributes(
       el.childNodes[index] as HTMLElement,

@@ -6,25 +6,6 @@ exports[`Todos: Example of using mount should render component 1`] = `
 >
   <li
     class=" ms__hsUUbt"
-  >
-    <article
-      class=" ms__kTRzUF"
-    >
-      <label>
-        <del>
-          <input
-            checked="true"
-            type="checkbox"
-          />
-          My Todo Item
-        </del>
-      </label>
-      <button
-        class="btn btn-sm btn-outline-secondary"
-      >
-        Delete
-      </button>
-    </article>
-  </li>
+  />
 </ul>
 `;

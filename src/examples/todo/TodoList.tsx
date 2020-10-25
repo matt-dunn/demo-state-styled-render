@@ -5,15 +5,16 @@
  * @licence MIT
  */
 
-/** @jsx createElement **/
+/** @jsx jsx **/
 
-import {createElement} from "packages/render";
+import {jsx} from "packages/render";
 import myStyled from "packages/myStyled";
 
 import {Todos} from "./Todos";
 import {TodoItems} from "./types";
 import {Actions as TodoActions} from "./duck";
 import {TodoInput} from "./TodoInput";
+import {Todo} from "./Todo";
 
 type TodoListProps = {
   todos: TodoItems;
@@ -42,7 +43,9 @@ export const TodoList = ({todos, createTodo, deleteTodo, updateTodo, className}:
       <p>You have <strong>{todos.length}</strong> todo{todos.length !== 1 && "s" || ""}</p>
     </TodoListHeader$>
     <main>
-      <Todos todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+      <Todos todos={todos}>
+        {todo => <Todo todo={todo} deleteTodo={deleteTodo} updateTodo={updateTodo}/>}
+      </Todos>
     </main>
   </TodoList$>
 );

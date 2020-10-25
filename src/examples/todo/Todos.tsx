@@ -5,19 +5,16 @@
  * @licence MIT
  */
 
-/** @jsx createElement **/
+/** @jsx jsx **/
 
-import {createElement} from "packages/render";
+import {jsx, Node} from "packages/render";
 import myStyled from "packages/myStyled";
 
-import {Actions as TodoActions} from "./duck";
-import {TodoItems} from "./types";
-import {Todo} from "./Todo";
+import {TodoItem, TodoItems} from "./types";
 
 type TodosProps = {
   todos: TodoItems;
-  deleteTodo: TodoActions["deleteTodo"];
-  updateTodo: TodoActions["updateTodo"];
+  children: (todo: TodoItem) => Node;
 }
 
 const Todos$ = myStyled("ul")`
@@ -30,11 +27,11 @@ const TodosItem$ = myStyled("li")`
   padding: 0.25rem 0;
 `;
 
-export const Todos = ({todos, updateTodo, deleteTodo}: TodosProps) => (
+export const Todos = ({todos, children}: TodosProps) => (
   <Todos$>
     {todos.map(todo =>
       <TodosItem$>
-        <Todo todo={todo} updateTodo={updateTodo} deleteTodo={deleteTodo}/>
+        {children(todo)}
       </TodosItem$>
     )}
   </Todos$>

@@ -5,10 +5,10 @@
  * @licence MIT
  */
 
-/** @jsx createElement **/
-/** @jsxFrag createFragment **/
+/** @jsx jsx **/
+/** @jsxFrag jsxFrag **/
 
-import {createElement, createFragment} from "packages/render";
+import {jsx, jsxFrag} from "packages/render";
 import myStyled from "packages/myStyled";
 
 import {TodoItem} from "./types";

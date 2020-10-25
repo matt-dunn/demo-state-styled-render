@@ -5,9 +5,9 @@
  * @licence MIT
  */
 
-/** @jsx createElement **/
+/** @jsx jsx **/
 
-import {createElement} from "packages/render";
+import {jsx} from "packages/render";
 import myStyled from "packages/myStyled";
 
 import AvatarImage from "./assets/mjd.png";
