@@ -35,4 +35,32 @@ describe("Todo: Example of using mount", () => {
 
     expect(wrapper.getDOMNode()).toMatchSnapshot();
   });
+
+  it("should update todo", async () => {
+    const fixture = {id: "1", text:"My Todo Item", complete: false};
+
+    const wrapper = mount(
+      <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+    );
+
+    expect(updateTodo).not.toHaveBeenCalled();
+
+    wrapper.find("label").simulate("click");
+
+    expect(updateTodo).toHaveBeenCalled();
+  });
+
+  it("should delete todo", async () => {
+    const fixture = {id: "1", text:"My Todo Item", complete: false};
+
+    const wrapper = mount(
+      <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+    );
+
+    expect(deleteTodo).not.toHaveBeenCalled();
+
+    wrapper.find("button").simulate("click");
+
+    expect(deleteTodo).toHaveBeenCalled();
+  });
 });
