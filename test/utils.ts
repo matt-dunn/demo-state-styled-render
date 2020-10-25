@@ -22,7 +22,7 @@ type Mount = (
   getNode: () => Node;
 } & Wrapper;
 
-export interface ElementMap extends Element {
+interface ElementMap extends Element {
   [key: string]: any;
 }
 
@@ -46,9 +46,7 @@ export const mount: Mount = (node) => {
   const componentDOM = el.firstElementChild;
 
   return {
-    getDOMNode() {
-      return componentDOM;
-    },
+    getDOMNode: () => componentDOM,
     getNode: () => node,
     find: (selector) => elementWrapper(componentDOM?.querySelector(selector)),
   };

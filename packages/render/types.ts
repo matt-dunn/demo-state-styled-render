@@ -7,6 +7,8 @@
 
 export type AnyFunc = (...args: any[]) => any;
 
+export type Key = string | number | null;
+
 export type Children<T = string> = Node<T>[];
 
 export type NodeBase<T = string, P = any> = {
@@ -16,14 +18,12 @@ export type NodeBase<T = string, P = any> = {
 
 export type Node<T = string, P = any> = {
   children?: Children<T>;
-  key: string | number | null;
+  key: Key;
 } & NodeBase<T, P>;
 
 export type FC<P = any, N = Node> = (props: P) => N;
 
 export type NodeType<P = any> = string | FC<P>;
-
-export type Key = string | number | null;
 
 export interface HTMLElementMap extends HTMLElement {
   [key: string]: any;
