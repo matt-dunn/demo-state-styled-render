@@ -38,7 +38,7 @@ export const TodoInput = ({createTodo}: TodoInputProps) => {
   const [value, setValue] = useState("");
 
   return (
-    <TodoListForm$ onSubmit={(e: Event) => {
+    <TodoListForm$ onSubmit={(e: any) => {
       e.preventDefault();
       createTodo(value);
       setValue("");

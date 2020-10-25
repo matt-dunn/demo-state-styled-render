@@ -7,9 +7,7 @@
 
 import { createHash } from "./hash";
 import { parseRule, generateClassName, updateSheetRule } from "./utils";
-import {
-  ClientServerStylesheet, createStylesheet, AnyRules,
-} from "./stylesheet";
+import { ClientServerStylesheet, createStylesheet, AnyRules } from "./stylesheet";
 
 import {Children, FC, createElement} from "packages/render";
 
@@ -18,8 +16,7 @@ export interface MyStyledComponentProps {
     children?: Children
 }
 
-// export type MyStyledComponent<P extends keyof JSX.IntrinsicElements | FC<P> | MyStyledComponentProps> = FC<P> | keyof JSX.IntrinsicElements;
-export type MyStyledComponent<P extends keyof JSX.IntrinsicElements | FC<P> | MyStyledComponentProps> = any;
+export type MyStyledComponent<P extends keyof JSX.IntrinsicElements | FC<P> | MyStyledComponentProps> = FC<P> | keyof JSX.IntrinsicElements;
 
 export interface MyStyled<P, T> {
     (string: TemplateStringsArray, ...args: T[]): MyStyledComponent<P>;
@@ -31,7 +28,7 @@ type MyStyledTemplate<P> = {
 
 const globalStylesheet = createStylesheet();
 
-const myStyled = <P>(Component: MyStyledComponent<P>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
+const myStyled = <P>(Component: MyStyledComponent<P>): MyStyled<Omit<P, "className">, MyStyledTemplate<P>> => (strings, ...args) => {
   const updateRule = (prevClassName: string | undefined, props: any, stylesheet?: ClientServerStylesheet<CSSRuleList | AnyRules>) => {
     if (stylesheet) {
       const rule = (args.length === 0 && strings.join("")) || parseRule(strings, args, props);

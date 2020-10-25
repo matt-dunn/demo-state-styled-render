@@ -16,6 +16,7 @@ export type NodeBase<T = string, P = any> = {
 
 export type Node<T = string, P = any> = {
   children?: Children<T>;
+  key: string | number | null
 } & NodeBase<T, P>
 
 export type FC<P = any, N = Node> = (props: P) => N;

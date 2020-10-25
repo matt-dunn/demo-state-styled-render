@@ -12,7 +12,7 @@ import {setAttributes, updateAttributes} from "./attributes";
 const NODE_TYPE_FRAGMENT = "#fragment";
 
 export const jsx = (type: NodeType, props: Props = {}, ...children: Children): Node =>
-  typeof type === "function" ? type({...props, children: children?.length === 1 ? children[0] : children}) : {type, props, children};
+  typeof type === "function" ? type({...props, children: children?.length === 1 ? children[0] : children, key: null}) : {type, props, children, key: null};
 
 export const jsxFrag = ({children, ...props}: {children: Children}): Node & {key: Key} => ({type: NODE_TYPE_FRAGMENT, props: props, children:children, key: null});
 
