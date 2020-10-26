@@ -23,7 +23,7 @@ Demonstrated with an example [Todo app](./src/examples/todo) 🙀.
 
 Also includes:
 
-- Simple [Enzyme](https://enzymejs.github.io/enzyme/) inspired [test utility](./test/utils.ts) to 
+- Simple implementation of a [test utility](./packages/render/test-utils/mount.ts) inspired by [Enzyme](https://enzymejs.github.io/enzyme/) to 
   [mount components and simulate events](./src/examples/todo/__tests__/Todo.spec.tsx).
 - GitHub [workflow](./.github/workflows/ci.yml) for CI builds; runs tests and creates 
   a preview distribution for each pull request and merges into master.
