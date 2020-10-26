@@ -30,7 +30,7 @@ const TodosItem$ = myStyled("li")`
 export const Todos = ({ todos, children }: TodosProps) => (
   <Todos$>
     {todos.map((todo) => (
-      <TodosItem$>{children(todo)}</TodosItem$>
+      <TodosItem$ key={todo.id}>{children(todo)}</TodosItem$>
     ))}
   </Todos$>
 );

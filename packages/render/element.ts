@@ -15,14 +15,17 @@ export const jsx = (
   type: NodeType,
   props: Props = {},
   ...children: Children
-): Node =>
-  typeof type === "function"
+): Node => {
+  const { key, ...rest } = props || {};
+
+  return typeof type === "function"
     ? type({
-        ...props,
+        ...rest,
         children: children?.length === 1 ? children[0] : children,
-        key: null,
+        key,
       })
-    : { type, props, children, key: null };
+    : { type, props: rest, children, key };
+};
 
 export const jsxFrag = ({
   children,
