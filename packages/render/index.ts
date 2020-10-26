@@ -7,7 +7,7 @@
 
 export { Mx as default, useState } from "./render";
 
-export { Node, Children, FC } from "./types";
+export { Node, Children, FC, HTMLElementMap } from "./types";
 
 export { classnames } from "./utils";
 

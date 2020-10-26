@@ -5,7 +5,7 @@
  * @licence MIT
  */
 
-import { Node, updateTree } from "packages/render";
+import { HTMLElementMap, Node, updateTree } from "packages/render";
 
 type ElementWrapper = {
   simulate: (eventName: string) => any;
@@ -22,16 +22,14 @@ type Mount = (
   getNode: () => Node;
 } & Wrapper;
 
-interface ElementMap extends Element {
-  [key: string]: any;
-}
-
 const simulatedEvent = () => ({
   preventDefault: () => undefined,
   stopPropagation: () => undefined,
 });
 
-const elementWrapper = (el: ElementMap | null | undefined): ElementWrapper => ({
+const elementWrapper = (
+  el: HTMLElementMap | null | undefined
+): ElementWrapper => ({
   simulate: (eventName) => {
     const handler = el?.[`on${eventName}`];
     return handler && handler(simulatedEvent());
