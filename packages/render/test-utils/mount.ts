@@ -5,7 +5,8 @@
  * @licence MIT
  */
 
-import { HTMLElementMap, Node, updateTree } from "packages/render";
+import { HTMLElementMap, Node } from "../types";
+import { updateTree } from "../element";
 
 type ElementWrapper = {
   simulate: (eventName: string) => any;

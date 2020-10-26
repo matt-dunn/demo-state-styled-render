@@ -8,7 +8,7 @@
 /** @jsx jsx **/
 
 import { jsx } from "packages/render";
-import { mount } from "test/utils";
+import { mount } from "packages/render/test-utils";
 
 import { Todos } from "../Todos";
 import { TodoItem } from "../types";
