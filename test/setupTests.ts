@@ -6,7 +6,6 @@
  */
 
 import { JSDOM } from "jsdom";
-import "@testing-library/jest-dom";
 
 const jsdom = new JSDOM("<!doctype html><html><body></body></html>", {
   url: "https://example.org/",
