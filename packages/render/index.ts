@@ -11,4 +11,4 @@ export { Node, Children, FC, HTMLElementMap } from "./types";
 
 export { classnames } from "./utils";
 
-export { jsx, jsxFrag, updateTree, createElement } from "./element";
+export { jsx, jsxFrag, createElement } from "./element";
