@@ -30,6 +30,6 @@ describe("Todos: Example of using mount", () => {
       <Todos todos={fixture}>{(todo) => <MockTodo todo={todo} />}</Todos>
     );
 
-    expect(wrapper.getDOMNode()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 });

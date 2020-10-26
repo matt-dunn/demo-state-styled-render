@@ -23,7 +23,7 @@ describe("Todo: Example of using mount", () => {
       <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
     );
 
-    expect(wrapper.getDOMNode()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it("should render complete todo", async () => {
@@ -33,7 +33,7 @@ describe("Todo: Example of using mount", () => {
       <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
     );
 
-    expect(wrapper.getDOMNode()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it("should update todo", async () => {

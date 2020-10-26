@@ -9,31 +9,37 @@ import { HTMLElementMap, Node } from "../types";
 import { updateTree } from "../element";
 
 type ElementWrapper = {
-  simulate: (eventName: string) => any;
-};
-
-type Wrapper = {
+  getDOMNodes: () => HTMLElement[];
   find: (selector: string) => ElementWrapper;
+  simulate: (eventName: string) => ElementWrapper;
 };
 
-type Mount = (
-  node: Node
-) => {
-  getDOMNode: () => Element | null;
-  getNode: () => Node;
-} & Wrapper;
+type Mount = (node: Node) => ElementWrapper;
 
-const simulatedEvent = () => ({
+const syntheticEvent = () => ({
   preventDefault: () => undefined,
   stopPropagation: () => undefined,
 });
 
-const elementWrapper = (
-  el: HTMLElementMap | null | undefined
-): ElementWrapper => ({
-  simulate: (eventName) => {
-    const handler = el?.[`on${eventName}`];
-    return handler && handler(simulatedEvent());
+const elementWrapper = (elements: HTMLElementMap[]): ElementWrapper => ({
+  getDOMNodes: () => elements,
+  find: (selector) =>
+    elementWrapper(
+      elements.reduce(
+        (els, el) => [
+          ...els,
+          ...Array.from<HTMLElement>(el.querySelectorAll(selector)),
+        ],
+        [] as HTMLElement[]
+      )
+    ),
+  simulate(eventName) {
+    elements?.forEach((element) => {
+      const handler = element?.[`on${eventName}`];
+      handler && handler(syntheticEvent());
+    });
+
+    return this;
   },
 });
 
@@ -42,11 +48,7 @@ export const mount: Mount = (node) => {
 
   updateTree(el, node);
 
-  const componentDOM = el.firstElementChild;
+  const componentDOM = el.firstElementChild as HTMLElement | null;
 
-  return {
-    getDOMNode: () => componentDOM,
-    getNode: () => node,
-    find: (selector) => elementWrapper(componentDOM?.querySelector(selector)),
-  };
+  return elementWrapper((componentDOM && [componentDOM]) || []);
 };

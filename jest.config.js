@@ -12,5 +12,8 @@ module.exports = {
   collectCoverageFrom: [
     "<rootDir>/src/**/*.{ts,tsx,js,jsx}",
     "<rootDir>/packages/**/*.{ts,tsx,js,jsx}",
+  ],
+  snapshotSerializers: [
+    "<rootDir>/packages/render/test-utils/serialize-to-json"
   ]
 };
