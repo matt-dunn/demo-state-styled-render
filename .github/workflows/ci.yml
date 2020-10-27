@@ -29,6 +29,7 @@ jobs:
           yarn ci
 
       - name: Reporting (coverage)
+        if: github.event_name == 'pull_request'
         uses: vebr/jest-lcov-reporter@v0.2.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
