@@ -12,7 +12,11 @@ the hood and **not intended for production use**.
 
 ## Example
 
+### Functional Component
+
 ```jsx
+import myStyled from "packages/myStyled";
+
 const StyledArticle = myStyled("article")`
   @media (min-width: 576px) {
     display: flex;
@@ -44,4 +48,65 @@ export const MyComponent = () => (
     <p>World</p>
   </StyledArticle>
 );
+```
+
+#### Dynamic styling
+
+```tsx
+import myStyled from "packages/myStyled";
+
+type TodoItem = {
+  id: string;
+  text: string;
+  complete: boolean;
+};
+
+type TodoProps = {
+  todo: TodoItem;
+  className?: string;
+};
+
+export const Todo = ({ todo: { text }, className }: TodoProps) => (
+  <article className={className}>
+    {text}
+  </article>
+);
+
+const MyStyledTodo = myStyled(Todo)`
+  background-color: ${({ todo }) => (todo.complete ? "#0f0" : "#f00")}
+`;
+
+export const MyComponent = () => (
+  <>
+    <Todo$ todo={{id: "1", text: "My Todo", complete: true}} />
+    <Todo$ todo={{id: "2", text: "My Other Todo", complete: false}} />
+  </>
+);
+```
+
+### Vanilla DOM
+
+```javascript
+import { css } from "packages/myStyled";
+
+const myComponentClassName = css`
+  border: 1px solid red;
+  
+  &:hover {
+    border: 1px solid blue;
+  }
+  
+  label {
+    border: 1px solid green;
+  }
+`;
+
+const el = document.createElement("div");
+el.classList.add(myComponentClassName);
+
+const label = document.createElement("label");
+label.innerText = "My Label";
+
+el.append(label);
+document.body.append(el);
 ```

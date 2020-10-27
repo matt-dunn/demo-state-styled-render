@@ -7,13 +7,7 @@
 
 import { Children, createElement, FC } from "packages/render";
 
-import {
-  AnyRules,
-  ClientServerStylesheet,
-  createStylesheet,
-} from "./stylesheet";
-import { generateClassName, parseRule, updateSheetRule } from "./utils";
-import { createHash } from "./hash";
+import { cssWithProps, MyStyledTemplate } from "./css";
 
 export interface MyStyledComponentProps {
   className?: string;
@@ -28,63 +22,26 @@ export interface MyStyled<P, T> {
   (string: TemplateStringsArray, ...args: T[]): MyStyledComponent<P>;
 }
 
-type MyStyledTemplate<P> =
-  | {
-      (props: P): string | false | number | undefined;
-    }
-  | string
-  | false
-  | number
-  | undefined;
+type ComponentProps<P> = Omit<P, "className">;
 
-const globalStylesheet = createStylesheet();
-
-export const myStyled = <P>(
+export const myStyled = <P, O = ComponentProps<P>>(
   Component: MyStyledComponent<P>
-): MyStyled<Omit<P, "className">, MyStyledTemplate<P>> => (
-  strings,
-  ...args
-) => {
-  const updateRule = (
-    prevClassName: string | undefined,
-    props: any,
-    stylesheet?: ClientServerStylesheet<CSSRuleList | AnyRules>
-  ) => {
-    if (stylesheet) {
-      const rule =
-        (args.length === 0 && strings.join("")) ||
-        parseRule(strings, args, props);
-      const hash = createHash(rule);
-      const className = generateClassName(Component, hash);
+): MyStyled<O, MyStyledTemplate<O>> => (strings, ...args) => ({
+  children,
+  className,
+  ...props
+}: MyStyledComponentProps) => {
+  // @TODO keep track of previous class name...
+  // const prevClassName = useRef<string>("");
+  // prevClassName.current = css<P>(props as P, prevClassName.current)(strings, ...args);
 
-      if (
-        className === prevClassName ||
-        (stylesheet.hashes && stylesheet.hashes.indexOf(hash) !== -1)
-      ) {
-        return className;
-      }
+  const templateClassName = cssWithProps(props as O)(strings, ...args);
 
-      stylesheet.collectHash(hash);
-
-      return updateSheetRule(stylesheet.sheet, className, rule);
-    }
-
-    return "";
-  };
-
-  return ({ children, className, ...props }: MyStyledComponentProps) => {
-    // @TODO keep track of previous class name...
-    // const prevClassName = useRef<string | undefined>(undefined);
-    // prevClassName = updateRule(prevClassName, props, globalStylesheet);
-
-    const prevClassName = updateRule(undefined, props, globalStylesheet);
-
-    return createElement(
-      Component,
-      { ...props, className: [className, prevClassName].join(" ") },
-      children
-    );
-  };
+  return createElement(
+    Component,
+    { ...props, className: [className, templateClassName].join(" ") },
+    children
+  );
 };
 
 // @TODO: type this...!

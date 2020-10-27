@@ -7,7 +7,6 @@
 
 import Stylis from "stylis";
 
-import { MyStyledComponent } from "./myStyled";
 import { AnyRules, StylesheetPartial } from "./stylesheet";
 
 function isFunction(value: any): value is (...args: any[]) => any {
@@ -16,14 +15,14 @@ function isFunction(value: any): value is (...args: any[]) => any {
 
 export const parseRule = <T>(
   strings: TemplateStringsArray,
-  args: T[],
-  props: any
+  args?: T[],
+  props?: any
 ): string =>
   strings
     .reduce((rule: string[], part: string, index: number) => {
       rule.push(part);
 
-      const arg = args[index];
+      const arg = args?.[index];
       const value = arg && isFunction(arg) ? arg(props) : arg;
 
       if (value) {
@@ -36,10 +35,7 @@ export const parseRule = <T>(
 
 // Use a fixed class prefix to simplify client/server class names
 // const generateClassName = (Component, hash) => `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
-export const generateClassName = (
-  Component: MyStyledComponent<any>,
-  hash: string
-): string => `ms__${hash}`;
+export const generateClassName = (hash: string): string => `ms__${hash}`;
 
 export const updateSheetRule = (
   sheet: StylesheetPartial<CSSRuleList | AnyRules>,
