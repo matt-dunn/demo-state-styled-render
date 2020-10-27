@@ -5,7 +5,7 @@
  * @licence MIT
  */
 
-import { getDOMNodes } from "./mount";
+import { getDOMNodes } from "../mount";
 
 module.exports = {
   serialize(val, config, indentation, depth, refs, printer) {

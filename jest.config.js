@@ -14,6 +14,6 @@ module.exports = {
     "<rootDir>/packages/**/*.{ts,tsx,js,jsx}",
   ],
   snapshotSerializers: [
-    "<rootDir>/packages/render/test-utils/serialize-to-json"
+    "<rootDir>/packages/render/test-utils/jest/serialize-to-json"
   ]
 };
