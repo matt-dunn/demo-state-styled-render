@@ -10,7 +10,7 @@ the hood and **not intended for production use**.
 
 ---
 
-## Example
+## Examples
 
 ### Functional Component
 
@@ -78,8 +78,8 @@ const MyStyledTodo = myStyled(Todo)`
 
 export const MyComponent = () => (
   <>
-    <Todo$ todo={{id: "1", text: "My Todo", complete: true}} />
-    <Todo$ todo={{id: "2", text: "My Other Todo", complete: false}} />
+    <MyStyledTodo todo={{id: "1", text: "My Todo", complete: true}} />
+    <MyStyledTodo todo={{id: "2", text: "My Other Todo", complete: false}} />
   </>
 );
 ```
