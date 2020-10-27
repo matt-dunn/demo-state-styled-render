@@ -63,7 +63,8 @@ describe("Todo: Example of using mount", () => {
 
     expect(deleteTodo).not.toHaveBeenCalled();
 
-    wrapper.find("button").simulate("click");
+    // Example of simulating an event on the first element only
+    wrapper.find("button").at(0).simulate("click");
 
     expect(deleteTodo).toHaveBeenCalledWith("1");
   });
