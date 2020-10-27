@@ -1,5 +1,7 @@
 # Pure TypeScript implementation of styled JSX functional components and state management
 
+[![Actions Status](https://github.com/matt-dunn/demo-state-styled-render/workflows/CI/badge.svg)](https://github.com/matt-dunn/demo-state-styled-render/actions)
+
 > Simple vanilla, dependency free implementation of:
 >
 > - JSX functional component rendering with simple hooks
