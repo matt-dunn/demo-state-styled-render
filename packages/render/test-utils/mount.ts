@@ -15,6 +15,13 @@ type ElementWrapper = {
   find: (selector: string) => ElementWrapper;
   simulate: (eventName: string) => ElementWrapper;
   at: (index: number) => ElementWrapper;
+  hasClass: (className: string) => boolean;
+  forEach: (
+    cb: (element: HTMLElement, index: number) => void
+  ) => ElementWrapper;
+  map: <T>(cb: (element: HTMLElement, index: number) => T) => T[];
+  length: number;
+  html: () => string;
 };
 
 type Mount = (node: Node) => ElementWrapper;
@@ -62,6 +69,26 @@ const elementWrapper = (
 
       return this;
     },
+    hasClass: (className) => {
+      if (elements.length !== 1) {
+        throw new TypeError(
+          `hasClass can only be executed on a single element. Found ${
+            elements.length
+          } elements: ${elements.map((el) => el.tagName)}.`
+        );
+      }
+
+      return elements[0].classList.contains(className);
+    },
+    forEach(cb) {
+      elements.forEach(cb);
+
+      return this;
+    },
+    map: (cb) => elements.map(cb),
+    length: elements.length,
+    html: () =>
+      elements.reduce((html, element) => html + element.outerHTML.trim(), ""),
   };
 };
 

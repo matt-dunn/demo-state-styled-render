@@ -68,4 +68,55 @@ describe("Todo: Example of using mount", () => {
 
     expect(deleteTodo).toHaveBeenCalledWith("1");
   });
+
+  it("should have correct class names", async () => {
+    const fixture = { id: "1", text: "My Todo Item", complete: true };
+
+    const wrapper = mount(
+      <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+    );
+
+    // Example of checking the class name on an element
+    expect(wrapper.find("del").hasClass("text-muted")).toEqual(true);
+  });
+
+  it("should have correct child elements", async () => {
+    const fixture = { id: "1", text: "My Todo Item", complete: true };
+
+    const wrapper = mount(
+      <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+    );
+
+    // Convoluted example of checking the child element tag names with forEach
+    const elementNames = ["LABEL", "DEL", "INPUT", "BUTTON"];
+
+    wrapper.find("*").forEach((el, i) => {
+      expect(el.tagName).toEqual(elementNames[i]);
+    });
+
+    // Convoluted example of checking the child element tag names with map
+    const elementTagNames = wrapper
+      .find("*")
+      .map((el) => el.tagName.toLowerCase());
+
+    expect(elementTagNames).toEqual(["label", "del", "input", "button"]);
+  });
+
+  it("should have correct html", async () => {
+    const fixture = { id: "1", text: "My Todo Item", complete: true };
+
+    const wrapper = mount(
+      <Todo todo={fixture} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+    );
+
+    // Convoluted example of checking the root html - NOT recommended ;)
+    expect(wrapper.html()).toEqual(
+      '<article class=" ms__enAiqr"><label><del class="text-muted"><input type="checkbox" checked="true">My Todo Item</del></label><button class="btn btn-sm btn-outline-secondary">Delete</button></article>'
+    );
+
+    // Convoluted example of checking the child elements html - NOT recommended ;)
+    expect(wrapper.find("*").html()).toEqual(
+      '<label><del class="text-muted"><input type="checkbox" checked="true">My Todo Item</del></label><del class="text-muted"><input type="checkbox" checked="true">My Todo Item</del><input type="checkbox" checked="true"><button class="btn btn-sm btn-outline-secondary">Delete</button>'
+    );
+  });
 });
