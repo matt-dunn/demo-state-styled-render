@@ -9,13 +9,20 @@
 
 import { jsx } from "packages/render";
 import { mount } from "packages/render/test-utils";
+import { createMockAction, MockAction } from "packages/state/test-utils/jest";
 
 import { Todo } from "../Todo";
-
-const deleteTodo: any = jest.fn();
-const updateTodo: any = jest.fn();
+import { Actions as TodoActions } from "../duck";
 
 describe("Todo: Example of using mount", () => {
+  let deleteTodo: MockAction<TodoActions["deleteTodo"]>;
+  let updateTodo: MockAction<TodoActions["updateTodo"]>;
+
+  beforeEach(() => {
+    deleteTodo = createMockAction();
+    updateTodo = createMockAction();
+  });
+
   it("should render incomplete todo", async () => {
     const fixture = { id: "1", text: "My Todo Item", complete: false };
 
