@@ -15,5 +15,14 @@ module.exports = {
   ],
   snapshotSerializers: [
     "<rootDir>/packages/render/test-utils/jest/serialize-to-json"
+  ],
+  reporters: [
+    "default",
+    ["jest-junit", {
+      outputDirectory: "./reports",
+      suiteNameTemplate: "{filepath}",
+      classNameTemplate: "{classname}",
+      titleTemplate: "{title}"
+    }],
   ]
 };

@@ -28,6 +28,19 @@ jobs:
           yarn install
           yarn ci
 
+      - name: Reporting (coverage)
+        uses: vebr/jest-lcov-reporter@v0.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/lcov.info
+
+      - name: Reporting (unit)
+        uses: IgnusG/jest-report-action@v2.3.3
+        if: always() # Or use "continue-on-error: true" in previous test step
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          junit-file: ./reports/junit.xml
+
       - name: Checkout gh-pages
         uses: actions/checkout@v2
         with:
