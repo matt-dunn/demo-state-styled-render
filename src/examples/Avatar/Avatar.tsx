@@ -12,7 +12,10 @@ import myStyled from "packages/myStyled";
 
 import AvatarImage from "./assets/mjd.png";
 
-const Avatar$ = myStyled("aside")`
+// Quick fix to allow stylelint to do it's thing:
+const styled = myStyled;
+
+const Avatar$ = styled("aside")`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -23,8 +26,9 @@ const Avatar$ = myStyled("aside")`
     flex-direction: column;
     align-items: flex-end;
   }
-    
-  a, a:hover {
+
+  a,
+  a:hover {
     color: inherit;
     text-decoration: none;
   }
@@ -44,7 +48,7 @@ const Avatar$ = myStyled("aside")`
 
     &::before {
       content: " ";
-      background: url(${AvatarImage}) no-repeat 50%/cover #fff;
+      background: url(${AvatarImage}) no-repeat 50% / cover #fff;
       border-radius: 500px;
       border: 1px solid #ccc;
       overflow: hidden;
@@ -58,7 +62,7 @@ const Avatar$ = myStyled("aside")`
       display: block;
     }
   }
-  
+
   p {
     margin: 0;
     padding: 0;

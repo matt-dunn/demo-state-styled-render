@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "type-check": "tsc --noEmit --skipLibCheck",
-    "lint:css": "yarn stylelint \"./src/**/*.{css,scss,sass}\"",
+    "lint:css": "yarn stylelint \"./src/**/*.{css,scss,sass,jsx,tsx}\" --fix",
     "lint:js": "eslint ./ --ext .js,.ts,.jsx,.tsx --fix",
     "lint": "yarn lint:css && yarn lint:js",
     "start": "parcel public/index.html --https",
@@ -55,6 +55,7 @@
     "recursive-copy": "^2.0.11",
     "sass": "^1.26.8",
     "stylelint": "^13.7.0",
+    "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-sass-guidelines": "^7.1.0",
     "typescript": "^4.0.2"
   },

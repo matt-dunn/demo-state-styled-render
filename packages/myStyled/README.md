@@ -110,3 +110,29 @@ label.innerText = "My Label";
 el.append(label);
 document.body.append(el);
 ```
+
+## Linting CSS-in-JS
+
+An easy way to lint styled components is to re-use the styled-components stylelint configuration. To do
+this, create a local ```const``` called '```styled```' and use this variable for the styled
+components.
+
+For example:
+
+```javascript
+import myStyled from "packages/myStyled";
+
+// 'styled' variable kept separate from the import to get stylelint to 
+// perform linting of the embedded CSS
+const styled = myStyled;
+
+const Todo$ = styled("article")`
+  margin: 2xxx
+`;
+```
+
+Result:
+
+```
+Unexpected unknown unit "xxx"
+```

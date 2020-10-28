@@ -20,7 +20,10 @@ type TodoProps = {
   updateTodo: TodoActions["updateTodo"];
 };
 
-const Todo$ = myStyled("article")`
+// Quick fix to allow stylelint to do it's thing:
+const styled = myStyled;
+
+const Todo$ = styled("article")`
   display: flex;
   align-items: flex-start;
 
@@ -31,7 +34,7 @@ const Todo$ = myStyled("article")`
     display: flex;
     align-items: baseline;
   }
-  
+
   del {
     word-break: break-word;
     display: flex;

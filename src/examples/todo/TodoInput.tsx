@@ -16,7 +16,10 @@ type TodoInputProps = {
   createTodo: TodoActions["createTodo"];
 };
 
-const TodoListForm$ = myStyled("form")`
+// Quick fix to allow stylelint to do it's thing:
+const styled = myStyled;
+
+const TodoListForm$ = styled("form")`
   display: flex;
   align-items: center;
   margin-bottom: 0.75rem;
@@ -28,7 +31,7 @@ const TodoListForm$ = myStyled("form")`
     margin: 0;
   }
 
-  input[type=text] {
+  input[type="text"] {
     width: 100%;
     margin: 0 0.5rem 0 0.35rem;
   }

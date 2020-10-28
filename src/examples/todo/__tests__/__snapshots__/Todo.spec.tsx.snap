@@ -1,8 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Todo: Example of using mount should have correct html 1`] = `"<article class=\\" ms__ezdkTR\\"><label><del class=\\"text-muted\\"><input type=\\"checkbox\\" checked=\\"true\\">My Todo Item</del></label><button class=\\"btn btn-sm btn-outline-secondary\\">Delete</button></article>"`;
+
+exports[`Todo: Example of using mount should have correct html 2`] = `"<label><del class=\\"text-muted\\"><input type=\\"checkbox\\" checked=\\"true\\">My Todo Item</del></label><del class=\\"text-muted\\"><input type=\\"checkbox\\" checked=\\"true\\">My Todo Item</del><input type=\\"checkbox\\" checked=\\"true\\"><button class=\\"btn btn-sm btn-outline-secondary\\">Delete</button>"`;
+
 exports[`Todo: Example of using mount should render complete todo 1`] = `
 <article
-  class=" ms__enAiqr"
+  class=" ms__ezdkTR"
 >
   <label>
     <del
@@ -25,7 +29,7 @@ exports[`Todo: Example of using mount should render complete todo 1`] = `
 
 exports[`Todo: Example of using mount should render incomplete todo 1`] = `
 <article
-  class=" ms__enAiqr"
+  class=" ms__ezdkTR"
 >
   <label>
     <input

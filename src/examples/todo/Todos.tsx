@@ -17,13 +17,16 @@ type TodosProps = {
   children: (todo: TodoItem) => Node;
 };
 
-const Todos$ = myStyled("ul")`
+// Quick fix to allow stylelint to do it's thing:
+const styled = myStyled;
+
+const Todos$ = styled("ul")`
   list-style: none;
   margin: 0;
   padding: 0;
 `;
 
-const TodosItem$ = myStyled("li")`
+const TodosItem$ = styled("li")`
   padding: 0.25rem 0;
 `;
 

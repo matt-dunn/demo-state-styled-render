@@ -24,14 +24,17 @@ type TodoListProps = {
   className?: string;
 };
 
-const TodoList$ = myStyled("section")`
+// Quick fix to allow stylelint to do it's thing:
+const styled = myStyled;
+
+const TodoList$ = styled("section")`
   padding: 1rem;
   width: 100%;
   border: 1px solid var(--secondary-color);
   border-radius: 0.25rem;
 `;
 
-const TodoListHeader$ = myStyled("header")`
+const TodoListHeader$ = styled("header")`
   border-bottom: 1px solid var(--secondary-color);
   margin-bottom: 1rem;
 `;

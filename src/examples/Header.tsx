@@ -12,14 +12,17 @@ import myStyled from "packages/myStyled";
 
 import { Avatar } from "./Avatar";
 
-const Header$ = myStyled("header")`
+// Quick fix to allow stylelint to do it's thing:
+const styled = myStyled;
+
+const Header$ = styled("header")`
   align-items: flex-end;
   padding: 0.5rem 0;
   margin-bottom: 1rem;
   border-bottom: 2px solid var(--secondary-color);
   background-color: var(--main-bg-color);
   z-index: 1;
-  
+
   > h1 {
     flex-grow: 1;
     align-self: center;
