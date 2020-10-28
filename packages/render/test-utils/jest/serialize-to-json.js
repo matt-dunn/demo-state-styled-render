@@ -8,8 +8,9 @@
 import { getDOMNodes } from "../mount";
 
 module.exports = {
-  serialize(val, config, indentation, depth, refs, printer) {
-    const elements = val[getDOMNodes]();
+  serialize(value, config, indentation, depth, refs, printer) {
+    const elements = value[getDOMNodes]();
+
     return printer(
       elements.length === 1 ? elements[0] : elements,
       config,
@@ -20,10 +21,11 @@ module.exports = {
     );
   },
 
-  test(val) {
+  test(value) {
     return (
-      Object.getOwnPropertySymbols(val).filter((s) => s === getDOMNodes)
-        .length === 1
+      Object.getOwnPropertySymbols(value).filter(
+        (symbol) => symbol === getDOMNodes
+      ).length === 1
     );
   },
 };

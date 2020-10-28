@@ -5,25 +5,33 @@
  * @licence MIT
  */
 
+export const NODE_TYPE_FRAGMENT = "#fragment";
+
 export type AnyFunc = (...args: any[]) => any;
 
 export type Key = string | number | null;
 
-export type Children<T = string> = Node<T>[];
+export type NodeType<P = any> =
+  | {
+      [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]
+        ? K
+        : never;
+    }[keyof JSX.IntrinsicElements]
+  | typeof NODE_TYPE_FRAGMENT
+  | FC<P>;
 
-export type NodeBase<T = string, P = any> = {
-  type: T;
+export type Node<P = any> = {
+  type: NodeType;
   props: P;
+  children?: Children<P>;
+  key: Key;
 };
 
-export type Node<T = string, P = any> = {
-  children?: Children<T>;
-  key: Key;
-} & NodeBase<T, P>;
+export type Children<P = any> = Node<P>[];
 
-export type FC<P = any, N = Node> = (props: P) => N;
+export type AnyNode = Node | string | number;
 
-export type NodeType<P = any> = string | FC<P>;
+export type FC<P = any, N = Node<P>> = (props: P) => N;
 
 export interface HTMLElementMap extends HTMLElement {
   [key: string]: any;

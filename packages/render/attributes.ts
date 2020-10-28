@@ -9,52 +9,52 @@ import { AnyFunc, HTMLElementMap, Props } from "./types";
 import { propertyMap } from "./utils";
 
 export const setAttribute = (
-  el: HTMLElementMap,
+  element: HTMLElementMap,
   name: string,
   value: string | AnyFunc
 ) => {
   const propertyName = propertyMap(name);
 
   if (typeof value === "function") {
-    el[propertyName] = value;
+    element[propertyName] = value;
   } else {
     if (value) {
-      el.setAttribute(propertyName, value);
+      element.setAttribute(propertyName, value);
     } else {
-      el.removeAttribute(propertyName);
+      element.removeAttribute(propertyName);
     }
-    el[propertyName] = value;
+    element[propertyName] = value;
   }
 };
 
-export const setAttributes = (el: HTMLElement, props: Props) =>
+export const setAttributes = (element: HTMLElement, props: Props) =>
   Object.keys(props || {}).forEach((name) =>
-    setAttribute(el, name, props[name])
+    setAttribute(element, name, props[name])
   );
 
-export const removeAttribute = (el: HTMLElement, name: string) =>
-  el.removeAttribute(propertyMap(name));
+export const removeAttribute = (element: HTMLElement, name: string) =>
+  element.removeAttribute(propertyMap(name));
 
 export const updateAttribute = (
-  el: HTMLElement,
+  element: HTMLElement,
   name: string,
   value: string,
   prevValue: string
 ) => {
   if (value !== prevValue) {
     if (value === undefined) {
-      removeAttribute(el, name);
+      removeAttribute(element, name);
     } else if (!prevValue || value !== prevValue) {
-      setAttribute(el, name, value);
+      setAttribute(element, name, value);
     }
   }
 };
 
 export const updateAttributes = (
-  el: HTMLElement,
+  element: HTMLElement,
   props: Props,
   prevProps: Props = {}
 ) =>
   Object.keys({ ...props, ...prevProps }).forEach((name) =>
-    updateAttribute(el, name, props[name], prevProps[name])
+    updateAttribute(element, name, props[name], prevProps[name])
   );

@@ -13,7 +13,7 @@ export const getDOMNodes = Symbol("getDOMNodes");
 type ElementWrapper = {
   [getDOMNodes]: () => HTMLElement[];
   find: (selector: string) => ElementWrapper;
-  simulate: (eventName: string) => ElementWrapper;
+  simulate: <A = any>(eventName: string, eventArgs?: A) => ElementWrapper;
   at: (index: number) => ElementWrapper;
   hasClass: (className: string) => boolean;
   forEach: (
@@ -26,7 +26,8 @@ type ElementWrapper = {
 
 type Mount = (node: Node) => ElementWrapper;
 
-const syntheticEvent = () => ({
+const syntheticEvent = <A = any>(eventArgs?: A) => ({
+  ...eventArgs,
   preventDefault: () => undefined,
   stopPropagation: () => undefined,
 });
@@ -43,17 +44,17 @@ const elementWrapper = (
     find: (selector) =>
       elementWrapper(
         elements.reduce(
-          (els, el) => [
-            ...els,
-            ...Array.from<HTMLElement>(el.querySelectorAll(selector)),
+          (elements, element) => [
+            ...elements,
+            ...Array.from<HTMLElement>(element.querySelectorAll(selector)),
           ],
           [] as HTMLElement[]
         )
       ),
-    simulate(eventName) {
+    simulate(eventName, eventArgs?) {
       elements.forEach((element) => {
         const handler = element?.[`on${eventName}`];
-        handler && handler(syntheticEvent());
+        handler && handler(syntheticEvent(eventArgs));
       });
 
       return this;
