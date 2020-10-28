@@ -38,14 +38,11 @@ const AnyRule = (cssText: string): AnyRule => {
 
     return {
       cssText,
-      cssRules:
-        match &&
-        match.groups &&
-        match.groups.selectorText
-          .slice(0, -1)
-          .split("}")
-          .map((rule) => rule && AnyRule(`${rule}}`))
-          .filter((rule) => rule),
+      cssRules: match?.groups?.selectorText
+        .slice(0, -1)
+        .split("}")
+        .map((rule) => rule && AnyRule(`${rule}}`))
+        .filter((rule) => rule),
     } as OtherRule;
   }
   const match = cssText.match(/(?<selectorText>.*?)\{/);

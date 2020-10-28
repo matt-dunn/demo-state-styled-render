@@ -68,7 +68,7 @@ const createDocumentElement = (node: AnyNode): HTMLElement | Text => {
 
     setAttributes(element, node?.props);
 
-    flattenChildren(node.children || [])
+    flattenChildren(node.children)
       .map(createDocumentElement)
       .forEach(element.appendChild.bind(element));
 
@@ -109,10 +109,10 @@ const updateChildren = (
   }
 };
 
-const flattenChildren = (children: Children): Children =>
+const flattenChildren = (children: Children = []): Children =>
   children.reduce((children, child) => {
     if (child.type === NODE_TYPE_FRAGMENT) {
-      return [...children, ...flattenChildren(child.children || [])];
+      return [...children, ...flattenChildren(child.children)];
     }
     return [...children, child];
   }, [] as Children);
@@ -141,8 +141,8 @@ export const updateTree = (
 
     updateChildren(
       element,
-      flattenChildren(node.children || []),
-      flattenChildren(prevNode.children || []),
+      flattenChildren(node.children),
+      flattenChildren(prevNode.children),
       index
     );
   } else if (element.childNodes[index].nodeValue !== node) {

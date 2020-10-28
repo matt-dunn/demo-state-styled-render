@@ -31,7 +31,7 @@ export type Children<P = any> = Node<P>[];
 
 export type AnyNode = Node | string | number;
 
-export type FC<P = any, N = Node<P>> = (props: P) => N;
+export type FC<P = any> = (props: P) => Node<P>;
 
 export interface HTMLElementMap extends HTMLElement {
   [key: string]: any;

@@ -25,7 +25,7 @@ export const createMockAction = <A extends any[], P>(
   payloadCreator?: PayloadCreator<A, P>
 ): MockActionCreator<A, P> => {
   const action = (...args: A) => ({
-    type,
+    type: type || "mock/ACTION",
     payload: payloadCreator && payloadCreator(...args),
   });
 

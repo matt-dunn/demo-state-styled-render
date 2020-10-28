@@ -9,6 +9,10 @@ import Stylis from "stylis";
 
 import { AnyRules, StylesheetPartial } from "./stylesheet";
 
+const CLASS_NAME_PREFIX = "ms__";
+
+const DEBUG = process.env.DEBUG === "true";
+
 function isFunction(value: any): value is (...args: any[]) => any {
   return typeof value === "function";
 }
@@ -34,15 +38,15 @@ export const parseRule = <T>(
     .join("");
 
 // Use a fixed class prefix to simplify client/server class names
-// const generateClassName = (Component, hash) => `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
-export const generateClassName = (hash: string): string => `ms__${hash}`;
+export const generateClassName = (hash: string): string =>
+  `${CLASS_NAME_PREFIX}${hash}`;
 
 export const updateSheetRule = (
   sheet: StylesheetPartial<CSSRuleList | AnyRules>,
   className: string,
   rule: string
 ) => {
-  const DEBUG: string[] = [];
+  const DEBUG_RULES: string[] = [];
 
   const selectorText = `.${className}`;
 
@@ -83,14 +87,21 @@ export const updateSheetRule = (
 
         sheet.insertRule(`${currentSelector} {${currentContent}}`);
 
-        DEBUG.push(`${currentSelector} {\n    ${content}\n  }`);
+        if (DEBUG) {
+          DEBUG_RULES.push(`${currentSelector} {\n    ${content}\n  }`);
+        }
       }
     }
   });
 
   stylis(selectorText, rule);
 
-  // console.log(`UPDATE(${sheet.rules.length} rules)\n `, DEBUG.join("\n  "));
+  if (DEBUG) {
+    console.log(
+      `UPDATE(${sheet.rules.length} rules)\n `,
+      DEBUG_RULES.join("\n  ")
+    );
+  }
 
   return className;
 };

@@ -12,5 +12,9 @@
       "ignore": ["attribute", "class", "id"]
     }],
     "shorthand-property-no-redundant-values": null
-  }
+  },
+  "ignoreFiles": [
+    "**/*.js",
+    "**/*.ts"
+  ]
 }
