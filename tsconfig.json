@@ -13,6 +13,8 @@
     "moduleResolution": "node",
     "lib": ["es2015", "dom"],
     "strict": true,
+    "alwaysStrict": true,
+    "noImplicitThis": true,
     "strictNullChecks": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,

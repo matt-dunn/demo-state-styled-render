@@ -21,9 +21,9 @@ export type NodeType<P = any> =
   | FC<P>;
 
 export type Node<P = any> = {
-  type: NodeType;
+  type: NodeType<P>;
   props: P;
-  children?: Children<P>;
+  children?: Children;
   key: Key;
 };
 

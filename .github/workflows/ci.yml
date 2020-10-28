@@ -23,10 +23,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install & Build
-        run: |
-          yarn install
-          yarn ci
+      - name: Install
+        run: yarn install
+
+      - name: Build
+        run: yarn ci
 
       - name: Reporting (coverage)
         if: github.event_name == 'pull_request'
