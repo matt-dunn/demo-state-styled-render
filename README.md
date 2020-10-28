@@ -27,8 +27,8 @@ Also includes:
 
 - Simple implementation of a [test utility](./packages/render/test-utils/mount.ts) inspired by [Enzyme](https://enzymejs.github.io/enzyme/) to 
   [mount components and simulate events](./src/examples/todo/__tests__/Todo.spec.tsx).
-- GitHub [workflow](./.github/workflows/ci.yml) for CI builds; runs tests and creates 
-  a preview distribution for each pull request and merges into master.
+- GitHub [workflow](./.github/workflows/ci.yml) for CI builds; runs the usual tasks and creates 
+  sandboxed preview distributions hosted on gh-pages for each pull request and merges into master.
   
 ---
 
