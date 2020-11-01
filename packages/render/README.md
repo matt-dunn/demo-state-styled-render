@@ -10,6 +10,7 @@ hooks or detection for cascading re-renders etc.
 
 Features:
 
+- Simple virtual DOM
 - DOM tree diff with updates applied only to changed elements / attributes
 - Simple implementation of a React style hooks:
     - very simple implementation of ```useState```
