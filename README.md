@@ -4,7 +4,7 @@
 
 > Simple vanilla, dependency free implementation of:
 >
-> - JSX functional component rendering with simple hooks
+> - JSX functional component rendering with virtual DOM and simple hooks
 > - Redux style state management
 > - A Styled Component implementation
 
