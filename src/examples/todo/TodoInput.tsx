@@ -44,7 +44,7 @@ export const TodoInput = ({ createTodo }: TodoInputProps) => {
     <TodoListForm$
       onSubmit={(e: any) => {
         e.preventDefault();
-        createTodo(value);
+        createTodo(value.trim());
         setValue("");
       }}
     >
@@ -60,7 +60,7 @@ export const TodoInput = ({ createTodo }: TodoInputProps) => {
           }}
         />
       </label>
-      <button type="submit" className="btn btn-primary" disabled={!value}>
+      <button type="submit" className="btn btn-primary" disabled={!value.trim()}>
         Add
       </button>
     </TodoListForm$>

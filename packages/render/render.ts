@@ -7,18 +7,15 @@
 
 import { Actions, Store } from "packages/state";
 
-import { FC, Node } from "./types";
+import { AnyNode, FC } from "./types";
 import { updateTree } from "./element";
-
-type UseState = <S = any>(initialState: S) => [S, (newValue: S) => S];
+import activeHooks, { HookID } from "./hooks";
 
 type MxContainer = {
-  index: number;
-  state: any[];
+  hookId: HookID;
   currentState: any;
-  currentTree?: Node;
+  currentTree?: AnyNode;
   renderTree: () => void;
-  useState: UseState;
   render: <S>(
     store?: Store<S>,
     actions?: Actions
@@ -26,32 +23,11 @@ type MxContainer = {
 };
 
 export const Mx: MxContainer = {
-  index: 0,
-  state: [],
+  hookId: (undefined as unknown) as HookID,
   currentState: undefined,
   currentTree: undefined,
   renderTree: (undefined as unknown) as () => void,
-  useState: <S = any>(initialState: S) => {
-    const activeIndex = Mx.index;
 
-    if (Mx.state[activeIndex] === undefined) {
-      Mx.state[activeIndex] = initialState;
-    }
-
-    const currentState = Mx.state[activeIndex];
-
-    const setter = (newValue: S) => {
-      if (Mx.state[activeIndex] !== newValue) {
-        Mx.state[activeIndex] = newValue;
-        Mx.renderTree();
-      }
-      return newValue;
-    };
-
-    Mx.index++;
-
-    return [currentState, setter];
-  },
   render: (store, actions) => (component) => (mountPoint) => {
     const dispatchActions = Object.entries(actions || {}).reduce(
       (actions, [key, action]) => ({
@@ -62,12 +38,17 @@ export const Mx: MxContainer = {
     );
 
     Mx.renderTree = () => {
+      activeHooks.setActive(Mx.hookId);
+
       const currentTree = component({ ...Mx.currentState, ...dispatchActions });
       updateTree(mountPoint, currentTree, Mx.currentTree);
 
       Mx.currentTree = currentTree;
-      Mx.index = 0;
     };
+
+    Mx.hookId = activeHooks.register({
+      render: Mx.renderTree,
+    });
 
     Mx.currentState = store?.getState();
 
@@ -79,5 +60,3 @@ export const Mx: MxContainer = {
     return Mx.renderTree();
   },
 };
-
-export const useState = Mx.useState;

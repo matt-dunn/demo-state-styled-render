@@ -84,13 +84,12 @@ const createDocumentElement = (node: AnyNode): HTMLElement | Text => {
 
 const hasChanged = (node: AnyNode, prevNode: AnyNode) =>
   typeof node !== typeof prevNode ||
-  (typeof node === "string" && node !== prevNode) ||
   (isNode(node) && node.type) !== (isNode(prevNode) && prevNode.type);
 
 const updateChildren = (
   element: HTMLElement,
-  children: Children,
-  prevChildren: Children,
+  children: Children = [],
+  prevChildren: Children = [],
   index: number
 ) => {
   const nodeChildrenLength = children.length;
@@ -111,7 +110,7 @@ const updateChildren = (
 
 const flattenChildren = (children: Children = []): Children =>
   children.reduce((children, child) => {
-    if (child.type === NODE_TYPE_FRAGMENT) {
+    if (isNode(child) && child.type === NODE_TYPE_FRAGMENT) {
       return [...children, ...flattenChildren(child.children)];
     }
     return [...children, child];
@@ -119,8 +118,8 @@ const flattenChildren = (children: Children = []): Children =>
 
 export const updateTree = (
   element: HTMLElement,
-  node: Node,
-  prevNode?: Node,
+  node: AnyNode,
+  prevNode?: AnyNode,
   index = 0
 ) => {
   if (prevNode === undefined) {
@@ -136,13 +135,15 @@ export const updateTree = (
     updateAttributes(
       element.childNodes[index] as HTMLElement,
       node.props,
-      prevNode.props
+      isNode(prevNode) ? prevNode.props : undefined
     );
 
     updateChildren(
       element,
       flattenChildren(node.children),
-      flattenChildren(prevNode.children),
+      flattenChildren(
+        (isNode(prevNode) && flattenChildren(prevNode?.children)) || undefined
+      ),
       index
     );
   } else if (element.childNodes[index].nodeValue !== node) {

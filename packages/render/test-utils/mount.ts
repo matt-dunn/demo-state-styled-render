@@ -7,6 +7,8 @@
 
 import { HTMLElementMap, Node } from "../types";
 import { updateTree } from "../element";
+import activeHooks from "../hooks";
+import { looseRef } from "../utils";
 
 export const getDOMNodes = Symbol("getDOMNodes");
 
@@ -22,6 +24,7 @@ type ElementWrapper = {
   map: <T>(cb: (element: HTMLElement, index: number) => T) => T[];
   length: number;
   html: () => string;
+  update: () => void;
 };
 
 type Mount = (node: Node) => ElementWrapper;
@@ -32,27 +35,33 @@ const syntheticEvent = <A = any>(eventArgs?: A) => ({
   stopPropagation: () => undefined,
 });
 
+type ElementWrapperOptions = {
+  render: () => void;
+};
+
 const elementWrapper = (
-  element?: HTMLElementMap[] | HTMLElementMap | null
+  parentElement: HTMLElementMap,
+  element: HTMLElementMap | HTMLElementMap[],
+  options: ElementWrapperOptions
 ): ElementWrapper => {
-  const elements =
-    (element && Array.isArray(element) ? element : [element as HTMLElement]) ||
-    [];
+  const elements = looseRef(Array.isArray(element) ? element : [element] || []);
 
   return {
-    [getDOMNodes]: () => elements,
+    [getDOMNodes]: () => elements.current,
     find: (selector) =>
       elementWrapper(
-        elements.reduce(
+        parentElement,
+        elements.current.reduce(
           (elements, element) => [
             ...elements,
             ...Array.from<HTMLElement>(element.querySelectorAll(selector)),
           ],
           [] as HTMLElement[]
-        )
+        ),
+        options
       ),
     simulate(eventName, eventArgs?) {
-      elements.forEach((element) => {
+      elements.current.forEach((element) => {
         const handler = element?.[`on${eventName}`];
         handler && handler(syntheticEvent(eventArgs));
       });
@@ -65,40 +74,60 @@ const elementWrapper = (
       }
 
       if (Array.isArray(element)) {
-        return elementWrapper(element[index]);
+        return elementWrapper(parentElement, element[index], options);
       }
 
       return this;
     },
     hasClass: (className) => {
-      if (elements.length !== 1) {
+      if (elements.current.length !== 1) {
         throw new TypeError(
           `hasClass can only be executed on a single element. Found ${
-            elements.length
-          } elements: ${elements.map((el) => el.tagName)}.`
+            elements.current.length
+          } elements: ${elements.current.map((el) => el.tagName)}.`
         );
       }
 
-      return elements[0].classList.contains(className);
+      return elements.current[0].classList.contains(className);
     },
     forEach(cb) {
-      elements.forEach(cb);
+      elements.current.forEach(cb);
 
       return this;
     },
-    map: (cb) => elements.map(cb),
-    length: elements.length,
+    map: (cb) => elements.current.map(cb),
+    length: elements.current.length,
     html: () =>
-      elements.reduce((html, element) => html + element.outerHTML.trim(), ""),
+      elements.current.reduce(
+        (html, element) => html + element.outerHTML.trim(),
+        ""
+      ),
+    update() {
+      options.render();
+      elements.current = Array.isArray(parentElement.firstElementChild)
+        ? parentElement.firstElementChild
+        : [parentElement.firstElementChild as HTMLElement] || [];
+
+      return this;
+    },
   };
 };
 
 export const mount: Mount = (node) => {
   const el = document.createElement("div");
 
-  updateTree(el, node);
+  const render = () => {
+    activeHooks.setActive(hookId);
 
-  const componentDOM = el.firstElementChild as HTMLElement | null;
+    el.innerHTML = "";
+    updateTree(el, node);
+  };
 
-  return elementWrapper(componentDOM);
+  const hookId = activeHooks.register({
+    render,
+  });
+
+  render();
+
+  return elementWrapper(el, el.firstElementChild as HTMLElement, { render });
 };
