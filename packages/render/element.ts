@@ -8,7 +8,6 @@
 import {
   AnyNode,
   Children,
-  Key,
   Node,
   NODE_TYPE_FRAGMENT,
   NodeType,
@@ -16,37 +15,7 @@ import {
 } from "./types";
 import { isNode } from "./utils";
 import { setAttributes, updateAttributes } from "./attributes";
-
-export const jsx = (
-  type: NodeType,
-  props: Props = {},
-  ...children: Children
-): Node => {
-  const { key, ...rest } = props || {};
-
-  return typeof type === "function"
-    ? type({
-        ...rest,
-        children: children?.length === 1 ? children[0] : children,
-        key,
-      })
-    : { type, props: rest, children, key };
-};
-
-export const jsxFrag = ({
-  children,
-  ...props
-}: {
-  children: Children;
-}): Node & { key: Key } => ({
-  type: NODE_TYPE_FRAGMENT,
-  props: props,
-  children: children,
-  key: null,
-});
-
-(global as any).jsx = jsx;
-(global as any).jsxFrag = jsxFrag;
+import { jsx } from "./jsx";
 
 export const createElement = (
   type: NodeType,
@@ -125,6 +94,7 @@ export const updateTree = (
   if (prevNode === undefined) {
     element.appendChild(createDocumentElement(node));
   } else if (node === undefined) {
+    // @TODO: unmount and mounted components...!
     element.removeChild(element.childNodes[index]);
   } else if (hasChanged(node, prevNode)) {
     element.replaceChild(

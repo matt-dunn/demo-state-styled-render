@@ -11,6 +11,8 @@ export { Node, Children, FC, HTMLElementMap } from "./types";
 
 export { classnames } from "./utils";
 
-export { jsx, jsxFrag, createElement } from "./element";
+export { createElement } from "./element";
+
+export { jsx, jsxFrag } from "./jsx";
 
 export * from "./hooks";
