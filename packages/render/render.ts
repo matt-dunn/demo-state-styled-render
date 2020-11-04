@@ -14,7 +14,7 @@ import activeHooks, { HookID } from "./hooks";
 type MxContainer = {
   hookId: HookID;
   currentState: any;
-  currentTree?: AnyNode;
+  previousTree?: AnyNode;
   renderTree: () => void;
   render: <S>(
     store?: Store<S>,
@@ -25,7 +25,7 @@ type MxContainer = {
 export const Mx: MxContainer = {
   hookId: (undefined as unknown) as HookID,
   currentState: undefined,
-  currentTree: undefined,
+  previousTree: undefined,
   renderTree: (undefined as unknown) as () => void,
 
   render: (store, actions) => (component) => (mountPoint) => {
@@ -41,9 +41,9 @@ export const Mx: MxContainer = {
       activeHooks.setActive(Mx.hookId);
 
       const currentTree = component({ ...Mx.currentState, ...dispatchActions });
-      updateTree(mountPoint, currentTree, Mx.currentTree);
+      updateTree(mountPoint, currentTree, Mx.previousTree);
 
-      Mx.currentTree = currentTree;
+      Mx.previousTree = currentTree;
     };
 
     Mx.hookId = activeHooks.register({

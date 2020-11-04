@@ -11,7 +11,8 @@ module.exports = {
   coverageDirectory: "<rootDir>/coverage/",
   collectCoverageFrom: [
     "<rootDir>/src/**/*.{ts,tsx,js,jsx}",
-    "<rootDir>/packages/**/*.{ts,tsx,js,jsx}",
+    // Don't collect coverage from the packages for now as it's only example / test code...
+    // "<rootDir>/packages/**/*.{ts,tsx,js,jsx}",
   ],
   snapshotSerializers: [
     "<rootDir>/packages/render/test-utils/jest/serialize-to-json"

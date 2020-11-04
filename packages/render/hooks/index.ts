@@ -137,9 +137,7 @@ const ActiveHooks = (): HooksContainer => {
   };
 };
 
-const activeHooks = ActiveHooks();
-
-export default activeHooks;
+export default ActiveHooks();
 
 export * from "./useState";
 export * from "./useEffect";

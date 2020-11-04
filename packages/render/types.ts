@@ -40,3 +40,5 @@ export interface HTMLElementMap extends HTMLElement {
 export type Props = {
   [key: string]: any;
 };
+
+export type AnyCallback = (() => void) | void;

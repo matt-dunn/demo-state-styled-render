@@ -42,5 +42,7 @@ export const looseRef = <T>(initial: T): LooseRef<T> => ({
   current: initial,
 });
 
-export const hasChanged = <T extends any[] = any[]>(deps: T, prevDeps?: T) =>
+export type Deps = any[];
+
+export const hasChanged = <T extends Deps = Deps>(deps: T, prevDeps?: T) =>
   !prevDeps || deps.filter((d, i) => d !== prevDeps[i]).length > 0;

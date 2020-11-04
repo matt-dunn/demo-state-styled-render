@@ -6,38 +6,37 @@
  */
 
 import activeHooks, { HookImplementation } from "./index";
-import { hasChanged } from "../utils";
+import { Deps, hasChanged } from "../utils";
+import { AnyCallback } from "../types";
 
 const HOOK_TYPE = "useEffect";
 
-type UseEffectCallback = () => (() => any) | void;
+type UseEffectCallback = () => AnyCallback;
 
 export type UseEffect = {
-  deps: any[];
-  callback: UseEffectCallback;
-  cleanup?: any;
+  deps: Deps;
+  cleanup?: AnyCallback;
 } & HookImplementation;
 
-export const useEffect = (callback: UseEffectCallback, deps: any[]): void => {
+export const useEffect = (callback: UseEffectCallback, deps: Deps): void => {
   const hook = activeHooks.getCurrent<UseEffect>();
 
   const currentState = hook.getValue();
 
-  let cleanup = currentState?.cleanup;
+  const cleanup = () => {
+    if (hasChanged(deps, currentState?.deps)) {
+      currentState?.cleanup && currentState.cleanup();
+      return callback();
+    }
 
-  if (hasChanged(deps, currentState?.deps)) {
-    currentState?.cleanup();
-    cleanup = callback();
-  }
-
-  const value = {
-    type: HOOK_TYPE,
-    deps,
-    cleanup,
-    callback,
+    return currentState?.cleanup;
   };
 
-  hook.setValue(value);
+  hook.setValue({
+    type: HOOK_TYPE,
+    deps,
+    cleanup: cleanup(),
+  });
 };
 
 useEffect.type = HOOK_TYPE;
