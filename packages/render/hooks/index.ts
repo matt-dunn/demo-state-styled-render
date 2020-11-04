@@ -142,3 +142,4 @@ const activeHooks = ActiveHooks();
 export default activeHooks;
 
 export * from "./useState";
+export * from "./useEffect";
