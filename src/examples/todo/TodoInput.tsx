@@ -60,7 +60,11 @@ export const TodoInput = ({ createTodo }: TodoInputProps) => {
           }}
         />
       </label>
-      <button type="submit" className="btn btn-primary" disabled={!value.trim()}>
+      <button
+        type="submit"
+        className="btn btn-primary"
+        disabled={!value.trim()}
+      >
         Add
       </button>
     </TodoListForm$>
