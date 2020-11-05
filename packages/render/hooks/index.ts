@@ -141,3 +141,4 @@ export default ActiveHooks();
 
 export * from "./useState";
 export * from "./useEffect";
+export * from "./useContext";

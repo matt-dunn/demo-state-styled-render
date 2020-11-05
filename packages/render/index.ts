@@ -16,3 +16,5 @@ export { createElement } from "./element";
 export { jsx, jsxFrag } from "./jsx";
 
 export * from "./hooks";
+
+export * from "./context";
