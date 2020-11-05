@@ -83,7 +83,7 @@ export type Matching<InjectedProps, DecorationTargetProps> = {
 };
 
 export type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> = <
-  C extends FC<Matching<TInjectedProps, GetProps<C>>>
+  C extends FC<Matching<GetProps<C>, TInjectedProps>>
 >(
   component: C
 ) => FC<

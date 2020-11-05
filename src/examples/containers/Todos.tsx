@@ -40,13 +40,13 @@ const Todos = ({ todos, createTodo, deleteTodo, updateTodo }: TodosProps) => (
   </main>
 );
 
-const ConnectedTodos = connect<AppState>(
-  ({ todos }) => ({
+const ConnectedTodos = connect(
+  ({ todos }: AppState) => ({
     todos,
   }),
   {
     ...todoActions,
   }
-)(Todos as any);
+)(Todos);
 
 export { ConnectedTodos as Todos };
