@@ -102,7 +102,7 @@ exports[`App: Example of using mount should render component 1`] = `
         <p>
           You have 
           <strong>
-            0
+            2
           </strong>
            todo
           s
@@ -111,13 +111,68 @@ exports[`App: Example of using mount should render component 1`] = `
       <main>
         <ul
           class=" ms__hUhVje"
-        />
+        >
+          <li
+            class=" ms__hsUUbt"
+          >
+            <article
+              class=" ms__ezdkTR"
+            >
+              <label>
+                <del
+                  class="text-muted"
+                >
+                  <input
+                    checked="true"
+                    type="checkbox"
+                  />
+                  Do something
+                </del>
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+          <li
+            class=" ms__hsUUbt"
+          >
+            <article
+              class=" ms__ezdkTR"
+            >
+              <label>
+                <input
+                  type="checkbox"
+                />
+                Do something else
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+        </ul>
       </main>
     </section>
     <pre
       class="ml-md-2 flex-grow-1 col-md"
     >
-      []
+      [
+ {
+  "id": "1",
+  "text": "Do something",
+  "complete": true
+ },
+ {
+  "id": "2",
+  "text": "Do something else",
+  "complete": false
+ }
+]
     </pre>
   </main>
 </div>
