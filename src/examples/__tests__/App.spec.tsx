@@ -26,14 +26,14 @@ describe("App: Example of using mount", () => {
   });
 
   it("should render component", async () => {
-    const wrapper = mount(() => (
+    const wrapper = mount(
       <App
         todos={[]}
         createTodo={createTodo}
         deleteTodo={deleteTodo}
         updateTodo={updateTodo}
       />
-    ));
+    );
 
     expect(wrapper).toMatchSnapshot();
   });

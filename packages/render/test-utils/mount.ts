@@ -27,7 +27,7 @@ type ElementWrapper = {
   update: () => void;
 };
 
-type Mount = (node: Node | (() => Node)) => ElementWrapper;
+type Mount = (node: Node) => ElementWrapper;
 
 const syntheticEvent = <A = any>(eventArgs?: A) => ({
   ...eventArgs,
@@ -120,7 +120,7 @@ export const mount: Mount = (node) => {
     activeHooks.setActive(hookId);
 
     el.innerHTML = "";
-    updateTree(el, typeof node === "function" ? node() : node);
+    updateTree(el, node);
   };
 
   const hookId = activeHooks.register({

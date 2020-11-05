@@ -29,14 +29,14 @@ describe("TodoList: Example of using mount", () => {
   it("should render component with 1 items", async () => {
     const fixture = [{ id: "1", text: "My Todo Item 1", complete: true }];
 
-    const wrapper = mount(() => (
+    const wrapper = mount(
       <TodoList
         todos={fixture}
         createTodo={createTodo}
         deleteTodo={deleteTodo}
         updateTodo={updateTodo}
       />
-    ));
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -47,14 +47,14 @@ describe("TodoList: Example of using mount", () => {
       { id: "2", text: "My Todo Item 2", complete: false },
     ];
 
-    const wrapper = mount(() => (
+    const wrapper = mount(
       <TodoList
         todos={fixture}
         createTodo={createTodo}
         deleteTodo={deleteTodo}
         updateTodo={updateTodo}
       />
-    ));
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -62,14 +62,14 @@ describe("TodoList: Example of using mount", () => {
   it("should render component with no items", async () => {
     const fixture: TodoItems = [];
 
-    const wrapper = mount(() => (
+    const wrapper = mount(
       <TodoList
         todos={fixture}
         createTodo={createTodo}
         deleteTodo={deleteTodo}
         updateTodo={updateTodo}
       />
-    ));
+    );
 
     expect(wrapper).toMatchSnapshot();
   });

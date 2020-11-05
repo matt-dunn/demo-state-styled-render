@@ -22,7 +22,7 @@ describe("TodoInput: Example of using mount", () => {
   });
 
   it("should render component", () => {
-    const wrapper = mount(() => <TodoInput createTodo={createTodo} />);
+    const wrapper = mount(<TodoInput createTodo={createTodo} />);
 
     expect(createTodo).not.toHaveBeenCalled();
 
@@ -30,7 +30,7 @@ describe("TodoInput: Example of using mount", () => {
   });
 
   it("should create todo", () => {
-    const wrapper = mount(() => <TodoInput createTodo={createTodo} />);
+    const wrapper = mount(<TodoInput createTodo={createTodo} />);
 
     expect(createTodo).not.toHaveBeenCalled();
 

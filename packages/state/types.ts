@@ -38,8 +38,10 @@ export type ActionCreator<A extends any[], P> = {
   [typeSymbol]: string;
 };
 
+export type Dispatch = <P>(action: ActionPayload<P>) => void;
+
 export type Store<S> = {
-  dispatch: <P>(action: ActionPayload<P>) => void;
+  dispatch: Dispatch;
   getState: () => S;
   subscribe: (cb: StoreCallback<S>) => void;
   unsubscribe: (cb: StoreCallback<S>) => void;

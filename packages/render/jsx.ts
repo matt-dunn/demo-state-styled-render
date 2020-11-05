@@ -14,21 +14,10 @@ import {
   Props,
 } from "./types";
 
-export const jsx = (
-  type: NodeType,
-  props: Props = {},
-  ...children: Children
-): Node => {
-  const { key, ...rest } = props || {};
-
-  return typeof type === "function"
-    ? type({
-        ...rest,
-        children: children?.length === 1 ? children[0] : children,
-        key,
-      })
-    : { type, props: rest, children, key };
-};
+const flattenChildren = (children: Children | Children[]): Children =>
+  (children.length === 1 && Array.isArray(children[0]) && children[0]
+    ? children[0]
+    : children) as Children;
 
 export const jsxFrag = ({
   children,
@@ -37,10 +26,31 @@ export const jsxFrag = ({
   children: Children;
 }): Node & { key: Key } => ({
   type: NODE_TYPE_FRAGMENT,
-  props: props,
-  children: children,
+  props,
+  children: Array.isArray(children) ? children : [children],
   key: null,
 });
 
-(global as any).jsx = jsx;
+export const jsx = (
+  type: NodeType,
+  props: Props = {},
+  ...children: Children | Children[]
+): Node => {
+  const { key, ...rest } = props || {};
+
+  return type === jsxFrag
+    ? type({
+        ...rest,
+        children: flattenChildren(children),
+        key,
+      })
+    : {
+        type,
+        props: rest,
+        children: flattenChildren(children),
+        key: key || null,
+      };
+};
+
 (global as any).jsxFrag = jsxFrag;
+(global as any).jsx = jsx;
