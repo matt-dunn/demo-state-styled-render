@@ -8,30 +8,19 @@
 /** @jsx jsx **/
 
 import { jsx } from "packages/render";
-import { createStore, StoreProvider } from "packages/state";
+import { StoreProvider } from "packages/state";
 
-import { Header } from "./Header";
+import { getStore } from "./store";
+
+import { Header } from "./components/Header";
 import { Todos } from "./containers/Todos";
 
-import { TodoItems } from "./todo";
-import todoReducer from "./todo/duck";
-
-export type AppState = {
-  todos: TodoItems;
-};
-
-const initialState: AppState = {
+const store = getStore({
   todos: [
     { id: "1", text: "Do something", complete: true },
     { id: "2", text: "Do something else", complete: false },
   ],
-};
-
-const rootReducer = {
-  todos: todoReducer,
-};
-
-const store = createStore(rootReducer)(initialState);
+});
 
 export const App = () => (
   <StoreProvider store={store}>

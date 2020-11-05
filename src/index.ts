@@ -7,7 +7,7 @@
 
 import Mx from "packages/render";
 
-import { App } from "./examples/App";
+import { App } from "./App";
 
 const el = document.createElement("div");
 

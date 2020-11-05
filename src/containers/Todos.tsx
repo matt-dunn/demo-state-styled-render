@@ -10,13 +10,14 @@
 import { jsx } from "packages/render";
 import { connect } from "packages/state";
 
-import { AppState } from "../App";
+import { AppState } from "../store";
+
 import {
   Actions as TodoActions,
   actions as todoActions,
   TodoItems,
   TodoList,
-} from "../todo";
+} from "../components/Todos";
 
 type TodosProps = {
   todos: TodoItems;

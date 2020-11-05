@@ -10,7 +10,7 @@
 import { jsx } from "packages/render";
 import myStyled from "packages/myStyled";
 
-import { Avatar } from "./Avatar";
+import { Avatar } from "../Avatar";
 
 // Quick fix to allow stylelint to do it's thing:
 const styled = myStyled;
