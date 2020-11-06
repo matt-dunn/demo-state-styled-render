@@ -56,25 +56,27 @@ const AnyRule = (cssText: string): AnyRule => {
   } as CSSRule;
 };
 
-const StylesheetPartial = (): StylesheetPartial<AnyRules> => {
-  const rules: AnyRules = [];
+// @TODO: uncomment for server support
+// const StylesheetPartial = (): StylesheetPartial<AnyRules> => {
+//   const rules: AnyRules = [];
+//
+//   const deleteRule = (index: number) => {
+//     rules.splice(index, 1);
+//   };
+//
+//   const insertRule = (cssText: string, index?: number) => {
+//     rules.splice(index || rules.length - 1, 0, AnyRule(cssText));
+//     return index || rules.length - 1;
+//   };
+//
+//   return {
+//     rules,
+//     deleteRule,
+//     insertRule,
+//   };
+// };
 
-  const deleteRule = (index: number) => {
-    rules.splice(index, 1);
-  };
-
-  const insertRule = (cssText: string, index?: number) => {
-    rules.splice(index || rules.length - 1, 0, AnyRule(cssText));
-    return index || rules.length - 1;
-  };
-
-  return {
-    rules,
-    deleteRule,
-    insertRule,
-  };
-};
-
+// @TODO: uncomment for server support
 // export const ServerStylesheet = (): ClientServerStylesheet<AnyRules> => {
 //   const hashes: string[] = [];
 //

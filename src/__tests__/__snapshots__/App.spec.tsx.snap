@@ -39,7 +39,7 @@ exports[`App: Example of using mount should render component 1`] = `
             rel="noopener noreferrer"
             target="_blank"
           >
-            JSX functional component rendering with simple hooks
+            JSX functional component rendering with virtual DOM and simple hooks
           </a>
         </li>
         <li>

@@ -44,8 +44,10 @@ export const TodoInput = ({ createTodo }: TodoInputProps) => {
     <TodoListForm$
       onSubmit={(e: any) => {
         e.preventDefault();
-        createTodo(value.trim());
-        setValue("");
+        if (value.trim()) {
+          createTodo(value.trim());
+          setValue("");
+        }
       }}
     >
       <label>

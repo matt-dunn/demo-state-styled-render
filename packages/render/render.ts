@@ -16,11 +16,10 @@ type MxContainer = {
 const MxFactory = (): MxContainer => {
   let hookId: HookID;
   let previousTree: AnyNode | undefined;
-  let renderTree: () => void;
 
   return {
     render: (component) => (mountPoint) => {
-      renderTree = () => {
+      const renderTree = () => {
         activeHooks.setActive(hookId);
 
         previousTree = updateTree(mountPoint, component({}), previousTree);
@@ -30,7 +29,7 @@ const MxFactory = (): MxContainer => {
         render: renderTree,
       });
 
-      return renderTree();
+      renderTree();
     },
   };
 };
