@@ -35,9 +35,11 @@ const Todos = ({ todos, createTodo, deleteTodo, updateTodo }: TodosProps) => (
       updateTodo={updateTodo}
       className="mr-md-2 mb-3 flex-grow-1 align-self-start col-md"
     />
-    <pre className="ml-md-2 flex-grow-1 col-md">
-      {JSON.stringify(todos, undefined, 1)}
-    </pre>
+    <div className="ml-md-2 flex-grow-1 col-md">
+      <pre style={{ fontSize: "0.85rem" }}>
+        {JSON.stringify(todos, undefined, 1)}
+      </pre>
+    </div>
   </main>
 );
 

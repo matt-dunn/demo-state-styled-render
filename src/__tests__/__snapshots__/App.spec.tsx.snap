@@ -158,10 +158,13 @@ exports[`App: Example of using mount should render component 1`] = `
         </ul>
       </main>
     </section>
-    <pre
+    <div
       class="ml-md-2 flex-grow-1 col-md"
     >
-      [
+      <pre
+        style="font-size: 0.85rem;"
+      >
+        [
  {
   "id": "1",
   "text": "Do something",
@@ -173,7 +176,8 @@ exports[`App: Example of using mount should render component 1`] = `
   "complete": false
  }
 ]
-    </pre>
+      </pre>
+    </div>
   </main>
 </div>
 `;
