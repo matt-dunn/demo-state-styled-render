@@ -6,8 +6,12 @@
  */
 
 import Mx from "packages/render";
+import { lazy } from "packages/render/lazy";
 
-import { App } from "./App";
+const App = lazy(
+  () => import("./App"),
+  (module) => module.App
+);
 
 const el = document.createElement("div");
 

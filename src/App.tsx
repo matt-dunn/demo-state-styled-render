@@ -9,11 +9,11 @@
 
 import { jsx } from "packages/render";
 import { StoreProvider } from "packages/state";
-import { lazy } from "packages/render/lazy";
 
 import { getStore } from "./store";
 
 import { Header } from "./components/Header";
+import { Todos } from "./containers/Todos";
 
 const store = getStore({
   todos: [
@@ -21,11 +21,6 @@ const store = getStore({
     { id: "2", text: "Do something else", complete: false },
   ],
 });
-
-const Todos = lazy(
-  () => import("./containers/Todos"),
-  (module) => module.Todos
-);
 
 export const App = () => (
   <StoreProvider store={store}>
