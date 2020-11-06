@@ -36,7 +36,7 @@ export const App = () => (
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                JSX functional component rendering with simple hooks
+                JSX functional component rendering with virtual DOM and simple hooks
               </a>
             </li>
             <li>

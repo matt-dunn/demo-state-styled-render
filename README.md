@@ -21,12 +21,12 @@ Includes the following packages:
 - [Functional component JSX rendering](./packages/render)
 - [Styled Components implementation](./packages/myStyled)
 
-Demonstrated with an example [Todo app](./src/examples/todo) 🙀.
+Demonstrated with an example [Todo app](./src) 🙀.
 
 Also includes:
 
 - Simple implementation of a [test utility](./packages/render/test-utils/mount.ts) inspired by [Enzyme](https://enzymejs.github.io/enzyme/) to 
-  [mount components and simulate events](./src/examples/todo/__tests__/Todo.spec.tsx).
+  [mount components and simulate events](./src/components/Todos/__tests__/Todo.spec.tsx).
 - GitHub [workflow](./.github/workflows/ci.yml) for CI builds; runs the usual tasks and creates 
   sandboxed preview distributions hosted on gh-pages for each pull request and merges into master.
   
