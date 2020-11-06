@@ -60,10 +60,10 @@ export const StoreProvider = <S extends Record<string, unknown>>({
 );
 
 export function connect<
-  TStateProps = any,
-  TOwnProps = any,
-  TDispatchProps = any,
-  TState = any
+  TStateProps = Record<string, unknown>,
+  TOwnProps = Record<string, unknown>,
+  TDispatchProps = Record<string, unknown>,
+  TState = Record<string, unknown>
 >(
   mapStateToProps: MapStateToProps<TStateProps, TState>,
   mapDispatchToProps: MapDispatch<TDispatchProps>

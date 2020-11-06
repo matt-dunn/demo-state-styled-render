@@ -20,9 +20,18 @@ export type NodeType<P = any> =
   | typeof NODE_TYPE_FRAGMENT
   | FC<P>;
 
-export type Node<P = any> = {
+type Ref = (el: HTMLElement) => void;
+
+type BaseProps = {
+  style?: {
+    [P in keyof CSSStyleDeclaration]: CSSStyleDeclaration[P];
+  };
+  ref?: Ref;
+};
+
+export type Node<P = Record<string, any>> = {
   type: NodeType<P>;
-  props: P;
+  props: P & BaseProps;
   children?: Children;
   key: Key;
 };

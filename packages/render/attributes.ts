@@ -15,7 +15,15 @@ export const setAttribute = (
 ) => {
   const propertyName = propertyMap(name);
 
-  if (typeof value === "function") {
+  if (name === "style") {
+    if (typeof value !== "object") {
+      throw new TypeError("Invalid style object");
+    }
+
+    Object.entries(value).forEach(
+      ([key, value]) => ((<any>element.style)[key] = value)
+    );
+  } else if (typeof value === "function") {
     element[propertyName] = value;
   } else {
     if (value) {

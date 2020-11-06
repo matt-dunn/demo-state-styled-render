@@ -21,7 +21,7 @@ export const createElement = (
   type: NodeType,
   props: Props = {},
   children?: Children | Node
-): Node => {
+): Node<any> => {
   if (Array.isArray(children)) {
     return jsx(type, props, ...children);
   } else if (children) {
