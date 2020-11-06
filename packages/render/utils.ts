@@ -27,7 +27,8 @@ export const propertyMap = (name: string) => {
 };
 
 export const isNode = (node: any): node is Node =>
-  (typeof node === "object" &&
+  (node &&
+    typeof node === "object" &&
     Object.prototype.hasOwnProperty.call(node, "type")) ||
   false;
 
