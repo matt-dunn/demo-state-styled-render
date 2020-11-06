@@ -11,23 +11,35 @@ import { jsx } from "./jsx";
 import { useEffect, useState } from "./hooks";
 import { FC } from "./types";
 
-type Module = any;
+type Module<T> = T;
 
-type GetModule = () => Promise<Module>;
+type GetModule<T> = () => Promise<Module<T>>;
 
-type ExportResolver = (module: Module) => FC;
+type ExportResolver<T> = (module: Module<T>) => FC;
 
-export const lazy = (getModule: GetModule, exportResolver: ExportResolver) => {
+export function lazy<T>(
+  getModule: GetModule<T>,
+  exportResolver?: ExportResolver<T>
+) {
   return (props = {}) => {
     const [component, setComponent] = useState<FC | undefined>(undefined);
 
     useEffect(() => {
       (async function () {
-        setComponent(exportResolver(await getModule()));
+        const module = (await getModule()) as Module<T> & { default: any };
+        const resolvedComponent = exportResolver
+          ? exportResolver(module)
+          : module.default;
+
+        if (!resolvedComponent) {
+          throw new TypeError("Unable to load component");
+        }
+
+        setComponent(resolvedComponent);
       })();
     }, []);
 
     // @TODO: currently need to be in placeholder element to proved a valid mount point. The tree update would need to support dynamic mounting
     return <div data-placeholder>{component ? component(props) : ""}</div>;
   };
-};
+}

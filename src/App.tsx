@@ -22,7 +22,7 @@ const store = getStore({
   ],
 });
 
-const LazyTodos = lazy(
+const Todos = lazy(
   () => import("./containers/Todos"),
   (module) => module.Todos
 );
@@ -71,7 +71,7 @@ export const App = () => (
           <strong>not intended for production use</strong>.
         </p>
       </article>
-      <LazyTodos />
+      <Todos />
     </div>
   </StoreProvider>
 );
