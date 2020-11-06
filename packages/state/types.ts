@@ -9,8 +9,10 @@ import { FC } from "packages/render";
 
 export const typeSymbol = Symbol("type");
 
+export type ActionType = string;
+
 export type ActionPayload<P> = {
-  type: string;
+  type: ActionType;
   payload: P;
 };
 

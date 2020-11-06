@@ -5,8 +5,7 @@
  * @licence MIT
  */
 
-import { Node } from "packages/render";
-
+import { Node } from "./types";
 import { looseRef } from "./utils";
 
 export const getValueSymbol = Symbol("getValueSymbol");

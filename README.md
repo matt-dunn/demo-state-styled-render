@@ -17,8 +17,8 @@ View [demo](https://matt-dunn.github.io/demo-state-styled-render/).
 
 Includes the following packages:
 
-- [Redux style state management](./packages/state)
 - [Functional component JSX rendering](./packages/render)
+- [Redux style state management](./packages/state)
 - [Styled Components implementation](./packages/myStyled)
 
 Demonstrated with an example [Todo app](./src) 🙀.
