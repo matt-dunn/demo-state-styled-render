@@ -1,0 +1,199 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TodoList: Example of using mount should render component with > 1 items 1`] = `
+<section
+  class=" ms__brMznf"
+>
+  <header
+    class=" ms__jVxsUK"
+  >
+    <form
+      class=" ms__iMxdBJ"
+    >
+      <label>
+        Todo
+        <input
+          class="form-control"
+          placeholder="Add new todo"
+          type="text"
+        />
+      </label>
+      <button
+        class="btn btn-primary"
+        disabled=""
+        type="submit"
+      >
+        Add
+      </button>
+    </form>
+    <p>
+      You have 
+      <strong>
+        2
+      </strong>
+       todo
+      s
+    </p>
+  </header>
+  <main>
+    <ul
+      class=" ms__hUhVje"
+    >
+      <li
+        class=" ms__hsUUbt"
+      >
+        <article
+          class=" ms__ezdkTR"
+        >
+          <label>
+            <del
+              class="text-muted"
+            >
+              <input
+                checked="true"
+                type="checkbox"
+              />
+              My Todo Item 1
+            </del>
+          </label>
+          <button
+            class="btn btn-sm btn-outline-secondary"
+          >
+            Delete
+          </button>
+        </article>
+      </li>
+      <li
+        class=" ms__hsUUbt"
+      >
+        <article
+          class=" ms__ezdkTR"
+        >
+          <label>
+            <input
+              type="checkbox"
+            />
+            My Todo Item 2
+          </label>
+          <button
+            class="btn btn-sm btn-outline-secondary"
+          >
+            Delete
+          </button>
+        </article>
+      </li>
+    </ul>
+  </main>
+</section>
+`;
+
+exports[`TodoList: Example of using mount should render component with 1 items 1`] = `
+<section
+  class=" ms__brMznf"
+>
+  <header
+    class=" ms__jVxsUK"
+  >
+    <form
+      class=" ms__iMxdBJ"
+    >
+      <label>
+        Todo
+        <input
+          class="form-control"
+          placeholder="Add new todo"
+          type="text"
+        />
+      </label>
+      <button
+        class="btn btn-primary"
+        disabled=""
+        type="submit"
+      >
+        Add
+      </button>
+    </form>
+    <p>
+      You have 
+      <strong>
+        1
+      </strong>
+       todo
+      
+    </p>
+  </header>
+  <main>
+    <ul
+      class=" ms__hUhVje"
+    >
+      <li
+        class=" ms__hsUUbt"
+      >
+        <article
+          class=" ms__ezdkTR"
+        >
+          <label>
+            <del
+              class="text-muted"
+            >
+              <input
+                checked="true"
+                type="checkbox"
+              />
+              My Todo Item 1
+            </del>
+          </label>
+          <button
+            class="btn btn-sm btn-outline-secondary"
+          >
+            Delete
+          </button>
+        </article>
+      </li>
+    </ul>
+  </main>
+</section>
+`;
+
+exports[`TodoList: Example of using mount should render component with no items 1`] = `
+<section
+  class=" ms__brMznf"
+>
+  <header
+    class=" ms__jVxsUK"
+  >
+    <form
+      class=" ms__iMxdBJ"
+    >
+      <label>
+        Todo
+        <input
+          class="form-control"
+          placeholder="Add new todo"
+          type="text"
+        />
+      </label>
+      <button
+        class="btn btn-primary"
+        disabled=""
+        type="submit"
+      >
+        Add
+      </button>
+    </form>
+    <p>
+      You have 
+      <strong>
+        0
+      </strong>
+       todo
+      s
+    </p>
+  </header>
+  <main>
+    <ul
+      class=" ms__hUhVje"
+    />
+  </main>
+</section>
+`;

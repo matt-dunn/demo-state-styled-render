@@ -1,0 +1,179 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App: Example of using mount should render component 1`] = `
+<div
+  class="container-lg container-main"
+>
+  <header
+    class=" ms__blmrZ"
+  >
+    <h1>
+      Pure TypeScript implementation of styled JSX functional components and state management
+    </h1>
+    <aside
+      class=" ms__lhcqzR"
+    >
+      <a
+        href="https://matt-dunn.github.io/"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <h2>
+          Matt Dunn
+        </h2>
+        <p>
+          Senior User Interface / Full Stack Developer
+        </p>
+      </a>
+    </aside>
+  </header>
+  <article>
+    <header>
+      <p>
+        Simple vanilla, dependency free implementation of:
+      </p>
+      <ul>
+        <li>
+          <a
+            href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/render"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            JSX functional component rendering with virtual DOM and simple hooks
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/state"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Redux style state management
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/matt-dunn/demo-state-styled-render/tree/master/packages/myStyled"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            A Styled Component implementation
+          </a>
+        </li>
+      </ul>
+    </header>
+    <p>
+      Intended as an illustration of how the basics and internals of React / Redux / Styled Components work under the hood and
+       
+      <strong>
+        not intended for production use
+      </strong>
+      .
+    </p>
+  </article>
+  <main
+    class="d-flex flex-md-row flex-column"
+  >
+    <section
+      class="mr-md-2 mb-3 flex-grow-1 align-self-start col-md ms__brMznf"
+    >
+      <header
+        class=" ms__jVxsUK"
+      >
+        <form
+          class=" ms__iMxdBJ"
+        >
+          <label>
+            Todo
+            <input
+              class="form-control"
+              placeholder="Add new todo"
+              type="text"
+            />
+          </label>
+          <button
+            class="btn btn-primary"
+            disabled=""
+            type="submit"
+          >
+            Add
+          </button>
+        </form>
+        <p>
+          You have 
+          <strong>
+            2
+          </strong>
+           todo
+          s
+        </p>
+      </header>
+      <main>
+        <ul
+          class=" ms__hUhVje"
+        >
+          <li
+            class=" ms__hsUUbt"
+          >
+            <article
+              class=" ms__ezdkTR"
+            >
+              <label>
+                <del
+                  class="text-muted"
+                >
+                  <input
+                    checked="true"
+                    type="checkbox"
+                  />
+                  Do something
+                </del>
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+          <li
+            class=" ms__hsUUbt"
+          >
+            <article
+              class=" ms__ezdkTR"
+            >
+              <label>
+                <input
+                  type="checkbox"
+                />
+                Do something else
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+        </ul>
+      </main>
+    </section>
+    <pre
+      class="ml-md-2 flex-grow-1 col-md"
+    >
+      [
+ {
+  "id": "1",
+  "text": "Do something",
+  "complete": true
+ },
+ {
+  "id": "2",
+  "text": "Do something else",
+  "complete": false
+ }
+]
+    </pre>
+  </main>
+</div>
+`;

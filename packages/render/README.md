@@ -10,10 +10,12 @@ hooks or detection for cascading re-renders etc.
 
 Features:
 
-- Simple virtual DOM
+- JSX functional component rendering with virtual DOM
 - DOM tree diff with updates applied only to changed elements / attributes
-- Simple implementation of a React style hooks:
-    - very simple implementation of ```useState```
+- Simple implementation of hooks:
+    - ```useState```
+    - ```useEffect``` (does not have full support for unmounting components)
+    - ```useContext```
 - JSX Fragments support
 
 ---

@@ -16,7 +16,8 @@
     "build": "rimraf dist && parcel build public/index.html --public-url ./ --out-dir ./dist --no-cache",
     "serve": "npx http-server dist/ -g -b -S -C ./etc/cert.pem -K ./etc/key.pem",
     "bundle": "node ./etc/scripts/bundle",
-    "test": "jest --coverage --passWithNoTests",
+    "test:unit": "jest --passWithNoTests",
+    "test": "yarn test:unit --coverage",
     "ci": "yarn build"
   },
   "devDependencies": {
@@ -85,5 +86,9 @@
       "enable_context_modeling": true
     },
     "compressOutput": true
+  },
+  "engines": {
+    "node" : ">=10",
+    "yarn": ">=1.22"
   }
 }

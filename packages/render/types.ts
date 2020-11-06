@@ -27,9 +27,9 @@ export type Node<P = any> = {
   key: Key;
 };
 
-export type Children<P = any> = Node<P>[];
+export type Children<P = any> = AnyNode<P>[];
 
-export type AnyNode = Node | string | number;
+export type AnyNode<P = any> = Node<P> | string;
 
 export type FC<P = any> = (props: P) => Node<P>;
 
@@ -40,3 +40,5 @@ export interface HTMLElementMap extends HTMLElement {
 export type Props = {
   [key: string]: any;
 };
+
+export type AnyCallback = (() => void) | void;

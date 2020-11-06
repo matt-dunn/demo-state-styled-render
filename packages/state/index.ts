@@ -11,3 +11,4 @@ export * from "./createAction";
 export * from "./createReducer";
 export * from "./createStore";
 export * from "./getType";
+export * from "./connect";

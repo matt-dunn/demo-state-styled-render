@@ -8,7 +8,6 @@
 import {
   AnyNode,
   Children,
-  Key,
   Node,
   NODE_TYPE_FRAGMENT,
   NodeType,
@@ -16,37 +15,7 @@ import {
 } from "./types";
 import { isNode } from "./utils";
 import { setAttributes, updateAttributes } from "./attributes";
-
-export const jsx = (
-  type: NodeType,
-  props: Props = {},
-  ...children: Children
-): Node => {
-  const { key, ...rest } = props || {};
-
-  return typeof type === "function"
-    ? type({
-        ...rest,
-        children: children?.length === 1 ? children[0] : children,
-        key,
-      })
-    : { type, props: rest, children, key };
-};
-
-export const jsxFrag = ({
-  children,
-  ...props
-}: {
-  children: Children;
-}): Node & { key: Key } => ({
-  type: NODE_TYPE_FRAGMENT,
-  props: props,
-  children: children,
-  key: null,
-});
-
-(global as any).jsx = jsx;
-(global as any).jsxFrag = jsxFrag;
+import { jsx } from "./jsx";
 
 export const createElement = (
   type: NodeType,
@@ -68,84 +37,130 @@ const createDocumentElement = (node: AnyNode): HTMLElement | Text => {
 
     setAttributes(element, node?.props);
 
-    flattenChildren(node.children)
-      .map(createDocumentElement)
-      .forEach(element.appendChild.bind(element));
+    node?.props?.ref?.(element);
 
     return element;
-  } else if (typeof node === "string" || typeof node === "number") {
-    return document.createTextNode(node.toString());
   }
 
-  throw new TypeError(
-    `Unable to render invalid node ${JSON.stringify(node).substr(0, 20)}`
-  );
+  return document.createTextNode(node.toString());
 };
 
 const hasChanged = (node: AnyNode, prevNode: AnyNode) =>
   typeof node !== typeof prevNode ||
-  (typeof node === "string" && node !== prevNode) ||
   (isNode(node) && node.type) !== (isNode(prevNode) && prevNode.type);
 
 const updateChildren = (
   element: HTMLElement,
-  children: Children,
-  prevChildren: Children,
+  children: Children = [],
+  prevChildren: Children = [],
   index: number
 ) => {
   const nodeChildrenLength = children.length;
   const prevNodeChildrenLength = prevChildren.length;
+  const nodes: Children = [];
+
   for (
     let childIndex = 0;
     childIndex < nodeChildrenLength || childIndex < prevNodeChildrenLength;
     childIndex++
   ) {
-    updateTree(
+    const node = updateTree(
       element.childNodes[index] as HTMLElement,
       children[childIndex],
       prevChildren[childIndex],
       childIndex
     );
+
+    if (node !== undefined) {
+      nodes.push(node);
+    }
   }
+
+  return nodes;
 };
 
 const flattenChildren = (children: Children = []): Children =>
   children.reduce((children, child) => {
-    if (child.type === NODE_TYPE_FRAGMENT) {
+    if (isNode(child) && child.type === NODE_TYPE_FRAGMENT) {
       return [...children, ...flattenChildren(child.children)];
     }
     return [...children, child];
   }, [] as Children);
 
+const updateNode = (
+  element: HTMLElement,
+  node: AnyNode,
+  prevNode?: AnyNode,
+  index = 0
+): AnyNode | undefined =>
+  (isNode(node) && {
+    ...node,
+    children: updateChildren(
+      element,
+      flattenChildren(node.children),
+      (isNode(prevNode) && flattenChildren(prevNode?.children)) || undefined,
+      index
+    ),
+  }) ||
+  node;
+
 export const updateTree = (
   element: HTMLElement,
-  node: Node,
-  prevNode?: Node,
+  node: AnyNode,
+  prevNode?: AnyNode,
   index = 0
-) => {
+): AnyNode | undefined => {
+  if (isNode(node) && typeof node?.type === "function") {
+    // @TODO: process hooks - would add support for unmounting effects etc.
+    // activeHooks.beginCollect();
+
+    const componentNode = node.type({
+      ...node.props,
+      children: node.children?.length === 1 ? node.children[0] : node.children,
+    });
+
+    // const componentStates = activeHooks.collect();
+    // if (componentStates.length > 0) {
+    //   componentStates.byType<UseEffect>(useEffect).forEach((s) => s.callback());
+    //
+    //   console.log("----COLLECTED", node.type.name, componentStates);
+    // }
+
+    const componentTree = updateTree(
+      element,
+      componentNode,
+      isNode(prevNode) ? prevNode?.children?.[0] : prevNode,
+      index
+    );
+
+    return {
+      ...node,
+      children: componentTree ? [componentTree] : [],
+    };
+  }
+
   if (prevNode === undefined) {
     element.appendChild(createDocumentElement(node));
   } else if (node === undefined) {
+    // @TODO: unmount and mounted components...!
     element.removeChild(element.childNodes[index]);
+    return undefined;
   } else if (hasChanged(node, prevNode)) {
     element.replaceChild(
       createDocumentElement(node),
       element.childNodes[index]
     );
+
+    return updateNode(element, node, undefined, index);
   } else if (isNode(node)) {
     updateAttributes(
       element.childNodes[index] as HTMLElement,
       node.props,
-      prevNode.props
-    );
-
-    updateChildren(
-      element,
-      flattenChildren(node.children),
-      flattenChildren(prevNode.children),
-      index
+      isNode(prevNode) ? prevNode.props : undefined
     );
   } else if (element.childNodes[index].nodeValue !== node) {
-    element.childNodes[index].nodeValue = node;
+    element.childNodes[index].nodeValue = node.toString();
   }
+
+  return updateNode(element, node, prevNode, index);
 };

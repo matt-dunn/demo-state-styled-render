@@ -4,7 +4,7 @@
 
 > Simple vanilla, dependency free implementation of:
 >
-> - JSX functional component rendering with simple hooks
+> - JSX functional component rendering with virtual DOM and simple hooks
 > - Redux style state management
 > - A Styled Component implementation
 
@@ -17,16 +17,16 @@ View [demo](https://matt-dunn.github.io/demo-state-styled-render/).
 
 Includes the following packages:
 
-- [Redux style state management](./packages/state)
 - [Functional component JSX rendering](./packages/render)
+- [Redux style state management](./packages/state)
 - [Styled Components implementation](./packages/myStyled)
 
-Demonstrated with an example [Todo app](./src/examples/todo) 🙀.
+Demonstrated with an example [Todo app](./src) 🙀.
 
 Also includes:
 
 - Simple implementation of a [test utility](./packages/render/test-utils/mount.ts) inspired by [Enzyme](https://enzymejs.github.io/enzyme/) to 
-  [mount components and simulate events](./src/examples/todo/__tests__/Todo.spec.tsx).
+  [mount components and simulate events](./src/components/Todos/__tests__/Todo.spec.tsx).
 - GitHub [workflow](./.github/workflows/ci.yml) for CI builds; runs the usual tasks and creates 
   sandboxed preview distributions hosted on gh-pages for each pull request and merges into master.
   

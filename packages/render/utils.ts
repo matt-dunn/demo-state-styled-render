@@ -27,8 +27,22 @@ export const propertyMap = (name: string) => {
 };
 
 export const isNode = (node: any): node is Node =>
-  typeof node?.type === "string" &&
-  Object.prototype.hasOwnProperty.call(node, "props");
+  (typeof node === "object" &&
+    Object.prototype.hasOwnProperty.call(node, "type")) ||
+  false;
 
 export const classnames = (...classNames: (string | undefined)[]): string =>
   classNames.join(" ");
+
+type LooseRef<T = any> = {
+  current: T;
+};
+
+export const looseRef = <T>(initial: T): LooseRef<T> => ({
+  current: initial,
+});
+
+export type Deps = any[];
+
+export const hasChanged = <T extends Deps = Deps>(deps: T, prevDeps?: T) =>
+  !prevDeps || deps.filter((d, i) => d !== prevDeps[i]).length > 0;

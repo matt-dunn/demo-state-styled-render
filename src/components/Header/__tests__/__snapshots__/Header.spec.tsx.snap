@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header: Example of using mount should render component 1`] = `
+<header
+  class=" ms__blmrZ"
+>
+  <h1>
+    Pure TypeScript implementation of styled JSX functional components and state management
+  </h1>
+  <aside
+    class=" ms__lhcqzR"
+  >
+    <a
+      href="https://matt-dunn.github.io/"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <h2>
+        Matt Dunn
+      </h2>
+      <p>
+        Senior User Interface / Full Stack Developer
+      </p>
+    </a>
+  </aside>
+</header>
+`;
