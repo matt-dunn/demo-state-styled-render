@@ -13,7 +13,7 @@ export const getValueSymbol = Symbol("getValueSymbol");
 
 export type Context<T = any> = {
   [getValueSymbol]: () => T | undefined;
-  Provider: ({ value, children }: { value: T; children: Node }) => any;
+  Provider: ({ value, children }: { value: T; children: Node }) => Node;
 };
 
 export const createContext = <T = any>(defaultValue?: T): Context<T> => {
