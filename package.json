@@ -89,7 +89,7 @@
     "compressOutput": true
   },
   "engines": {
-    "node" : ">=10",
+    "node": ">=10",
     "yarn": ">=1.22"
   }
 }
