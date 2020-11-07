@@ -38,7 +38,7 @@ export type Node<P = Record<string, any>> = {
 
 export type Children<P = any> = AnyNode<P>[];
 
-export type AnyNode<P = any> = Node<P> | string;
+export type AnyNode<P = any> = Node<P> | string | null;
 
 export type FC<P = any> = (props: P) => Node<P>;
 

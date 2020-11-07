@@ -42,7 +42,7 @@ const createDocumentElement = (node: AnyNode): HTMLElement | Text => {
     return element;
   }
 
-  return document.createTextNode(node.toString());
+  return document.createTextNode(node?.toString() || "");
 };
 
 const hasChanged = (node: AnyNode, prevNode: AnyNode) =>
@@ -114,10 +114,12 @@ export const updateTree = (
     // @TODO: process hooks - would add support for unmounting effects etc.
     // activeHooks.beginCollect();
 
-    const componentNode = node.type({
-      ...node.props,
-      children: node.children?.length === 1 ? node.children[0] : node.children,
-    });
+    const componentNode =
+      node.type({
+        ...node.props,
+        children:
+          node.children?.length === 1 ? node.children[0] : node.children,
+      }) || " ";
 
     // const componentStates = activeHooks.collect();
     // if (componentStates.length > 0) {
@@ -159,7 +161,7 @@ export const updateTree = (
       isNode(prevNode) ? prevNode.props : undefined
     );
   } else if (element.childNodes[index].nodeValue !== node) {
-    element.childNodes[index].nodeValue = node.toString();
+    element.childNodes[index].nodeValue = node?.toString() || "";
   }
 
   return updateNode(element, node, prevNode, index);
