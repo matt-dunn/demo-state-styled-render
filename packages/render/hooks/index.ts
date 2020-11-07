@@ -5,12 +5,14 @@
  * @licence MIT
  */
 
+export type HookID = number;
+
 type HookOptions = {
   render: () => void;
 };
 
 export type HookImplementation = {
-  id: number;
+  id: HookID;
   type: string;
 };
 
@@ -34,8 +36,6 @@ type Hook = {
   state: State;
   options: HookOptions;
 };
-
-export type HookID = number;
 
 type Hooks = Hook[] & {
   [key: number]: Hook;

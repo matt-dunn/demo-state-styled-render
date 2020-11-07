@@ -119,7 +119,7 @@ export const updateTree = (
         ...node.props,
         children:
           node.children?.length === 1 ? node.children[0] : node.children,
-      }) || " ";
+      }) || " ";  // Return a placeholder if null returned from component
 
     // const componentStates = activeHooks.collect();
     // if (componentStates.length > 0) {

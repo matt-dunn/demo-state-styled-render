@@ -15,7 +15,7 @@ export const setAttribute = (
 ) => {
   const propertyName = propertyMap(name);
 
-  if (name === "style") {
+  if (propertyName === "style") {
     if (typeof value !== "object") {
       throw new TypeError("Invalid style object");
     }

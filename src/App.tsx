@@ -15,6 +15,13 @@ import { getStore } from "./store";
 import { Header } from "./components/Header";
 import { Todos } from "./containers/Todos";
 
+// Example of lazy loading a component:
+// import { lazy } from "packages/render/lazy";
+// const Todos = lazy(
+//   () => import("./containers/Todos"),
+//   (module) => module.Todos
+// );
+
 const store = getStore({
   todos: [
     { id: "1", text: "Do something", complete: true },
