@@ -24,7 +24,7 @@ export const jsxFrag = ({
   ...props
 }: {
   children: Children;
-}): Node & { key: Key } => ({
+}): (Node & { key: Key }) | null => ({
   type: NODE_TYPE_FRAGMENT,
   props,
   children: Array.isArray(children) ? children : [children],
@@ -35,7 +35,7 @@ export const jsx = (
   type: NodeType,
   props: Props = {},
   ...children: Children | Children[]
-): Node => {
+): Node | null => {
   const { key, ...rest } = props || {};
 
   return type === jsxFrag

@@ -40,7 +40,7 @@ export type Children<P = any> = AnyNode<P>[];
 
 export type AnyNode<P = any> = Node<P> | string | null;
 
-export type FC<P = any> = (props: P) => Node<P>;
+export type FC<P = any> = (props: P) => Node<P> | null;
 
 export interface HTMLElementMap extends HTMLElement {
   [key: string]: any;
