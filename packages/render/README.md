@@ -87,3 +87,7 @@ export const MyComponent = () => (
   </div>
 );
 ```
+
+Error boundary components can be nested to any level
+and will execute the nearest error handling component
+up the tree.
