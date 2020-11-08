@@ -16,17 +16,27 @@ type MxContainer = {
 const MxFactory = (): MxContainer => {
   let hookId: HookID;
   let previousTree: AnyNode | undefined;
+  let rendering = false;
 
   return {
     render: (component) => (mountPoint) => {
       const renderTree = () => {
         activeHooks.setActive(hookId);
 
+        rendering = true;
         previousTree = updateTree(mountPoint, component({}), previousTree);
+        rendering = false;
       };
 
       hookId = activeHooks.register({
-        render: renderTree,
+        render: () => {
+          if (rendering) {
+            // Push into next tick if currently rendering
+            setTimeout(renderTree);
+          } else {
+            renderTree();
+          }
+        },
       });
 
       renderTree();
