@@ -7,8 +7,7 @@
 
 /** @jsx jsx **/
 
-import { Node, jsx } from "packages/render";
-import { useError, useState } from "packages/render/hooks";
+import { Node, jsx, useState, useError } from "packages/render";
 
 type ErrorBoundaryProps = {
   children: Node;
