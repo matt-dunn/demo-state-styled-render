@@ -12,10 +12,12 @@ Features:
 
 - JSX functional component rendering with virtual DOM
 - DOM tree diff with updates applied only to changed elements / attributes
+- ErrorBoundary component support - re-renders a component tree that contains exceptions
 - Simple implementation of hooks:
-    - ```useState```
-    - ```useEffect``` (does not have full support for unmounting components)
-    - ```useContext```
+    - [```useState```](./hooks/useState.ts)
+    - [```useEffect```](./hooks/useEffect.ts) (does not have full support for unmounting components)
+    - [```useContext```](./hooks/useContext.ts)
+    - [```useError```](./hooks/useError.ts) (used in custom error boundary components)
 - JSX Fragments support
 
 ---
@@ -50,4 +52,38 @@ const el = document.createElement("div");
 document.body.append(el);
 
 Mx.render()(App)(el);
+```
+
+### Error Boundary Component
+
+```tsx
+type ErrorBoundaryProps = {
+  children: Node;
+};
+
+export const MyErrorBoundary = ({ children }: ErrorBoundaryProps) => {
+  const [error, setError] = useState<Error | undefined>(undefined);
+
+  useError(setError);
+
+  if (error) {
+    // Return something appropiate for an error...
+    return <code>{error.message}</code>;
+  }
+
+  return children;
+};
+```
+
+#### In use
+
+```tsx
+export const MyComponent = () => (
+  <div>
+    <MyErrorBoundary>
+      <SomeOtherCompoennt />
+    </MyErrorBoundary>
+    <SomeDifferentCompoennt />
+  </div>
+);
 ```
