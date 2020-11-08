@@ -16,6 +16,11 @@ import {
 import { isNode } from "./utils";
 import { setAttributes, updateAttributes } from "./attributes";
 import { jsx } from "./jsx";
+import activeHooks, { useError, UseError } from "./hooks";
+
+type Context = {
+  errorHook?: UseError;
+};
 
 export const createElement = (
   type: NodeType,
@@ -53,7 +58,8 @@ const updateChildren = (
   element: HTMLElement,
   children: Children = [],
   prevChildren: Children = [],
-  index: number
+  index: number,
+  context?: Context
 ) => {
   const nodeChildrenLength = children.length;
   const prevNodeChildrenLength = prevChildren.length;
@@ -68,7 +74,8 @@ const updateChildren = (
       element.childNodes[index] as HTMLElement,
       children[childIndex],
       prevChildren[childIndex],
-      childIndex
+      childIndex,
+      context
     );
 
     if (node !== undefined) {
@@ -91,7 +98,8 @@ const updateNode = (
   element: HTMLElement,
   node: AnyNode,
   prevNode?: AnyNode,
-  index = 0
+  index = 0,
+  context?: Context
 ): AnyNode | undefined =>
   (isNode(node) && {
     ...node,
@@ -99,40 +107,66 @@ const updateNode = (
       element,
       flattenChildren(node.children),
       (isNode(prevNode) && flattenChildren(prevNode?.children)) || undefined,
-      index
+      index,
+      context
     ),
   }) ||
   node;
+
+const renderComponentNode = (node: Node, context?: Context) => {
+  try {
+    if (isNode(node) && typeof node?.type === "function") {
+      return (
+        node.type({
+          ...node.props,
+          children:
+            node.children?.length === 1 ? node.children[0] : node.children,
+        }) || " " // Return a placeholder if null returned from component
+      );
+    } else {
+      return node;
+    }
+  } catch (ex) {
+    if (!context?.errorHook) {
+      throw new TypeError(ex);
+    }
+
+    console.error(ex);
+
+    context?.errorHook?.handleError(ex);
+
+    return null;
+  }
+};
 
 export const updateTree = (
   element: HTMLElement,
   node: AnyNode,
   prevNode?: AnyNode,
-  index = 0
+  index = 0,
+  context?: Context
 ): AnyNode | undefined => {
   if (isNode(node) && typeof node?.type === "function") {
     // @TODO: process hooks - would add support for unmounting effects etc.
-    // activeHooks.beginCollect();
+    activeHooks.beginCollect();
 
-    const componentNode =
-      node.type({
-        ...node.props,
-        children:
-          node.children?.length === 1 ? node.children[0] : node.children,
-      }) || " ";  // Return a placeholder if null returned from component
+    const componentNode = renderComponentNode(node, context);
 
-    // const componentStates = activeHooks.collect();
-    // if (componentStates.length > 0) {
-    //   componentStates.byType<UseEffect>(useEffect).forEach((s) => s.callback());
-    //
-    //   console.log("----COLLECTED", node.type.name, componentStates);
-    // }
+    const errorHooks = activeHooks.collect().byType<UseError>(useError);
+
+    if (errorHooks.length > 1) {
+      throw new TypeError("Invalid error hook tree");
+    }
 
     const componentTree = updateTree(
       element,
       componentNode,
       isNode(prevNode) ? prevNode?.children?.[0] : prevNode,
-      index
+      index,
+      {
+        ...context,
+        errorHook: errorHooks.length > 0 ? errorHooks[0] : context?.errorHook,
+      }
     );
 
     return {
@@ -153,7 +187,7 @@ export const updateTree = (
       element.childNodes[index]
     );
 
-    return updateNode(element, node, undefined, index);
+    return updateNode(element, node, undefined, index, context);
   } else if (isNode(node)) {
     updateAttributes(
       element.childNodes[index] as HTMLElement,
@@ -164,5 +198,5 @@ export const updateTree = (
     element.childNodes[index].nodeValue = node?.toString() || "";
   }
 
-  return updateNode(element, node, prevNode, index);
+  return updateNode(element, node, prevNode, index, context);
 };

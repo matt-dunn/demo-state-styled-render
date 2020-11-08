@@ -10,6 +10,8 @@
 import { jsx } from "packages/render";
 import myStyled from "packages/myStyled";
 
+import { ErrorBoundary } from "../ErrorBoundary";
+
 import { Todos } from "./Todos";
 import { TodoItems } from "./types";
 import { Actions as TodoActions } from "./duck";
@@ -48,7 +50,9 @@ export const TodoList = ({
 }: TodoListProps) => (
   <TodoList$ className={className}>
     <TodoListHeader$>
-      <TodoInput createTodo={createTodo} />
+      <ErrorBoundary>
+        <TodoInput createTodo={createTodo} />
+      </ErrorBoundary>
       <p>
         You have <strong>{todos.length}</strong> todo
         {(todos.length !== 1 && "s") || ""}
