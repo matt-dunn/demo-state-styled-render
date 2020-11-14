@@ -14,10 +14,13 @@ type ErrorBoundaryProps = {
 };
 
 export const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
-  const error = useError();
+  const error = useError((error) => {
+    console.log("HANDLE", error.message);
+    // return { message: "wrapped: " + error.message };
+  });
 
   if (error) {
-    return <code>APP ERROR BOUNDARY: {error.message}</code>;
+    return <code>TODO ERROR BOUNDARY: {error.message}</code>;
   }
 
   return children;

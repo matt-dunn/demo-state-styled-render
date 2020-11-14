@@ -10,7 +10,7 @@
 import { jsx } from "packages/render";
 import myStyled from "packages/myStyled";
 
-import { ErrorBoundary } from "../ErrorBoundary";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 import { Todos } from "./Todos";
 import { TodoItems } from "./types";
