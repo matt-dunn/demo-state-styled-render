@@ -23,6 +23,7 @@ export const useState = <S = any>(initialState: S): [S, (newValue: S) => S] => {
     type: HOOK_TYPE,
     value: currentState?.value ?? initialState,
     setter(newValue: S) {
+      console.error("SET STATE", updatedState.value, newValue)
       if (updatedState.value !== newValue) {
         hook.setValue({
           ...updatedState,

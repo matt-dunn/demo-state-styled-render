@@ -9,14 +9,14 @@ import activeHooks, { HookImplementation, useState } from "./index";
 
 const HOOK_TYPE = "useError";
 
-type UseErrorCallback = (error: Error) => void | undefined | Partial<Error>;
+type UseErrorCallback = <T = any>(error: Error | Promise<T>) => void | undefined | Partial<Error> | Promise<T>;
 
 export type UseError = {
   handleError: UseErrorCallback;
 } & HookImplementation;
 
-export const useError = (callback?: UseErrorCallback): Error | undefined => {
-  const [error, setError] = useState<Error | undefined>(undefined);
+export const useError = <T = any>(callback?: UseErrorCallback): Error | Promise<T> | undefined => {
+  const [error, setError] = useState<Error | Promise<any> | undefined>(undefined);
   const hook = activeHooks.getCurrent<UseError>();
 
   hook.setValue({

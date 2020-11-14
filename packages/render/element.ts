@@ -172,11 +172,27 @@ export const updateTree = (
 ): AnyNode | undefined => {
   if (isNode(node) && typeof node?.type === "function") {
     // @TODO: process hooks - would add support for unmounting effects etc.
+    // activeHooks.beginCollect();
+
+    const hooks = activeHooks.getActive()
+    const id = activeHooks.register(hooks.options)
+    activeHooks.setActive(id)
+
     activeHooks.beginCollect();
 
     const componentNode = renderComponentNode(node, context);
 
-    const errorHooks = activeHooks.collect().byType<UseError>(useError);
+    const treeHooks = activeHooks.collect();
+    const errorHooks = treeHooks.byType<UseError>(useError);
+
+    activeHooks.setActive(hooks.id, false)
+
+    if (node && !prevNode) {
+      if (treeHooks.length > 0) {
+        console.error("!!", treeHooks.length)
+        activeHooks.insertHooks(treeHooks)
+      }
+    }
 
     if (errorHooks.length > 1) {
       throw new TypeError("Invalid error hook tree");
@@ -194,6 +210,10 @@ export const updateTree = (
       }
     );
 
+    // if (node && !prevNode) {
+    //   console.error("!!", treeHooks.length)
+    //   activeHooks.insertHooks(treeHooks)
+    // }
     return {
       ...node,
       children: componentTree ? [componentTree] : [],

@@ -41,6 +41,12 @@ const TodoListHeader$ = styled("header")`
   margin-bottom: 1rem;
 `;
 
+// import { lazy } from "packages/render/lazy";
+// const TodoInput = lazy(
+//   () => import("./TodoInput"),
+//   (module) => module.TodoInput
+// );
+
 export const TodoList = ({
   todos,
   createTodo,

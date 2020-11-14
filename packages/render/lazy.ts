@@ -21,18 +21,32 @@ export const lazy = <T, P>(
   const [component, setComponent] = useState<FC | undefined>(undefined);
 
   useEffect(() => {
-    (async function () {
-      const module = (await getModule()) as Module<T> & { default: any };
-      const resolvedComponent = exportResolver
-        ? exportResolver(module)
-        : module.default;
+    console.error("@@@")
+    const promise = getModule()
+      .then((module: Module<T> & { default?: any }) => {
+        const resolvedComponent = exportResolver
+          ? exportResolver(module)
+          : module.default;
 
-      if (!resolvedComponent) {
-        throw new TypeError("Unable to load component");
-      }
+        if (!resolvedComponent) {
+          throw new TypeError("Unable to load component");
+        }
 
-      setComponent(resolvedComponent);
-    })();
+        return new Promise(resolve => {
+          setTimeout(() => {
+            setComponent(resolvedComponent);
+            resolve(resolvedComponent)
+          }, 2000)
+        })
+        return resolvedComponent
+      })
+      .catch(error => {
+        console.error(error)
+      })
+
+    console.error(promise)
+    throw promise
+      // const module = (await getModule()) as Module<T> & { default: any };
   }, []);
 
   return component?.(props) || null;

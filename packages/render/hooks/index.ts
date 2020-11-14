@@ -32,6 +32,7 @@ class State extends Array<HookImplementation> {
 }
 
 type Hook = {
+  id: HookID;
   index: number;
   state: State;
   options: HookOptions;
@@ -52,13 +53,15 @@ type HooksContainer = {
   setActive: (id: HookID) => void;
   getActive: () => Hook;
   getCurrent: <T = any>() => HookContainer<T>;
+  insertHooks: (hooks: State) => void;
   inspectActive: <T = any>() => HookContainer<T> | undefined;
   beginCollect: () => void;
   collect: () => State;
 };
 
-const hook = (options: HookOptions): Hook => ({
+const createHook = (options: HookOptions, id: HookID): Hook => ({
   index: 0,
+  id,
   state: new State(),
   options,
 });
@@ -99,11 +102,13 @@ const ActiveHooks = (): HooksContainer => {
 
   return {
     register(options) {
-      hooks = [...hooks, hook(options)];
-      return hooks.length - 1;
+      const hookId = hooks.length;
+      hooks = [...hooks, createHook(options, hookId)];
+      return hookId;
     },
-    setActive: (id) => {
+    setActive: (id, reset = true) => {
       activeId = id;
+      if (reset)
       hooks[activeId].index = 0;
     },
     getActive() {
@@ -113,6 +118,21 @@ const ActiveHooks = (): HooksContainer => {
       const current = getActiveHookContainer(activeId);
       this.getActive().index++;
       return current;
+    },
+    insertHooks(newHooks) {
+      if (newHooks.length > 0) {
+        const hook = this.getActive();
+        const hookId = hook.index;
+        console.error("%%%", hookId,newHooks.length)
+        hook.state.splice(hookId, 0, ...newHooks.map((h, i) => {
+          return {
+            ...h,
+            id: hookId + i
+          }
+        }));
+        hook.index += newHooks.length
+        console.error("@@@@@",activeId,hooks)
+      }
     },
     inspectActive() {
       return getActiveHookContainer(activeId, this.getActive().index - 1);
