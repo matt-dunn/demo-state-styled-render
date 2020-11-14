@@ -40,6 +40,10 @@ const TodoListForm$ = styled("form")`
 export const TodoInput = ({ createTodo }: TodoInputProps) => {
   const [value, setValue] = useState("");
 
+  if (value === "error") {
+    throw new Error("Example boundary caught error");
+  }
+
   return (
     <TodoListForm$
       onSubmit={(e: any) => {
