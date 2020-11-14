@@ -19,6 +19,7 @@ import { jsx } from "./jsx";
 import activeHooks, { useError, UseError } from "./hooks";
 
 type Context = {
+  parent?: Context;
   errorHook?: UseError;
 };
 
@@ -113,6 +114,36 @@ const updateNode = (
   }) ||
   node;
 
+const handleError = (
+  ex: Error,
+  context?: Context,
+  handled = false
+): Partial<Error> | null => {
+  if (context?.errorHook?.handleError) {
+    const error = context?.errorHook?.handleError(ex);
+
+    if (error && context?.parent) {
+      return handleError(error as Error, context.parent, true);
+    }
+
+    console.warn("", ex);
+
+    return null;
+  }
+
+  if (context?.parent) {
+    return handleError(ex, context.parent, handled);
+  }
+
+  if (!handled) {
+    throw ex;
+  } else {
+    console.warn(ex);
+  }
+
+  return null;
+};
+
 const renderComponentNode = (node: Node, context?: Context) => {
   try {
     if (isNode(node) && typeof node?.type === "function") {
@@ -127,14 +158,7 @@ const renderComponentNode = (node: Node, context?: Context) => {
       return node;
     }
   } catch (ex) {
-    if (!context?.errorHook) {
-      throw new TypeError(ex);
-    }
-
-    console.error(ex);
-
-    context?.errorHook?.handleError(ex);
-
+    handleError(ex, context);
     return null;
   }
 };
@@ -165,6 +189,7 @@ export const updateTree = (
       index,
       {
         ...context,
+        parent: { ...context },
         errorHook: errorHooks.length > 0 ? errorHooks[0] : context?.errorHook,
       }
     );

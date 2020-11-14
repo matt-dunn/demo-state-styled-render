@@ -14,6 +14,7 @@ import { getStore } from "./store";
 
 import { Header } from "./components/Header";
 import { Todos } from "./containers/Todos";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 // Example of lazy loading a component:
 // import { lazy } from "packages/render/lazy";
@@ -74,7 +75,9 @@ export const App = () => (
           <strong>not intended for production use</strong>.
         </p>
       </article>
-      <Todos />
+      <ErrorBoundary>
+        <Todos />
+      </ErrorBoundary>
     </div>
   </StoreProvider>
 );
