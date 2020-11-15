@@ -15,7 +15,6 @@ type UseEffectCallback = () => AnyCallback;
 
 export type UseEffect = {
   deps: Deps;
-  cleanup?: AnyCallback;
 } & HookImplementation;
 
 export const useEffect = (callback: UseEffectCallback, deps: Deps): void => {

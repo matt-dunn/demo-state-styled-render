@@ -5,6 +5,8 @@
  * @licence MIT
  */
 
+import { HookImplementations } from "./hooks";
+
 export const NODE_TYPE_FRAGMENT = "#fragment";
 
 export type AnyFunc = (...args: any[]) => any;
@@ -34,11 +36,12 @@ export type Node<P = Record<string, any>> = {
   props: P & BaseProps;
   children?: Children;
   key: Key;
+  hooks?: HookImplementations;
 };
 
 export type Children<P = any> = AnyNode<P>[];
 
-export type AnyNode<P = any> = Node<P> | string | null;
+export type AnyNode<P = any> = Node<P> | string | number | null | false;
 
 export type FC<P = any> = (props: P) => Node<P> | null;
 

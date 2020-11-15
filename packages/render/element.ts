@@ -16,7 +16,7 @@ import {
 import { isNode } from "./utils";
 import { setAttributes, updateAttributes } from "./attributes";
 import { jsx } from "./jsx";
-import activeHooks, { useError, UseError } from "./hooks";
+import activeHooks, { HookImplementations, useError, UseError } from "./hooks";
 
 type Context = {
   parent?: Context;
@@ -37,6 +37,9 @@ export const createElement = (
   }
 };
 
+const getTextNodeValue = (node: AnyNode): string =>
+  typeof node === "string" || typeof node === "number" ? node.toString() : "";
+
 const createDocumentElement = (node: AnyNode): HTMLElement | Text => {
   if (isNode(node) && typeof node.type === "string") {
     const element = document.createElement(node.type);
@@ -48,7 +51,7 @@ const createDocumentElement = (node: AnyNode): HTMLElement | Text => {
     return element;
   }
 
-  return document.createTextNode(node?.toString() || "");
+  return document.createTextNode(getTextNodeValue(node));
 };
 
 const hasChanged = (node: AnyNode, prevNode: AnyNode) =>
@@ -163,6 +166,22 @@ const renderComponentNode = (node: Node, context?: Context) => {
   }
 };
 
+const cleanupHooks = (hooks?: HookImplementations) => {
+  if (hooks && hooks?.length > 0) {
+    hooks.forEach((hook) => hook?.cleanup && hook.cleanup());
+
+    activeHooks.removeHooks(hooks.length);
+  }
+};
+
+const cleanupNode = (node: AnyNode) => {
+  if (isNode(node)) {
+    cleanupHooks(node.hooks);
+
+    node.children?.forEach((child) => cleanupNode(child));
+  }
+};
+
 export const updateTree = (
   element: HTMLElement,
   node: AnyNode,
@@ -171,12 +190,18 @@ export const updateTree = (
   context?: Context
 ): AnyNode | undefined => {
   if (isNode(node) && typeof node?.type === "function") {
-    // @TODO: process hooks - would add support for unmounting effects etc.
+    if (!prevNode) {
+      activeHooks.setInsertMode(true);
+    } else {
+      activeHooks.setInsertMode(false);
+    }
+
     activeHooks.beginCollect();
 
     const componentNode = renderComponentNode(node, context);
 
-    const errorHooks = activeHooks.collect().byType<UseError>(useError);
+    const componentHooks = activeHooks.collect();
+    const errorHooks = componentHooks.byType<UseError>(useError);
 
     if (errorHooks.length > 1) {
       throw new TypeError("Invalid error hook tree");
@@ -197,16 +222,20 @@ export const updateTree = (
     return {
       ...node,
       children: componentTree ? [componentTree] : [],
+      hooks: componentHooks,
     };
   }
 
   if (prevNode === undefined) {
     element.appendChild(createDocumentElement(node));
   } else if (node === undefined) {
-    // @TODO: unmount and mounted components...!
+    cleanupNode(prevNode);
+
     element.removeChild(element.childNodes[index]);
     return undefined;
   } else if (hasChanged(node, prevNode)) {
+    cleanupNode(prevNode);
+
     element.replaceChild(
       createDocumentElement(node),
       element.childNodes[index]
@@ -220,7 +249,7 @@ export const updateTree = (
       isNode(prevNode) ? prevNode.props : undefined
     );
   } else if (element.childNodes[index].nodeValue !== node) {
-    element.childNodes[index].nodeValue = node?.toString() || "";
+    element.childNodes[index].nodeValue = getTextNodeValue(node);
   }
 
   return updateNode(element, node, prevNode, index, context);

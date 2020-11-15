@@ -5,6 +5,8 @@
  * @licence MIT
  */
 
+import { AnyCallback } from "../types";
+
 export type HookID = number;
 
 type HookOptions = {
@@ -14,10 +16,13 @@ type HookOptions = {
 export type HookImplementation = {
   id: HookID;
   type: string;
+  cleanup?: AnyCallback;
 };
 
-class State extends Array<HookImplementation> {
-  constructor(...items: HookImplementation[]) {
+export type HookImplementations = Array<HookImplementation | null>;
+
+class State extends Array<HookImplementation | null> {
+  constructor(...items: HookImplementations) {
     super(...items);
 
     Object.setPrototypeOf(this, State.prototype);
@@ -27,7 +32,9 @@ class State extends Array<HookImplementation> {
     ...types: Omit<HookImplementation, "id">[]
   ): T[] {
     const filterType = types.map(({ type }) => type);
-    return this.filter(({ type }) => filterType.indexOf(type) !== -1) as T[];
+    return this.filter(
+      (item) => (item && filterType.indexOf(item.type) !== -1) || false
+    ) as T[];
   }
 }
 
@@ -37,7 +44,7 @@ type Hook = {
   options: HookOptions;
 };
 
-type Hooks = Hook[] & {
+export type Hooks = Hook[] & {
   [key: number]: Hook;
 };
 
@@ -48,6 +55,7 @@ type HookContainer<T> = {
 };
 
 type HooksContainer = {
+  setInsertMode: (insert: boolean) => void;
   register: (options: HookOptions) => HookID;
   setActive: (id: HookID) => void;
   getActive: () => Hook;
@@ -55,6 +63,7 @@ type HooksContainer = {
   inspectActive: <T = any>() => HookContainer<T> | undefined;
   beginCollect: () => void;
   collect: () => State;
+  removeHooks: (count: number) => void;
 };
 
 const hook = (options: HookOptions): Hook => ({
@@ -67,6 +76,7 @@ const ActiveHooks = (): HooksContainer => {
   let activeId: HookID | undefined;
   let hooks: Hooks = [];
   let collectedHookStartIndex: number;
+  let insertMode = false;
 
   const getActiveHook = (activeId?: HookID): Hook => {
     if (activeId === undefined) {
@@ -82,6 +92,11 @@ const ActiveHooks = (): HooksContainer => {
   ): HookContainer<any> => {
     const hook = getActiveHook(activeId);
     const currentIndex = activeIndex ?? hook.index;
+
+    if (insertMode) {
+      hook.state.splice(currentIndex, 0, null);
+    }
+
     const hookState = hook.state[currentIndex];
 
     return {
@@ -98,6 +113,9 @@ const ActiveHooks = (): HooksContainer => {
   };
 
   return {
+    setInsertMode(insert) {
+      insertMode = insert;
+    },
     register(options) {
       hooks = [...hooks, hook(options)];
       return hooks.length - 1;
@@ -128,11 +146,15 @@ const ActiveHooks = (): HooksContainer => {
         return new State(
           ...hook.state
             .slice(collectedHookStartIndex, currentIndex)
-            .map((state) => ({ ...state }))
+            .map((state) => state && { ...state })
         );
       }
 
       return new State();
+    },
+    removeHooks(count) {
+      const hook = this.getActive();
+      hook.state.splice(hook.index, count);
     },
   };
 };

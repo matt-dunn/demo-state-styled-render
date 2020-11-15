@@ -20,7 +20,7 @@ export const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
   });
 
   if (error) {
-    return <code>TODO ERROR BOUNDARY: {error.message}</code>;
+    return <code>TODO ERROR BOUNDARY: {JSON.stringify(error)}</code>;
   }
 
   return children;

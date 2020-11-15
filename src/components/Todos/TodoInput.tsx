@@ -7,7 +7,7 @@
 
 /** @jsx jsx **/
 
-import { jsx, useState } from "packages/render";
+import { jsx, useEffect, useState } from "packages/render";
 import myStyled from "packages/myStyled";
 
 import { Actions as TodoActions } from "./duck";
@@ -44,13 +44,22 @@ export const TodoInput = ({ createTodo }: TodoInputProps) => {
     throw new Error("Example boundary caught error");
   }
 
+  useEffect(() => {
+    console.error("MOUNT***");
+
+    return () => {
+      console.error("***UNMOUNT***");
+    };
+  }, []);
+
   return (
     <TodoListForm$
       onSubmit={(e: any) => {
         e.preventDefault();
         if (value.trim()) {
           createTodo(value.trim());
-          setValue("");
+          // @TODO: currently the reference to this hook setter is not correct and will setValue on the wrong hook
+          // setValue("???");
         }
       }}
     >
