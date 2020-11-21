@@ -5,7 +5,7 @@
  * @licence MIT
  */
 
-import { AnyNode, FC } from "./types";
+import { AnyFunc, AnyNode, FC } from "./types";
 import { updateTree } from "./element";
 import activeHooks, { HookID } from "./hooks";
 
@@ -18,6 +18,8 @@ const MxFactory = (): MxContainer => {
   let previousTree: AnyNode | undefined;
   let rendering = false;
 
+  const renderQueue: AnyFunc[] = [];
+
   return {
     render: (component) => (mountPoint) => {
       const renderTree = () => {
@@ -26,13 +28,16 @@ const MxFactory = (): MxContainer => {
         rendering = true;
         previousTree = updateTree(mountPoint, component({}), previousTree);
         rendering = false;
+
+        if (renderQueue.length > 0) {
+          renderQueue.shift()?.();
+        }
       };
 
       hookId = activeHooks.register({
         render: () => {
           if (rendering) {
-            // Push into next tick if currently rendering
-            setTimeout(renderTree);
+            renderQueue.push(renderTree);
           } else {
             renderTree();
           }
