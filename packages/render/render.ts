@@ -37,7 +37,10 @@ const MxFactory = (): MxContainer => {
       hookId = activeHooks.register({
         render: () => {
           if (rendering) {
-            renderQueue.push(renderTree);
+            // @TODO: Currently just use the first item in the queue as we just want a re-render of the entire tree if requested.
+            //        Will need to push to the queue once branch rendering is supported with a cycle check for infinite loop cascading
+            renderQueue[0] = renderTree;
+            // renderQueue.push(renderTree);
           } else {
             renderTree();
           }
