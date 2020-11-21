@@ -14,15 +14,14 @@ type HookOptions = {
 };
 
 export type HookImplementation = {
-  id: HookID;
   type: string;
   cleanup?: AnyCallback;
 };
 
 export type HookImplementations = Array<HookImplementation | null>;
 
-class State extends Array<HookImplementation | null> {
-  constructor(...items: HookImplementations) {
+export class State<T> extends Array<HookContainer<T>> {
+  constructor(...items: HookContainer<T>[]) {
     super(...items);
 
     Object.setPrototypeOf(this, State.prototype);
@@ -33,22 +32,24 @@ class State extends Array<HookImplementation | null> {
   ): T[] {
     const filterType = types.map(({ type }) => type);
     return this.filter(
-      (item) => (item && filterType.indexOf(item.type) !== -1) || false
-    ) as T[];
+      (item) =>
+        (item._value && filterType.indexOf(item._value.type) !== -1) || false
+    ).map((item) => item._value) as T[];
   }
 }
 
-type Hook = {
+type Hook<T> = {
   index: number;
-  state: State;
+  state: State<T>;
   options: HookOptions;
 };
 
-export type Hooks = Hook[] & {
-  [key: number]: Hook;
+export type Hooks<T> = Hook<T>[] & {
+  [key: number]: Hook<T>;
 };
 
-type HookContainer<T> = {
+export type HookContainer<T> = {
+  _value: HookImplementation | null;
   options: HookOptions;
   getValue: () => T | undefined;
   setValue: (value: Omit<T, "id">) => T;
@@ -58,27 +59,40 @@ type HooksContainer = {
   setInsertMode: (insert: boolean) => void;
   register: (options: HookOptions) => HookID;
   setActive: (id: HookID) => void;
-  getActive: () => Hook;
+  getActive: <T>() => Hook<T>;
   getCurrent: <T = any>() => HookContainer<T>;
   inspectActive: <T = any>() => HookContainer<T> | undefined;
   beginCollect: () => void;
-  collect: () => State;
+  collect: () => State<any>;
   removeHooks: (count: number) => void;
 };
 
-const hook = (options: HookOptions): Hook => ({
+const hook = <T>(options: HookOptions): Hook<T> => ({
   index: 0,
   state: new State(),
   options,
 });
 
+const hookContainer = (hook: Hook<any>): HookContainer<any> => ({
+  options: hook.options,
+  _value: null,
+  getValue() {
+    return this._value;
+  },
+  setValue(value: Omit<HookImplementation, "id">) {
+    this._value = value;
+
+    return value;
+  },
+});
+
 const ActiveHooks = (): HooksContainer => {
   let activeId: HookID | undefined;
-  let hooks: Hooks = [];
+  let hooks: Hooks<any> = [];
   let collectedHookStartIndex: number;
   let insertMode = false;
 
-  const getActiveHook = (activeId?: HookID): Hook => {
+  const getActiveHook = (activeId?: HookID): Hook<any> => {
     if (activeId === undefined) {
       throw new TypeError("No active hooks");
     }
@@ -94,22 +108,16 @@ const ActiveHooks = (): HooksContainer => {
     const currentIndex = activeIndex ?? hook.index;
 
     if (insertMode) {
-      hook.state.splice(currentIndex, 0, null);
+      hook.state.splice(currentIndex, 0, hookContainer(hook));
     }
 
     const hookState = hook.state[currentIndex];
 
-    return {
-      options: hook.options,
-      getValue: () => hookState,
-      setValue: (value: Omit<HookImplementation, "id">) => {
-        hook.state[currentIndex] = {
-          id: currentIndex,
-          ...value,
-        };
-        return value;
-      },
-    };
+    if (!hookState) {
+      hook.state[currentIndex] = hookContainer(hook);
+    }
+
+    return hookState;
   };
 
   return {

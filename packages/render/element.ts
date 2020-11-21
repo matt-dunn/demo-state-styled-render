@@ -16,7 +16,7 @@ import {
 import { isNode } from "./utils";
 import { setAttributes, updateAttributes } from "./attributes";
 import { jsx } from "./jsx";
-import activeHooks, { HookImplementations, useError, UseError } from "./hooks";
+import activeHooks, { State, useError, UseError } from "./hooks";
 
 type Context = {
   parent?: Context;
@@ -166,9 +166,9 @@ const renderComponentNode = (node: Node, context?: Context) => {
   }
 };
 
-const cleanupHooks = (hooks?: HookImplementations) => {
+const cleanupHooks = (hooks?: State<any>) => {
   if (hooks && hooks?.length > 0) {
-    hooks.forEach((hook) => hook?.cleanup && hook.cleanup());
+    hooks.forEach((hook) => hook._value?.cleanup && hook._value.cleanup());
 
     activeHooks.removeHooks(hooks.length);
   }

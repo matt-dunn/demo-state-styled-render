@@ -5,7 +5,7 @@
  * @licence MIT
  */
 
-import { HookImplementations } from "./hooks";
+import { State } from "./hooks";
 
 export const NODE_TYPE_FRAGMENT = "#fragment";
 
@@ -36,7 +36,7 @@ export type Node<P = Record<string, any>> = {
   props: P & BaseProps;
   children?: Children;
   key: Key;
-  hooks?: HookImplementations;
+  hooks?: State<any>;
 };
 
 export type Children<P = any> = AnyNode<P>[];
