@@ -7,7 +7,7 @@
 
 export { Mx as default } from "./render";
 
-export { Node, Children, FC, HTMLElementMap } from "./types";
+export { Node, Children, FC, Component, HTMLElementMap } from "./types";
 
 export { classnames } from "./utils";
 

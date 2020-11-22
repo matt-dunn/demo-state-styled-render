@@ -49,7 +49,7 @@ export const TodoList = ({
   className,
 }: TodoListProps) => (
   <TodoList$ className={className}>
-    {todos.length > 2 && <TodoInput createTodo={createTodo} />}
+    {todos.length > 3 && <TodoInput createTodo={createTodo} />}
     <TodoListHeader$>
       <ErrorBoundary>
         <TodoInput createTodo={createTodo} />
@@ -59,7 +59,7 @@ export const TodoList = ({
         {(todos.length !== 1 && "s") || ""}
       </p>
     </TodoListHeader$>
-    {todos.length > 2 && <TodoInput createTodo={createTodo} />}
+    {todos.length > 4 && <TodoInput createTodo={createTodo} />}
     <main>
       <Todos todos={todos}>
         {(todo) => (

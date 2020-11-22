@@ -45,6 +45,8 @@ export type AnyNode<P = any> = Node<P> | string | number | null | false;
 
 export type FC<P = any> = (props: P) => Node<P> | null;
 
+export type Component<P = any> = (props: P) => AnyNode<P>;
+
 export interface HTMLElementMap extends HTMLElement {
   [key: string]: any;
 }

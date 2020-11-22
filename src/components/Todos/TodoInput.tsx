@@ -40,17 +40,17 @@ const TodoListForm$ = styled("form")`
 export const TodoInput = ({ createTodo }: TodoInputProps) => {
   const [value, setValue] = useState("");
 
-  if (value === "error") {
-    throw new Error("Example boundary caught error");
-  }
-
   useEffect(() => {
-    console.error("MOUNT***");
+    console.error("*** MOUNT: TodoInput");
 
     return () => {
-      console.error("***UNMOUNT***");
+      console.error("*** UNMOUNT: TodoInput");
     };
   }, []);
+
+  if (value === "error!") {
+    throw new Error("Example boundary caught error");
+  }
 
   return (
     <TodoListForm$
@@ -58,8 +58,7 @@ export const TodoInput = ({ createTodo }: TodoInputProps) => {
         e.preventDefault();
         if (value.trim()) {
           createTodo(value.trim());
-          // @TODO: currently the reference to this hook setter is not correct and will setValue on the wrong hook
-          // setValue("???");
+          setValue("");
         }
       }}
     >

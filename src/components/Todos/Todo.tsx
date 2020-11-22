@@ -8,7 +8,7 @@
 /** @jsx jsx **/
 /** @jsxFrag jsxFrag **/
 
-import { jsx, jsxFrag } from "packages/render";
+import { jsx, jsxFrag, useEffect } from "packages/render";
 import myStyled from "packages/myStyled";
 
 import { TodoItem } from "./types";
@@ -50,34 +50,44 @@ export const Todo = ({
   todo: { id, text, complete },
   deleteTodo,
   updateTodo,
-}: TodoProps) => (
-  <Todo$>
-    <label
-      onClick={(e) => {
-        e.preventDefault();
-        updateTodo({ id, text, complete: !complete });
-      }}
-    >
-      {complete ? (
-        <del className="text-muted">
-          <input type="checkbox" checked={complete} />
-          {text}
-        </del>
-      ) : (
-        <>
-          <input type="checkbox" checked={complete} />
-          {text}
-        </>
-      )}
-    </label>
-    <button
-      className="btn btn-sm btn-outline-secondary"
-      onClick={(e) => {
-        e.preventDefault();
-        deleteTodo(id);
-      }}
-    >
-      Delete
-    </button>
-  </Todo$>
-);
+}: TodoProps) => {
+  useEffect(() => {
+    console.error("*** MOUNT: Todo", id, text);
+
+    return () => {
+      console.error("*** UNMOUNT: Todo", id, text);
+    };
+  }, []);
+
+  return (
+    <Todo$>
+      <label
+        onClick={(e) => {
+          e.preventDefault();
+          updateTodo({ id, text, complete: !complete });
+        }}
+      >
+        {complete ? (
+          <del className="text-muted">
+            <input type="checkbox" checked={complete} />
+            {text}
+          </del>
+        ) : (
+          <>
+            <input type="checkbox" checked={complete} />
+            {text}
+          </>
+        )}
+      </label>
+      <button
+        className="btn btn-sm btn-outline-secondary"
+        onClick={(e) => {
+          e.preventDefault();
+          deleteTodo(id);
+        }}
+      >
+        Delete
+      </button>
+    </Todo$>
+  );
+};

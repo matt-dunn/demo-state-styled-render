@@ -6,9 +6,8 @@
  */
 
 import { HTMLElementMap, Node } from "../types";
-import { updateTree } from "../element";
-import activeHooks from "../hooks";
 import { looseRef } from "../utils";
+import { MxFactory } from "../render";
 
 export const getDOMNodes = Symbol("getDOMNodes");
 
@@ -116,16 +115,9 @@ const elementWrapper = (
 export const mount: Mount = (node) => {
   const el = document.createElement("div");
 
-  const render = () => {
-    activeHooks.setActive(hookId);
+  const mx = MxFactory();
 
-    el.innerHTML = "";
-    updateTree(el, node);
-  };
-
-  const hookId = activeHooks.register({
-    render,
-  });
+  const render = mx.render(node)(el);
 
   render();
 

@@ -5,15 +5,17 @@
  * @licence MIT
  */
 
-import { AnyFunc, AnyNode, FC } from "./types";
+import { AnyFunc, AnyNode, Component } from "./types";
 import { updateTree } from "./element";
 import activeHooks, { HookID } from "./hooks";
 
 type MxContainer = {
-  render: (component: FC) => (mountPoint: HTMLElement) => void;
+  render: (
+    component: Component | AnyNode
+  ) => (mountPoint: HTMLElement) => () => void;
 };
 
-const MxFactory = (): MxContainer => {
+export const MxFactory = (): MxContainer => {
   let hookId: HookID;
   let previousTree: AnyNode | undefined;
   let rendering = false;
@@ -26,7 +28,11 @@ const MxFactory = (): MxContainer => {
         activeHooks.setActive(hookId);
 
         rendering = true;
-        previousTree = updateTree(mountPoint, component({}), previousTree);
+        previousTree = updateTree(
+          mountPoint,
+          typeof component === "function" ? component({}) : component,
+          previousTree
+        );
         rendering = false;
 
         if (renderQueue.length > 0) {
@@ -48,6 +54,8 @@ const MxFactory = (): MxContainer => {
       });
 
       renderTree();
+
+      return renderTree;
     },
   };
 };
