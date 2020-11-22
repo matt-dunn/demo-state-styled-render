@@ -20,7 +20,7 @@ import activeHooks, { State, useError, UseError } from "./hooks";
 
 type Context = {
   parent?: Context;
-  errorHook?: UseError;
+  hooks?: State<any>;
 };
 
 export const createElement = (
@@ -122,8 +122,14 @@ const handleError = (
   context?: Context,
   handled = false
 ): Partial<Error> | null => {
-  if (context?.errorHook?.handleError) {
-    const error = context?.errorHook?.handleError(ex);
+  const errorHooks = context?.hooks?.byType<UseError>(useError);
+
+  if (errorHooks && errorHooks.length > 1) {
+    throw new TypeError("Invalid error hook tree");
+  }
+
+  if (errorHooks && errorHooks.length > 0) {
+    const error = errorHooks[0].handleError(ex);
 
     if (error && context?.parent) {
       return handleError(error as Error, context.parent, true);
@@ -201,11 +207,6 @@ export const updateTree = (
     const componentNode = renderComponentNode(node, context);
 
     const componentHooks = activeHooks.collect();
-    const errorHooks = componentHooks.byType<UseError>(useError);
-
-    if (errorHooks.length > 1) {
-      throw new TypeError("Invalid error hook tree");
-    }
 
     const componentTree = updateTree(
       element,
@@ -213,9 +214,8 @@ export const updateTree = (
       isNode(prevNode) ? prevNode?.children?.[0] : prevNode,
       index,
       {
-        ...context,
-        parent: { ...context },
-        errorHook: errorHooks.length > 0 ? errorHooks[0] : context?.errorHook,
+        parent: context,
+        hooks: componentHooks,
       }
     );
 
