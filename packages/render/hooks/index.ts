@@ -117,7 +117,7 @@ const ActiveHooks = (): HooksContainer => {
       hook.state[currentIndex] = hookContainer(hook);
     }
 
-    return hookState;
+    return hook.state[currentIndex];
   };
 
   return {

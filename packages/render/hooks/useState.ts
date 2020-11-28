@@ -14,16 +14,16 @@ type UseState<S> = {
   setter: (newValue: S) => S;
 } & HookImplementation;
 
-export const useState = <S = any>(initialState: S): [S, (newValue: S) => S] => {
+export const useState = <S>(initialState: S): [S, (newValue: S) => S] => {
   const hook = activeHooks.getCurrent<UseState<S>>();
 
   const currentState = hook.getValue();
 
   const updatedState = hook.setValue({
     type: HOOK_TYPE,
-    value: currentState?.value ?? initialState,
+    value: currentState ? currentState.value : initialState,
     setter(newValue: S) {
-      if (updatedState.value !== newValue) {
+      if (hook.getValue()?.value !== newValue) {
         hook.setValue({
           ...updatedState,
           value: newValue,

@@ -31,7 +31,7 @@ type BaseProps = {
   ref?: Ref;
 };
 
-export type Node<P = Record<string, any>> = {
+export type Node<P = any> = {
   type: NodeType<P>;
   props: P & BaseProps;
   children?: Children;

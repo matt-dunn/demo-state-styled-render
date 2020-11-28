@@ -5,8 +5,10 @@
  * @licence MIT
  */
 
-import { useEffect, useState } from "./hooks";
+import { useContext, useEffect, useState } from "./hooks";
 import { FC } from "./types";
+import { createElement } from "./element";
+import { createContext } from "./context";
 
 type Module<T> = T;
 
@@ -14,26 +16,43 @@ type GetModule<T> = () => Promise<Module<T>>;
 
 type ExportResolver<T, P> = (module: Module<T>) => FC<P>;
 
+export const LazyContext = createContext<(promise: Promise<any>) => void>();
+
 export const lazy = <T, P>(
   getModule: GetModule<T>,
   exportResolver?: ExportResolver<T, P>
 ) => (props = {} as P) => {
   const [component, setComponent] = useState<FC | undefined>(undefined);
 
+  const setPromise = useContext(LazyContext);
+
   useEffect(() => {
-    (async function () {
-      const module = (await getModule()) as Module<T> & { default: any };
-      const resolvedComponent = exportResolver
-        ? exportResolver(module)
-        : module.default;
+    const promise = new Promise((resolve) => {
+      const module = getModule() as Promise<Module<T> & { default: any }>;
 
-      if (!resolvedComponent) {
-        throw new TypeError("Unable to load component");
-      }
+      module.then((module) => {
+        const resolvedComponent = exportResolver
+          ? exportResolver(module)
+          : module.default;
 
-      setComponent(resolvedComponent);
-    })();
+        if (!resolvedComponent) {
+          throw new TypeError("Unable to load component");
+        }
+
+        setTimeout(() => {
+          // reject(new TypeError("Unable to load component"));
+          setComponent(resolvedComponent);
+          resolve(resolvedComponent);
+        }, 2000);
+      });
+    });
+
+    setPromise && setPromise(promise);
   }, []);
 
-  return component?.(props) || null;
+  if (!component) {
+    return null;
+  }
+
+  return createElement(component, props);
 };

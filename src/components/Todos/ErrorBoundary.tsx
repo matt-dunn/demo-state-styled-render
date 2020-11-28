@@ -6,22 +6,38 @@
  */
 
 /** @jsx jsx **/
+/** @jsxFrag jsxFrag **/
 
-import { Node, jsx, useError } from "packages/render";
+import { Node, jsx, jsxFrag, useState, useEffect } from "packages/render";
+import { LazyContext } from "packages/render/lazy";
 
 type ErrorBoundaryProps = {
   children: Node;
 };
 
 export const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
-  const error = useError((error) => {
-    console.log("HANDLE", error.message);
-    // return { message: "wrapped: " + error.message };
-  });
+  const [promise, setPromise] = useState<Promise<any> | undefined>(undefined);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<Error | undefined>(undefined);
+
+  useEffect(() => {
+    if (promise) {
+      setPending(true);
+
+      promise.catch(setError).finally(() => setPending(false));
+    }
+  }, [promise]);
 
   if (error) {
-    return <code>TODO ERROR BOUNDARY: {JSON.stringify(error.message)}</code>;
+    throw error;
   }
 
-  return children;
+  return (
+    <LazyContext.Provider value={setPromise}>
+      <>
+        <p>[{pending ? "Y" : "N"}]</p>
+        {children}
+      </>
+    </LazyContext.Provider>
+  );
 };

@@ -27,7 +27,7 @@ export const createElement = (
   type: NodeType,
   props: Props = {},
   children?: Children | Node
-): Node<any> | null => {
+): Node | null => {
   if (Array.isArray(children)) {
     return jsx(type, props, ...children);
   } else if (children) {
@@ -153,7 +153,7 @@ const handleError = (
   return null;
 };
 
-const renderComponentNode = (node: Node, context?: Context) => {
+const renderComponentNode = (node: Node, context?: Context): AnyNode => {
   try {
     if (isNode(node) && typeof node?.type === "function") {
       return (
@@ -195,8 +195,14 @@ export const updateTree = (
   index = 0,
   context?: Context
 ): AnyNode | undefined => {
+  // @TODO: temp workaround for root fragment nodes. This needs to process the fragment children on the current element managing the index correctly...
+  if (isNode(node) && node.type === NODE_TYPE_FRAGMENT) {
+    node.type = "div";
+    node.props["data-type"] = NODE_TYPE_FRAGMENT;
+  }
+
   if (isNode(node) && typeof node?.type === "function") {
-    if (!prevNode) {
+    if (!prevNode || hasChanged(node, prevNode)) {
       activeHooks.setInsertMode(true);
     } else {
       activeHooks.setInsertMode(false);

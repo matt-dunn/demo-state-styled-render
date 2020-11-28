@@ -34,7 +34,7 @@ export const jsxFrag = ({
 export const jsx = (
   type: NodeType,
   props: Props = {},
-  ...children: Children | Children[]
+  ...children: Children
 ): Node | null => {
   const { key, ...rest } = props || {};
 
@@ -42,7 +42,6 @@ export const jsx = (
     ? type({
         ...rest,
         children: flattenChildren(children),
-        key,
       })
     : {
         type,

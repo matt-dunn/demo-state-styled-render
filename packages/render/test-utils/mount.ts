@@ -47,8 +47,8 @@ const elementWrapper = (
 
   return {
     [getDOMNodes]: () => elements.current,
-    find: (selector) =>
-      elementWrapper(
+    find(selector) {
+      return elementWrapper(
         parentElement,
         elements.current.reduce(
           (elements, element) => [
@@ -58,7 +58,8 @@ const elementWrapper = (
           [] as HTMLElement[]
         ),
         options
-      ),
+      );
+    },
     simulate(eventName, eventArgs?) {
       elements.current.forEach((element) => {
         const handler = element?.[`on${eventName}`];
@@ -78,7 +79,7 @@ const elementWrapper = (
 
       return this;
     },
-    hasClass: (className) => {
+    hasClass(className) {
       if (elements.current.length !== 1) {
         throw new TypeError(
           `hasClass can only be executed on a single element. Found ${
@@ -96,11 +97,12 @@ const elementWrapper = (
     },
     map: (cb) => elements.current.map(cb),
     length: elements.current.length,
-    html: () =>
-      elements.current.reduce(
+    html() {
+      return elements.current.reduce(
         (html, element) => html + element.outerHTML.trim(),
         ""
-      ),
+      );
+    },
     update() {
       options.render();
       elements.current = Array.isArray(parentElement.firstElementChild)
