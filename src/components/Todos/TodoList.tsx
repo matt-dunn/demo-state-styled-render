@@ -11,6 +11,7 @@ import { jsx } from "packages/render";
 import myStyled from "packages/myStyled";
 import { lazy } from "packages/render/lazy";
 import { Suspense } from "packages/render/Suspense";
+import { Delay } from "packages/render/Delay";
 
 import { ErrorBoundary } from "./ErrorBoundary";
 
@@ -77,7 +78,7 @@ const Loader = myStyled("div")`
 const SubtleLoader = myStyled(Loader)`
   opacity: 0.4;
   font-size: 0.85rem;
-`
+`;
 
 const Fallback = () => <SubtleLoader>Loading…</SubtleLoader>;
 
@@ -100,10 +101,12 @@ export const TodoList = ({
           <TodoInput createTodo={createTodo} />
         </Suspense>
       </ErrorBoundary>
-      <p>
-        You have <strong>{todos.length}</strong> todo
-        {(todos.length !== 1 && "s") || ""}
-      </p>
+      <Delay delay={4000}>
+        <p>
+          You have <strong>{todos.length}</strong> todo
+          {(todos.length !== 1 && "s") || ""}
+        </p>
+      </Delay>
     </TodoListHeader$>
     {todos.length > 4 && <TodoInput createTodo={createTodo} />}
     <main>

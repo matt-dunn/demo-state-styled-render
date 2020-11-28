@@ -84,19 +84,14 @@ exports[`App: Example of using mount should render component 1`] = `
         <div
           data-type="#fragment"
         >
-          <div>
-            LOADING...
+          <div
+            class=" ms__pXdzm ms__iIxxqL"
+          >
+            Loading…
           </div>
            
         </div>
-        <p>
-          You have 
-          <strong>
-            2
-          </strong>
-           todo
-          s
-        </p>
+         
       </header>
       
       <main>

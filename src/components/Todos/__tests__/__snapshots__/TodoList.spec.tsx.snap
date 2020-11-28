@@ -11,19 +11,14 @@ exports[`TodoList: Example of using mount should render component with > 1 items
     <div
       data-type="#fragment"
     >
-      <div>
-        LOADING...
+      <div
+        class=" ms__pXdzm ms__iIxxqL"
+      >
+        Loading…
       </div>
        
     </div>
-    <p>
-      You have 
-      <strong>
-        2
-      </strong>
-       todo
-      s
-    </p>
+     
   </header>
   
   <main>
@@ -89,19 +84,14 @@ exports[`TodoList: Example of using mount should render component with 1 items 1
     <div
       data-type="#fragment"
     >
-      <div>
-        LOADING...
+      <div
+        class=" ms__pXdzm ms__iIxxqL"
+      >
+        Loading…
       </div>
        
     </div>
-    <p>
-      You have 
-      <strong>
-        1
-      </strong>
-       todo
-      
-    </p>
+     
   </header>
   
   <main>
@@ -148,19 +138,14 @@ exports[`TodoList: Example of using mount should render component with no items 
     <div
       data-type="#fragment"
     >
-      <div>
-        LOADING...
+      <div
+        class=" ms__pXdzm ms__iIxxqL"
+      >
+        Loading…
       </div>
        
     </div>
-    <p>
-      You have 
-      <strong>
-        0
-      </strong>
-       todo
-      s
-    </p>
+     
   </header>
   
   <main>
