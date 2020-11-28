@@ -9,14 +9,21 @@
 
 import { jsx } from "packages/render";
 import myStyled from "packages/myStyled";
+import { lazy } from "packages/render/lazy";
+import { Suspense } from "packages/render/Suspense";
 
 import { ErrorBoundary } from "./ErrorBoundary";
 
 import { Todos } from "./Todos";
 import { TodoItems } from "./types";
 import { Actions as TodoActions } from "./duck";
-import { TodoInput } from "./TodoInput";
 import { Todo } from "./Todo";
+// import { TodoInput } from "./TodoInput";
+
+const TodoInput = lazy(
+  () => import("./TodoInput"),
+  (module) => module.TodoInput
+);
 
 type TodoListProps = {
   todos: TodoItems;
@@ -41,6 +48,8 @@ const TodoListHeader$ = styled("header")`
   margin-bottom: 1rem;
 `;
 
+const Fallback = () => <div>LOADING...</div>;
+
 export const TodoList = ({
   todos,
   createTodo,
@@ -49,10 +58,16 @@ export const TodoList = ({
   className,
 }: TodoListProps) => (
   <TodoList$ className={className}>
-    {todos.length > 3 && <TodoInput createTodo={createTodo} />}
+    {todos.length > 3 && (
+      <Suspense Fallback={Fallback}>
+        <TodoInput createTodo={createTodo} />
+      </Suspense>
+    )}
     <TodoListHeader$>
       <ErrorBoundary>
-        <TodoInput createTodo={createTodo} />
+        <Suspense Fallback={Fallback}>
+          <TodoInput createTodo={createTodo} />
+        </Suspense>
       </ErrorBoundary>
       <p>
         You have <strong>{todos.length}</strong> todo

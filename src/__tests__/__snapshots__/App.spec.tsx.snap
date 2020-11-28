@@ -81,25 +81,14 @@ exports[`App: Example of using mount should render component 1`] = `
       <header
         class=" ms__jVxsUK"
       >
-        <form
-          class=" ms__iMxdBJ"
+        <div
+          data-type="#fragment"
         >
-          <label>
-            Todo
-            <input
-              class="form-control"
-              placeholder="Add new todo"
-              type="text"
-            />
-          </label>
-          <button
-            class="btn btn-primary"
-            disabled=""
-            type="submit"
-          >
-            Add
-          </button>
-        </form>
+          <div>
+            LOADING...
+          </div>
+           
+        </div>
         <p>
           You have 
           <strong>
