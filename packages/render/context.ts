@@ -6,26 +6,29 @@
  */
 
 import { Node } from "./types";
-import { looseRef } from "./utils";
+import { useContextState } from "./hooks/useContextState";
 
 export const getValueSymbol = Symbol("getValueSymbol");
 
 export type Context<T = any> = {
-  [getValueSymbol]: () => T | undefined;
   Provider: ({ value, children }: { value: T; children: Node }) => Node;
 };
 
 export const createContext = <T = any>(defaultValue?: T): Context<T> => {
-  const currentValue = looseRef(defaultValue);
+  const context: Context<T> = {
+    Provider({ value, children }) {
+      const [contextValue, setContextValue] = useContextState({
+        value: value ? value : defaultValue,
+        context,
+      });
 
-  return {
-    [getValueSymbol]: () => currentValue.current,
-    Provider: ({ value, children }) => {
-      if (currentValue.current !== value) {
-        currentValue.current = value;
+      if (contextValue.value !== value) {
+        setContextValue({ value, context });
       }
 
       return children;
     },
   };
+
+  return context;
 };

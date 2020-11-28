@@ -6,6 +6,7 @@
  */
 
 import { AnyCallback } from "../types";
+import { ContextValue, UseContextState } from "./useContextState";
 
 export type HookID = number;
 
@@ -38,10 +39,15 @@ export class State<T> extends Array<HookContainer<T>> {
   }
 }
 
+type Context = {
+  contexts?: UseContextState<ContextValue<any>>[];
+};
+
 type Hook<T> = {
   index: number;
   state: State<T>;
   options: HookOptions;
+  context?: Context;
 };
 
 export type Hooks<T> = Hook<T>[] & {
@@ -62,7 +68,7 @@ type HooksContainer = {
   getActive: <T>() => Hook<T>;
   getCurrent: <T = any>() => HookContainer<T>;
   inspectActive: <T = any>() => HookContainer<T> | undefined;
-  beginCollect: () => void;
+  beginCollect: (context: Context) => void;
   collect: () => State<any>;
   removeHooks: (count: number) => void;
 };
@@ -143,7 +149,9 @@ const ActiveHooks = (): HooksContainer => {
     inspectActive() {
       return getActiveHookContainer(activeId, this.getActive().index - 1);
     },
-    beginCollect() {
+    beginCollect(context) {
+      this.getActive().context = context;
+
       collectedHookStartIndex = this.getActive().index;
     },
     collect() {

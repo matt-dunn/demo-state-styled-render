@@ -17,10 +17,12 @@ import { isNode } from "./utils";
 import { setAttributes, updateAttributes } from "./attributes";
 import { jsx } from "./jsx";
 import activeHooks, { State, useError, UseError } from "./hooks";
+import { useContextState, UseContextState } from "./hooks/useContextState";
 
 type Context = {
   parent?: Context;
-  hooks?: State<any>;
+  hooks: State<any>;
+  contexts: UseContextState<any>[];
 };
 
 export const createElement = (
@@ -208,7 +210,9 @@ export const updateTree = (
       activeHooks.setInsertMode(false);
     }
 
-    activeHooks.beginCollect();
+    activeHooks.beginCollect({
+      contexts: context?.contexts,
+    });
 
     const componentNode = renderComponentNode(node, context);
 
@@ -222,6 +226,10 @@ export const updateTree = (
       {
         parent: context,
         hooks: componentHooks,
+        contexts: [
+          ...componentHooks.byType<UseContextState<any>>(useContextState),
+          ...(context?.contexts || []),
+        ],
       }
     );
 
