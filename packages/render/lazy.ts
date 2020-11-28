@@ -27,7 +27,7 @@ export const lazy = <T, P>(
   const setPromise = useContext(LazyContext);
 
   useEffect(() => {
-    const promise = new Promise((resolve) => {
+    const promise = new Promise((resolve, reject) => {
       const module = getModule() as Promise<Module<T> & { default: any }>;
 
       module.then((module) => {
@@ -36,11 +36,10 @@ export const lazy = <T, P>(
           : module.default;
 
         if (!resolvedComponent) {
-          throw new TypeError("Unable to load component");
+          reject(TypeError("Unable to load component"));
         }
 
         setTimeout(() => {
-          // reject(new TypeError("Unable to load component"));
           setComponent(resolvedComponent);
           resolve(resolvedComponent);
         }, 2000);

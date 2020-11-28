@@ -48,7 +48,38 @@ const TodoListHeader$ = styled("header")`
   margin-bottom: 1rem;
 `;
 
-const Fallback = () => <div>LOADING...</div>;
+const Loader = myStyled("div")`
+  display: inline-flex;
+  align-items: center;
+
+  &:before {
+    content: " ";
+    margin-right: 0.5rem;
+    display: block;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    border: 0.15em solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const SubtleLoader = myStyled(Loader)`
+  opacity: 0.4;
+  font-size: 0.85rem;
+`
+
+const Fallback = () => <SubtleLoader>Loading…</SubtleLoader>;
 
 export const TodoList = ({
   todos,
