@@ -47,3 +47,9 @@ export type Deps = any[];
 
 export const hasChanged = <T extends Deps = Deps>(deps: T, prevDeps?: T) =>
   !prevDeps || deps.filter((d, i) => d !== prevDeps[i]).length > 0;
+
+const ATTR_WHITELIST = [/class/, /data-*/, /aria-*/];
+
+export const isValidElementAttribute = (element: HTMLElement, name: string) =>
+  ATTR_WHITELIST.find((pattern) => pattern.test(name)) !== undefined ||
+  name in element;

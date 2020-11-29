@@ -6,12 +6,7 @@
  */
 
 import { AnyFunc, HTMLElementMap, Props } from "./types";
-import { propertyMap } from "./utils";
-
-const ATTR_BLACKLIST = ["ref", "key"];
-
-const isValidElementAttribute = (name: string) =>
-  ATTR_BLACKLIST.indexOf(name) == -1;
+import { isValidElementAttribute, propertyMap } from "./utils";
 
 export const setAttribute = (
   element: HTMLElementMap,
@@ -30,7 +25,7 @@ export const setAttribute = (
     );
   } else if (typeof value === "function") {
     element[propertyName] = value;
-  } else if (isValidElementAttribute(propertyName)) {
+  } else if (isValidElementAttribute(element, propertyName)) {
     if (value) {
       element.setAttribute(propertyName, value);
     } else {
@@ -42,7 +37,7 @@ export const setAttribute = (
 
 export const setAttributes = (element: HTMLElement, props: Props) =>
   Object.keys(props || {})
-    .filter((name) => isValidElementAttribute(name))
+    .filter((name) => isValidElementAttribute(element, name))
     .forEach((name) => setAttribute(element, name, props[name]));
 
 export const removeAttribute = (element: HTMLElement, name: string) =>
