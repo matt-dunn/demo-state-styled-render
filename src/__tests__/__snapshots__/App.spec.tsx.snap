@@ -77,72 +77,75 @@ exports[`App: Example of using mount should render component 1`] = `
     <section
       class="mr-md-2 mb-3 flex-grow-1 align-self-start col-md ms__brMznf"
     >
-      
-      <header
-        class=" ms__jVxsUK"
+      <div
+        data-type="#fragment"
       >
-        <div
-          data-type="#fragment"
-        >
-          <div
-            class=" ms__pXdzm ms__iIxxqL"
+        
+        <div>
+          
+          <header
+            class=" ms__jVxsUK"
           >
-            Loading…
-          </div>
-           
-        </div>
-         
-      </header>
-      
-      <main>
-        <ul
-          class=" ms__hUhVje"
-        >
-          <li
-            class=" ms__hsUUbt"
-          >
-            <article
-              class=" ms__ezdkTR"
+            <div
+              data-type="#fragment"
             >
-              <label>
-                <del
-                  class="text-muted"
+               
+               
+            </div>
+             
+          </header>
+          
+          <main>
+            <ul
+              class=" ms__hUhVje"
+            >
+              <li
+                class=" ms__hsUUbt"
+              >
+                <article
+                  class=" ms__ezdkTR"
                 >
-                  <input
-                    checked="true"
-                    type="checkbox"
-                  />
-                  Do something
-                </del>
-              </label>
-              <button
-                class="btn btn-sm btn-outline-secondary"
+                  <label>
+                    <del
+                      class="text-muted"
+                    >
+                      <input
+                        checked="true"
+                        type="checkbox"
+                      />
+                      Do something
+                    </del>
+                  </label>
+                  <button
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    Delete
+                  </button>
+                </article>
+              </li>
+              <li
+                class=" ms__hsUUbt"
               >
-                Delete
-              </button>
-            </article>
-          </li>
-          <li
-            class=" ms__hsUUbt"
-          >
-            <article
-              class=" ms__ezdkTR"
-            >
-              <label>
-                <input
-                  type="checkbox"
-                />
-                Do something else
-              </label>
-              <button
-                class="btn btn-sm btn-outline-secondary"
-              >
-                Delete
-              </button>
-            </article>
-          </li>
-        </ul>
-      </main>
+                <article
+                  class=" ms__ezdkTR"
+                >
+                  <label>
+                    <input
+                      type="checkbox"
+                    />
+                    Do something else
+                  </label>
+                  <button
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    Delete
+                  </button>
+                </article>
+              </li>
+            </ul>
+          </main>
+        </div>
+      </div>
     </section>
     <div
       class="ml-md-2 flex-grow-1 col-md"

@@ -31,18 +31,22 @@ export const lazy = <T, P>(
       const module = getModule() as Promise<Module<T> & { default: any }>;
 
       module.then((module) => {
-        const resolvedComponent = exportResolver
-          ? exportResolver(module)
-          : module.default;
+        try {
+          const resolvedComponent = exportResolver
+            ? exportResolver(module)
+            : module.default;
 
-        if (!resolvedComponent) {
-          reject(TypeError("Unable to load component"));
+          if (!resolvedComponent) {
+            reject(TypeError("Unable to load component"));
+          }
+
+          setTimeout(() => {
+            setComponent(() => resolvedComponent);
+            resolve(resolvedComponent);
+          }, 2000);
+        } catch (ex) {
+          reject(ex);
         }
-
-        setTimeout(() => {
-          setComponent(resolvedComponent);
-          resolve(resolvedComponent);
-        }, 2000);
       });
     });
 

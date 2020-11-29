@@ -6,6 +6,7 @@
  */
 
 import { State } from "./hooks";
+import { LooseRef } from "./utils";
 
 export const NODE_TYPE_FRAGMENT = "#fragment";
 
@@ -22,18 +23,18 @@ export type NodeType<P = any> =
   | typeof NODE_TYPE_FRAGMENT
   | FC<P>;
 
-type Ref = (el: HTMLElement) => void;
+type Ref<T> = (value: T) => void;
 
-type BaseProps = {
+export type BaseProps<T = any> = {
   style?: {
     [P in keyof CSSStyleDeclaration]: CSSStyleDeclaration[P];
   };
-  ref?: Ref;
+  ref?: Ref<T> | LooseRef<T>;
 };
 
 export type Node<P = any> = {
   type: NodeType<P>;
-  props: P & BaseProps;
+  props: P & BaseProps<P>;
   children?: Children;
   key: Key;
   hooks?: State<any>;

@@ -18,14 +18,16 @@ type SuspenseProps = {
 
 export const Suspense = ({ children, Fallback }: SuspenseProps) => {
   const [promise, setPromise] = useState<Promise<any> | undefined>(undefined);
-  const [pending, setPending] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
   const [error, setError] = useState<Error | undefined>(undefined);
 
   useEffect(() => {
     if (promise) {
-      setPending(true);
+      setPendingCount((pendingCount) => pendingCount + 1);
 
-      promise.catch(setError).finally(() => setPending(false));
+      promise
+        .catch(setError)
+        .finally(() => setPendingCount((pendingCount) => pendingCount - 1));
     }
   }, [promise]);
 
@@ -36,7 +38,7 @@ export const Suspense = ({ children, Fallback }: SuspenseProps) => {
   return (
     <LazyContext.Provider value={setPromise}>
       <>
-        {pending && <Fallback />}
+        {pendingCount !== 0 && <Fallback />}
         {children}
       </>
     </LazyContext.Provider>

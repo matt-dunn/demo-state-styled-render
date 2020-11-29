@@ -80,7 +80,17 @@ const SubtleLoader = myStyled(Loader)`
   font-size: 0.85rem;
 `;
 
-const Fallback = () => <SubtleLoader>Loading…</SubtleLoader>;
+const Fallback = () => (
+  <Delay>
+    <SubtleLoader>Loading…</SubtleLoader>
+  </Delay>
+);
+
+const FallbackOuter = () => (
+  <Delay>
+    <SubtleLoader>Loading outer…</SubtleLoader>
+  </Delay>
+);
 
 export const TodoList = ({
   todos,
@@ -90,31 +100,35 @@ export const TodoList = ({
   className,
 }: TodoListProps) => (
   <TodoList$ className={className}>
-    {todos.length > 3 && (
-      <Suspense Fallback={Fallback}>
-        <TodoInput createTodo={createTodo} />
-      </Suspense>
-    )}
-    <TodoListHeader$>
-      <ErrorBoundary>
-        <Suspense Fallback={Fallback}>
-          <TodoInput createTodo={createTodo} />
-        </Suspense>
-      </ErrorBoundary>
-      <Delay delay={4000}>
-        <p>
-          You have <strong>{todos.length}</strong> todo
-          {(todos.length !== 1 && "s") || ""}
-        </p>
-      </Delay>
-    </TodoListHeader$>
-    {todos.length > 4 && <TodoInput createTodo={createTodo} />}
-    <main>
-      <Todos todos={todos}>
-        {(todo) => (
-          <Todo todo={todo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-        )}
-      </Todos>
-    </main>
+    <Suspense Fallback={FallbackOuter}>
+      <div>
+        {todos.length > 3 && <TodoInput createTodo={createTodo} />}
+        <TodoListHeader$>
+          <ErrorBoundary>
+            <Suspense Fallback={Fallback}>
+              <TodoInput createTodo={createTodo} autoFocus={true} />
+            </Suspense>
+          </ErrorBoundary>
+          <Delay delay={4000}>
+            <p>
+              You have <strong>{todos.length}</strong> todo
+              {(todos.length !== 1 && "s") || ""}
+            </p>
+          </Delay>
+        </TodoListHeader$>
+        {todos.length > 4 && <TodoInput createTodo={createTodo} />}
+        <main>
+          <Todos todos={todos}>
+            {(todo) => (
+              <Todo
+                todo={todo}
+                deleteTodo={deleteTodo}
+                updateTodo={updateTodo}
+              />
+            )}
+          </Todos>
+        </main>
+      </div>
+    </Suspense>
   </TodoList$>
 );

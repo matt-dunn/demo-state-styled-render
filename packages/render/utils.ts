@@ -35,7 +35,7 @@ export const isNode = (node: any): node is Node =>
 export const classnames = (...classNames: (string | undefined)[]): string =>
   classNames.join(" ");
 
-type LooseRef<T = any> = {
+export type LooseRef<T = any> = {
   current: T;
 };
 

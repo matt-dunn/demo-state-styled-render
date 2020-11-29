@@ -7,13 +7,14 @@
 
 /** @jsx jsx **/
 
-import { jsx, useEffect, useState } from "packages/render";
+import { jsx, useEffect, useRef, useState } from "packages/render";
 import myStyled from "packages/myStyled";
 
 import { Actions as TodoActions } from "./duck";
 
 type TodoInputProps = {
   createTodo: TodoActions["createTodo"];
+  autoFocus?: boolean;
 };
 
 // Quick fix to allow stylelint to do it's thing:
@@ -37,16 +38,17 @@ const TodoListForm$ = styled("form")`
   }
 `;
 
-export const TodoInput = ({ createTodo }: TodoInputProps) => {
+export const TodoInput = ({ createTodo, autoFocus }: TodoInputProps) => {
   const [value, setValue] = useState("");
+  const input = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    console.error("*** MOUNT: TodoInput");
-
-    return () => {
-      console.error("*** UNMOUNT: TodoInput");
-    };
-  }, []);
+    if (autoFocus) {
+      setTimeout(() => {
+        input.current?.focus();
+      });
+    }
+  }, [autoFocus]);
 
   if (value === "error!") {
     throw new Error("Example boundary caught error");
@@ -65,6 +67,7 @@ export const TodoInput = ({ createTodo }: TodoInputProps) => {
       <label>
         Todo
         <input
+          ref={input}
           value={value}
           type="text"
           placeholder="Add new todo"

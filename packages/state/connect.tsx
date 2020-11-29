@@ -102,7 +102,7 @@ export function connect<
 
     const actions = getActions();
 
-    const [props, setProps] = useState(mapStateToProps(store.getState()));
+    const [props, setProps] = useState(() => mapStateToProps(store.getState()));
 
     useEffect(() => {
       const cb = (state: TState) => setProps(mapStateToProps(state));

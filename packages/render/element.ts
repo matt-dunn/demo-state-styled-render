@@ -7,6 +7,7 @@
 
 import {
   AnyNode,
+  BaseProps,
   Children,
   Node,
   NODE_TYPE_FRAGMENT,
@@ -42,13 +43,19 @@ export const createElement = (
 const getTextNodeValue = (node: AnyNode): string =>
   typeof node === "string" || typeof node === "number" ? node.toString() : "";
 
-const createDocumentElement = (node: AnyNode): HTMLElement | Text => {
+const createDocumentElement = (
+  node: AnyNode<BaseProps<HTMLElement>>
+): HTMLElement | Text => {
   if (isNode(node) && typeof node.type === "string") {
     const element = document.createElement(node.type);
 
     setAttributes(element, node?.props);
 
-    node?.props?.ref?.(element);
+    if (typeof node?.props?.ref === "function") {
+      node.props.ref(element);
+    } else if (node?.props?.ref) {
+      node.props.ref.current = element;
+    }
 
     return element;
   }

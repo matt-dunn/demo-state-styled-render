@@ -4,72 +4,75 @@ exports[`TodoList: Example of using mount should render component with > 1 items
 <section
   class=" ms__brMznf"
 >
-  
-  <header
-    class=" ms__jVxsUK"
+  <div
+    data-type="#fragment"
   >
-    <div
-      data-type="#fragment"
-    >
-      <div
-        class=" ms__pXdzm ms__iIxxqL"
+    
+    <div>
+      
+      <header
+        class=" ms__jVxsUK"
       >
-        Loading…
-      </div>
-       
-    </div>
-     
-  </header>
-  
-  <main>
-    <ul
-      class=" ms__hUhVje"
-    >
-      <li
-        class=" ms__hsUUbt"
-      >
-        <article
-          class=" ms__ezdkTR"
+        <div
+          data-type="#fragment"
         >
-          <label>
-            <del
-              class="text-muted"
+           
+           
+        </div>
+         
+      </header>
+      
+      <main>
+        <ul
+          class=" ms__hUhVje"
+        >
+          <li
+            class=" ms__hsUUbt"
+          >
+            <article
+              class=" ms__ezdkTR"
             >
-              <input
-                checked="true"
-                type="checkbox"
-              />
-              My Todo Item 1
-            </del>
-          </label>
-          <button
-            class="btn btn-sm btn-outline-secondary"
+              <label>
+                <del
+                  class="text-muted"
+                >
+                  <input
+                    checked="true"
+                    type="checkbox"
+                  />
+                  My Todo Item 1
+                </del>
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+          <li
+            class=" ms__hsUUbt"
           >
-            Delete
-          </button>
-        </article>
-      </li>
-      <li
-        class=" ms__hsUUbt"
-      >
-        <article
-          class=" ms__ezdkTR"
-        >
-          <label>
-            <input
-              type="checkbox"
-            />
-            My Todo Item 2
-          </label>
-          <button
-            class="btn btn-sm btn-outline-secondary"
-          >
-            Delete
-          </button>
-        </article>
-      </li>
-    </ul>
-  </main>
+            <article
+              class=" ms__ezdkTR"
+            >
+              <label>
+                <input
+                  type="checkbox"
+                />
+                My Todo Item 2
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+        </ul>
+      </main>
+    </div>
+  </div>
 </section>
 `;
 
@@ -77,53 +80,56 @@ exports[`TodoList: Example of using mount should render component with 1 items 1
 <section
   class=" ms__brMznf"
 >
-  
-  <header
-    class=" ms__jVxsUK"
+  <div
+    data-type="#fragment"
   >
-    <div
-      data-type="#fragment"
-    >
-      <div
-        class=" ms__pXdzm ms__iIxxqL"
+    
+    <div>
+      
+      <header
+        class=" ms__jVxsUK"
       >
-        Loading…
-      </div>
-       
-    </div>
-     
-  </header>
-  
-  <main>
-    <ul
-      class=" ms__hUhVje"
-    >
-      <li
-        class=" ms__hsUUbt"
-      >
-        <article
-          class=" ms__ezdkTR"
+        <div
+          data-type="#fragment"
         >
-          <label>
-            <del
-              class="text-muted"
-            >
-              <input
-                checked="true"
-                type="checkbox"
-              />
-              My Todo Item 1
-            </del>
-          </label>
-          <button
-            class="btn btn-sm btn-outline-secondary"
+           
+           
+        </div>
+         
+      </header>
+      
+      <main>
+        <ul
+          class=" ms__hUhVje"
+        >
+          <li
+            class=" ms__hsUUbt"
           >
-            Delete
-          </button>
-        </article>
-      </li>
-    </ul>
-  </main>
+            <article
+              class=" ms__ezdkTR"
+            >
+              <label>
+                <del
+                  class="text-muted"
+                >
+                  <input
+                    checked="true"
+                    type="checkbox"
+                  />
+                  My Todo Item 1
+                </del>
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+        </ul>
+      </main>
+    </div>
+  </div>
 </section>
 `;
 
@@ -131,27 +137,30 @@ exports[`TodoList: Example of using mount should render component with no items 
 <section
   class=" ms__brMznf"
 >
-  
-  <header
-    class=" ms__jVxsUK"
+  <div
+    data-type="#fragment"
   >
-    <div
-      data-type="#fragment"
-    >
-      <div
-        class=" ms__pXdzm ms__iIxxqL"
+    
+    <div>
+      
+      <header
+        class=" ms__jVxsUK"
       >
-        Loading…
-      </div>
-       
+        <div
+          data-type="#fragment"
+        >
+           
+           
+        </div>
+         
+      </header>
+      
+      <main>
+        <ul
+          class=" ms__hUhVje"
+        />
+      </main>
     </div>
-     
-  </header>
-  
-  <main>
-    <ul
-      class=" ms__hUhVje"
-    />
-  </main>
+  </div>
 </section>
 `;
