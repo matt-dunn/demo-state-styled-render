@@ -101,34 +101,28 @@ export const TodoList = ({
 }: TodoListProps) => (
   <TodoList$ className={className}>
     <Suspense Fallback={FallbackOuter}>
-      <div>
-        {todos.length > 3 && <TodoInput createTodo={createTodo} />}
-        <TodoListHeader$>
-          <ErrorBoundary>
-            <Suspense Fallback={Fallback}>
-              <TodoInput createTodo={createTodo} autoFocus={true} />
-            </Suspense>
-          </ErrorBoundary>
-          <Delay delay={4000}>
-            <p>
-              You have <strong>{todos.length}</strong> todo
-              {(todos.length !== 1 && "s") || ""}
-            </p>
-          </Delay>
-        </TodoListHeader$>
-        {todos.length > 4 && <TodoInput createTodo={createTodo} />}
-        <main>
-          <Todos todos={todos}>
-            {(todo) => (
-              <Todo
-                todo={todo}
-                deleteTodo={deleteTodo}
-                updateTodo={updateTodo}
-              />
-            )}
-          </Todos>
-        </main>
-      </div>
+      {todos.length > 3 && <TodoInput createTodo={createTodo} />}
+      <TodoListHeader$>
+        <ErrorBoundary>
+          <Suspense Fallback={Fallback}>
+            <TodoInput createTodo={createTodo} autoFocus={true} />
+          </Suspense>
+        </ErrorBoundary>
+        <Delay delay={4000}>
+          <p>
+            You have <strong>{todos.length}</strong> todo
+            {(todos.length !== 1 && "s") || ""}
+          </p>
+        </Delay>
+      </TodoListHeader$>
+      {todos.length > 4 && <TodoInput createTodo={createTodo} />}
+      <main>
+        <Todos todos={todos}>
+          {(todo) => (
+            <Todo todo={todo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+          )}
+        </Todos>
+      </main>
     </Suspense>
   </TodoList$>
 );

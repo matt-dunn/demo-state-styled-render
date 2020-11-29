@@ -8,11 +8,11 @@
 /** @jsx jsx **/
 /** @jsxFrag jsxFrag **/
 
-import { Node, jsx, jsxFrag, useState, useEffect, FC } from "./";
+import { Node, jsx, jsxFrag, useState, useEffect, FC, Children } from "./";
 import { LazyContext } from "./lazy";
 
 type SuspenseProps = {
-  children: Node;
+  children: Node | Children;
   Fallback: FC;
 };
 

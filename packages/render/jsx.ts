@@ -14,10 +14,12 @@ import {
   Props,
 } from "./types";
 
-const flattenChildren = (children: Children | Children[]): Children =>
-  (children.length === 1 && Array.isArray(children[0]) && children[0]
-    ? children[0]
-    : children) as Children;
+const flattenChildren = (children: Children): Children =>
+  children.reduce(
+    (children, child) =>
+      Array.isArray(child) ? [...children, ...child] : [...children, child],
+    [] as Children
+  );
 
 export const jsxFrag = ({
   children,
@@ -27,7 +29,7 @@ export const jsxFrag = ({
 }): (Node & { key: Key }) | null => ({
   type: NODE_TYPE_FRAGMENT,
   props,
-  children: Array.isArray(children) ? children : [children],
+  children: flattenChildren(Array.isArray(children) ? children : [children]),
   key: null,
 });
 
@@ -41,12 +43,12 @@ export const jsx = (
   return type === jsxFrag
     ? type({
         ...rest,
-        children: flattenChildren(children),
+        children,
       })
     : {
         type,
         props: rest,
-        children: flattenChildren(children),
+        children,
         key: key || null,
       };
 };
