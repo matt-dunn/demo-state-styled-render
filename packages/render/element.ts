@@ -217,6 +217,13 @@ export const updateTree = (
     node.props["data-type"] = NODE_TYPE_FRAGMENT;
   }
 
+  if (isNode(node) && node?.type === "script") {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("Script element found in tree and removed", node);
+    }
+    node = "";
+  }
+
   const namespaceURI =
     getElementNamespaceURI(node) ?? context?.namespaceURI ?? null;
 
