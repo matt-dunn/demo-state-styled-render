@@ -41,6 +41,10 @@ export const parseRule = <T>(
 export const generateClassName = (hash: string): string =>
   `${CLASS_NAME_PREFIX}${hash}`;
 
+const stylis = new Stylis({
+  global: false,
+});
+
 export const updateSheetRule = (
   sheet: StylesheetPartial<CSSRuleList | AnyRules>,
   className: string,
@@ -49,10 +53,6 @@ export const updateSheetRule = (
   const DEBUG_RULES: string[] = [];
 
   const selectorText = `.${className}`;
-
-  const stylis = new Stylis({
-    global: false,
-  });
 
   // See https://github.com/thysultan/stylis.js#plugins for plugin details
   stylis.use((context, content, selectors, parent) => {

@@ -53,3 +53,13 @@ const ATTR_WHITELIST = [/class/, /data-*/, /aria-*/];
 export const isValidElementAttribute = (element: HTMLElement, name: string) =>
   ATTR_WHITELIST.find((pattern) => pattern.test(name)) !== undefined ||
   name in element;
+export const getComponentName = (Component: FC | string | unknown) => {
+  if (typeof Component === "function") {
+    return Component.name;
+  } else if (typeof Component === "string") {
+    return Component;
+  }
+
+  return "anonymous";
+};
+

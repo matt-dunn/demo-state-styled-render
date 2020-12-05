@@ -21,41 +21,61 @@ export const LazyContext = createContext<(promise: Promise<any>) => void>();
 export const lazy = <T, P>(
   getModule: GetModule<T>,
   exportResolver?: ExportResolver<T, P>
-) => (props = {} as P) => {
-  const [component, setComponent] = useState<FC | undefined>(undefined);
+) => {
+  const LazyComponent = (props = {} as P) => {
+    const [component, setComponent] = useState<FC | undefined>(undefined);
 
-  const setPromise = useContext(LazyContext);
+    const setPromise = useContext(LazyContext);
 
-  useEffect(() => {
-    const promise = new Promise((resolve, reject) => {
-      const module = getModule() as Promise<Module<T> & { default: any }>;
+    useEffect(() => {
+      const promise = new Promise((resolve, reject) => {
+        const module = getModule() as Promise<Module<T> & { default: any }>;
 
-      module.then((module) => {
-        try {
-          const resolvedComponent = exportResolver
-            ? exportResolver(module)
-            : module.default;
-
-          if (!resolvedComponent) {
-            reject(TypeError("Unable to load component"));
-          }
-
-          setTimeout(() => {
-            setComponent(() => resolvedComponent);
-            resolve(resolvedComponent);
-          }, 2000);
-        } catch (ex) {
-          reject(ex);
+        if (!module?.then) {
+          return reject(
+            new TypeError("Invalid value returned from getModule()")
+          );
         }
+
+        module.then((module) => {
+          try {
+            const resolvedComponent = exportResolver
+              ? exportResolver(module)
+              : module.default;
+
+            if (!resolvedComponent) {
+              return reject(
+                new TypeError(
+                  `Unable to load component. Available exports: [${Object.keys(
+                    module
+                  )}]`
+                )
+              );
+            }
+
+            setTimeout(() => {
+              setComponent(() => resolvedComponent);
+              resolve(resolvedComponent);
+            }, 2000);
+          } catch (ex) {
+            reject(ex);
+          }
+        });
       });
-    });
 
-    setPromise && setPromise(promise);
-  }, []);
+      setPromise && setPromise(promise);
+    }, []);
 
-  if (!component) {
-    return null;
-  }
+    if (!component) {
+      return null;
+    }
 
-  return createElement(component, props);
+    return createElement(component, props);
+  };
+
+  Object.defineProperty(LazyComponent, "name", {
+    value: `lazy(${getModule.toString()})`,
+  });
+
+  return LazyComponent;
 };
