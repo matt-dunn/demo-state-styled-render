@@ -6,15 +6,18 @@
  */
 
 import {
+  AnyDOMElement,
   AnyNode,
   BaseProps,
   Children,
+  DOMElement,
+  NamespaceURI,
   Node,
   NODE_TYPE_FRAGMENT,
   NodeType,
   Props,
 } from "./types";
-import { isNode } from "./utils";
+import { getElementNamespaceURI, isNode } from "./utils";
 import { setAttributes, updateAttributes } from "./attributes";
 import { jsx } from "./jsx";
 import activeHooks, { State, useError, UseError } from "./hooks";
@@ -24,6 +27,7 @@ type Context = {
   parent?: Context;
   hooks: State<any>;
   contexts: UseContextState<any>[];
+  namespaceURI: NamespaceURI;
 };
 
 export const createElement = (
@@ -44,10 +48,13 @@ const getTextNodeValue = (node: AnyNode): string =>
   typeof node === "string" || typeof node === "number" ? node.toString() : "";
 
 const createDocumentElement = (
-  node: AnyNode<BaseProps<HTMLElement>>
-): HTMLElement | Text => {
+  node: AnyNode<BaseProps<DOMElement>>,
+  namespaceURI: NamespaceURI
+): AnyDOMElement => {
   if (isNode(node) && typeof node.type === "string") {
-    const element = document.createElement(node.type);
+    const element = namespaceURI
+      ? (document.createElementNS(namespaceURI, node.type) as HTMLElement)
+      : document.createElement(node.type);
 
     setAttributes(element, node?.props);
 
@@ -68,7 +75,7 @@ const hasChanged = (node: AnyNode, prevNode: AnyNode) =>
   (isNode(node) && node.type) !== (isNode(prevNode) && prevNode.type);
 
 const updateChildren = (
-  element: HTMLElement,
+  element: DOMElement,
   children: Children = [],
   prevChildren: Children = [],
   index: number,
@@ -84,7 +91,7 @@ const updateChildren = (
     childIndex++
   ) {
     const node = updateTree(
-      element.childNodes[index] as HTMLElement,
+      element.childNodes[index] as DOMElement,
       children[childIndex],
       prevChildren[childIndex],
       childIndex,
@@ -108,7 +115,7 @@ const flattenChildren = (children: Children = []): Children =>
   }, [] as Children);
 
 const updateNode = (
-  element: HTMLElement,
+  element: DOMElement,
   node: AnyNode,
   prevNode?: AnyNode,
   index = 0,
@@ -198,7 +205,7 @@ const cleanupNode = (node: AnyNode) => {
 };
 
 export const updateTree = (
-  element: HTMLElement,
+  element: DOMElement,
   node: AnyNode,
   prevNode?: AnyNode,
   index = 0,
@@ -209,6 +216,9 @@ export const updateTree = (
     node.type = "div";
     node.props["data-type"] = NODE_TYPE_FRAGMENT;
   }
+
+  const namespaceURI =
+    getElementNamespaceURI(node) ?? context?.namespaceURI ?? null;
 
   if (isNode(node) && typeof node?.type === "function") {
     if (!prevNode || hasChanged(node, prevNode)) {
@@ -237,6 +247,10 @@ export const updateTree = (
           ...componentHooks.byType<UseContextState<any>>(useContextState),
           ...(context?.contexts || []),
         ],
+        namespaceURI:
+          getElementNamespaceURI(componentNode) ??
+          context?.namespaceURI ??
+          null,
       }
     );
 
@@ -248,7 +262,7 @@ export const updateTree = (
   }
 
   if (prevNode === undefined) {
-    element.appendChild(createDocumentElement(node));
+    element.appendChild(createDocumentElement(node, namespaceURI));
   } else if (node === undefined) {
     cleanupNode(prevNode);
 
@@ -258,14 +272,14 @@ export const updateTree = (
     cleanupNode(prevNode);
 
     element.replaceChild(
-      createDocumentElement(node),
+      createDocumentElement(node, namespaceURI),
       element.childNodes[index]
     );
 
     return updateNode(element, node, undefined, index, context);
   } else if (isNode(node)) {
     updateAttributes(
-      element.childNodes[index] as HTMLElement,
+      element.childNodes[index] as DOMElement,
       node.props,
       isNode(prevNode) ? prevNode.props : undefined
     );
@@ -273,5 +287,14 @@ export const updateTree = (
     element.childNodes[index].nodeValue = getTextNodeValue(node);
   }
 
-  return updateNode(element, node, prevNode, index, context);
+  return updateNode(
+    element,
+    node,
+    prevNode,
+    index,
+    context && {
+      ...context,
+      namespaceURI,
+    }
+  );
 };

@@ -5,7 +5,9 @@
  * @licence MIT
  */
 
-import { Node } from "./types";
+import { AnyDOMElement, AnyNode, DOMElement, FC, Node } from "./types";
+
+const NAMESPACE_URI_SGV = "http://www.w3.org/2000/svg";
 
 type MappedProps = {
   [key: string]: string;
@@ -26,13 +28,16 @@ export const propertyMap = (name: string) => {
   return name;
 };
 
-export const isNode = (node: any): node is Node =>
+export const isNode = (node?: AnyNode): node is Node =>
   (node &&
     typeof node === "object" &&
     Object.prototype.hasOwnProperty.call(node, "type")) ||
   false;
 
-export const classnames = (...classNames: (string | undefined)[]): string =>
+export const isSVGNode = (node?: AnyNode) =>
+  isNode(node) && node.type === "svg";
+
+export const classnames = (...classNames: string[]): string =>
   classNames.join(" ");
 
 export type LooseRef<T = any> = {
@@ -50,9 +55,11 @@ export const hasChanged = <T extends Deps = Deps>(deps: T, prevDeps?: T) =>
 
 const ATTR_WHITELIST = [/class/, /data-*/, /aria-*/];
 
-export const isValidElementAttribute = (element: HTMLElement, name: string) =>
-  ATTR_WHITELIST.find((pattern) => pattern.test(name)) !== undefined ||
-  name in element;
+export const isValidElementAttribute = (element: DOMElement, name: string) =>
+  !isHTMLElement(element) ||
+  name in element ||
+  ATTR_WHITELIST.find((pattern) => pattern.test(name)) !== undefined;
+
 export const getComponentName = (Component: FC | string | unknown) => {
   if (typeof Component === "function") {
     return Component.name;
@@ -63,3 +70,13 @@ export const getComponentName = (Component: FC | string | unknown) => {
   return "anonymous";
 };
 
+export const isHTMLElement = (element: AnyDOMElement): element is HTMLElement =>
+  element.namespaceURI !== NAMESPACE_URI_SGV;
+
+export const getElementNamespaceURI = (node: AnyNode) => {
+  if (isSVGNode(node)) {
+    return NAMESPACE_URI_SGV;
+  }
+
+  return null;
+};

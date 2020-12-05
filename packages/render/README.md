@@ -24,6 +24,7 @@ Features:
 - [Suspense](./Suspense.tsx)
 - [Delay](./Delay.ts)
 - [Mount](./test-utils/mount.ts) test utility and jest [snapshot serialization](./test-utils/jest/serialize-to-json.js)
+- SVG support
 
 ---
 

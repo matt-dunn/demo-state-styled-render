@@ -57,3 +57,9 @@ export type Props<P = any> = {
 };
 
 export type AnyCallback = (() => void) | void;
+
+export type DOMElement = HTMLElementMap | SVGElement;
+
+export type AnyDOMElement = DOMElement | Text;
+
+export type NamespaceURI = string | null;
