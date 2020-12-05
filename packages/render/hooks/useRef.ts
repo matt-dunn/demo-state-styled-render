@@ -17,6 +17,12 @@ export type UseRef<T> = {
 export const useRef = <T>(value: T): LooseRef<T> => {
   const hook = activeHooks.getCurrent<UseRef<T>>();
 
+  const currentValue = hook.getValue();
+
+  if (currentValue) {
+    return currentValue.ref;
+  }
+
   const updatedValue = hook.setValue({
     type: HOOK_TYPE,
     ref: looseRef(value),
