@@ -15,6 +15,7 @@ import { TodoItem, TodoItems } from "./types";
 type TodosProps = {
   todos: TodoItems;
   children: (todo: TodoItem) => Node;
+  className?: string;
 };
 
 // Quick fix to allow stylelint to do it's thing:
@@ -30,8 +31,8 @@ const TodosItem$ = styled("li")`
   padding: 0.25rem 0;
 `;
 
-export const Todos = ({ todos, children }: TodosProps) => (
-  <Todos$>
+export const Todos = ({ todos, children, className }: TodosProps) => (
+  <Todos$ className={className}>
     {todos.map((todo) => (
       <TodosItem$ key={todo.id}>{children(todo)}</TodosItem$>
     ))}

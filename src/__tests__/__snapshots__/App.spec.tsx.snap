@@ -77,73 +77,81 @@ exports[`App: Example of using mount should render component 1`] = `
     <section
       class="mr-md-2 mb-3 flex-grow-1 align-self-start col-md ms__brMznf"
     >
-      <div
-        data-type="#fragment"
+      
+      <header
+        class=" ms__jVxsUK"
       >
-        
-        
-        <header
-          class=" ms__jVxsUK"
+        <form
+          class=" ms__iMxdBJ"
         >
-          <div
-            data-type="#fragment"
+          <label>
+            Todo
+            <input
+              class="form-control"
+              placeholder="Add new todo"
+              type="text"
+            />
+          </label>
+          <button
+            class="btn btn-primary"
+            disabled=""
+            type="submit"
           >
-             
-             
-          </div>
-           
-        </header>
-        
-        <main>
-          <ul
-            class=" ms__hUhVje"
+            Add
+          </button>
+        </form>
+         
+      </header>
+      
+      <main>
+        <ul
+          class=" ms__kcZOTY ms__hUhVje"
+        >
+          <li
+            class=" ms__hsUUbt"
           >
-            <li
-              class=" ms__hsUUbt"
+            <article
+              class=" ms__ezdkTR"
             >
-              <article
-                class=" ms__ezdkTR"
-              >
-                <label>
-                  <del
-                    class="text-muted"
-                  >
-                    <input
-                      checked="true"
-                      type="checkbox"
-                    />
-                    Do something
-                  </del>
-                </label>
-                <button
-                  class="btn btn-sm btn-outline-secondary"
+              <label>
+                <del
+                  class="text-muted"
                 >
-                  Delete
-                </button>
-              </article>
-            </li>
-            <li
-              class=" ms__hsUUbt"
-            >
-              <article
-                class=" ms__ezdkTR"
-              >
-                <label>
                   <input
+                    checked="true"
                     type="checkbox"
                   />
-                  Do something else
-                </label>
-                <button
-                  class="btn btn-sm btn-outline-secondary"
-                >
-                  Delete
-                </button>
-              </article>
-            </li>
-          </ul>
-        </main>
-      </div>
+                  Do something
+                </del>
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+          <li
+            class=" ms__hsUUbt"
+          >
+            <article
+              class=" ms__ezdkTR"
+            >
+              <label>
+                <input
+                  type="checkbox"
+                />
+                Do something else
+              </label>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+              >
+                Delete
+              </button>
+            </article>
+          </li>
+        </ul>
+      </main>
     </section>
     <div
       class="ml-md-2 flex-grow-1 col-md"
@@ -164,6 +172,27 @@ exports[`App: Example of using mount should render component 1`] = `
  }
 ]
       </pre>
+      <div
+        data-type="#fragment"
+      >
+         
+        <div
+          style="height: 50px; margin-bottom: 1rem; display: flex;"
+        >
+          <div
+            data-type="#fragment"
+          >
+            <div
+              class=" ms__pXdzm ms__fGYsBm"
+            >
+              Loading…
+            </div>
+             
+          </div>
+           
+           
+        </div>
+      </div>
     </div>
   </main>
 </div>
