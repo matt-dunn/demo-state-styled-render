@@ -14,17 +14,19 @@ type DelayProps = {
 };
 
 export const Delay = ({ delay = 500, children }: DelayProps) => {
-  const [waiting, setWaiting] = useState(true);
+  const [waiting, setWaiting] = useState(delay !== 0);
 
   useEffect(() => {
-    const t = setTimeout(() => {
-      setWaiting(false);
-    }, delay);
+    if (waiting) {
+      const t = setTimeout(() => {
+        setWaiting(false);
+      }, delay);
 
-    return () => {
-      clearTimeout(t);
-    };
-  }, []);
+      return () => {
+        clearTimeout(t);
+      };
+    }
+  }, [delay]);
 
   return waiting ? null : children;
 };
