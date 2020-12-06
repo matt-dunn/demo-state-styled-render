@@ -6,7 +6,7 @@
  */
 
 import { AnyFunc, AnyNode, Component } from "./types";
-import { updateTree } from "./element";
+import {updateTree, updateTreeChildren} from "./element";
 import activeHooks, { HookID } from "./hooks";
 
 type MxContainer = {
@@ -22,18 +22,34 @@ export const MxFactory = (): MxContainer => {
 
   const renderQueue: AnyFunc[] = [];
 
+  const x = []
+
   return {
     render: (component) => (mountPoint) => {
       const renderTree = () => {
         activeHooks.setActive(hookId);
 
+        const xxxx = typeof component === "function" ? component({}) : component;
+
+        const z = {
+          type: "#fragment",
+           children: [xxxx]
+        }
+
+        console.error("!!!",xxxx)
         rendering = true;
-        previousTree = updateTree(
+        previousTree = updateTreeChildren(
           mountPoint,
-          typeof component === "function" ? component({}) : component,
+          xxxx,
           previousTree
         );
         rendering = false;
+
+        // previousTree = xxxx
+
+        x.push(previousTree)
+
+        console.error("!!!END",previousTree);
 
         if (renderQueue.length > 0) {
           renderQueue.shift()?.();

@@ -59,6 +59,8 @@ export const Todo = ({
     };
   }, []);
 
+  console.log("***RENDER", id);
+
   return (
     <Todo$>
       <label

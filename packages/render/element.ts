@@ -25,8 +25,8 @@ import { useContextState, UseContextState } from "./hooks/useContextState";
 
 type Context = {
   parent?: Context;
-  hooks: State<any>;
-  contexts: UseContextState<any>[];
+  hooks?: State<any>;
+  contexts?: UseContextState<any>[];
   namespaceURI: NamespaceURI;
 };
 
@@ -72,39 +72,41 @@ const createDocumentElement = (
 
 const hasChanged = (node: AnyNode, prevNode: AnyNode) =>
   typeof node !== typeof prevNode ||
+  // node !== prevNode ||
+  (typeof node === "string" && node !== prevNode) ||
   (isNode(node) && node.type) !== (isNode(prevNode) && prevNode.type);
 
-const updateChildren = (
-  element: DOMElement,
-  children: Children = [],
-  prevChildren: Children = [],
-  index: number,
-  context?: Context
-) => {
-  const nodeChildrenLength = children.length;
-  const prevNodeChildrenLength = prevChildren.length;
-  const nodes: Children = [];
-
-  for (
-    let childIndex = 0;
-    childIndex < nodeChildrenLength || childIndex < prevNodeChildrenLength;
-    childIndex++
-  ) {
-    const node = updateTree(
-      element.childNodes[index] as DOMElement,
-      children[childIndex],
-      prevChildren[childIndex],
-      childIndex,
-      context
-    );
-
-    if (node !== undefined) {
-      nodes.push(node);
-    }
-  }
-
-  return nodes;
-};
+// const updateChildren = (
+//   element: DOMElement,
+//   children: Children = [],
+//   prevChildren: Children = [],
+//   index: number,
+//   context?: Context
+// ) => {
+//   const nodeChildrenLength = children.length;
+//   const prevNodeChildrenLength = prevChildren.length;
+//   const nodes: Children = [];
+//
+//   for (
+//     let childIndex = 0;
+//     childIndex < nodeChildrenLength || childIndex < prevNodeChildrenLength;
+//     childIndex++
+//   ) {
+//     const node = updateTree(
+//       element.childNodes[index] as DOMElement,
+//       children[childIndex],
+//       prevChildren[childIndex],
+//       childIndex,
+//       context
+//     );
+//
+//     if (node !== undefined) {
+//       nodes.push(node);
+//     }
+//   }
+//
+//   return nodes;
+// };
 
 const flattenChildren = (children: Children = []): Children =>
   children.reduce((children, child) => {
@@ -114,24 +116,24 @@ const flattenChildren = (children: Children = []): Children =>
     return [...children, child];
   }, [] as Children);
 
-const updateNode = (
-  element: DOMElement,
-  node: AnyNode,
-  prevNode?: AnyNode,
-  index = 0,
-  context?: Context
-): AnyNode | undefined =>
-  (isNode(node) && {
-    ...node,
-    children: updateChildren(
-      element,
-      flattenChildren(node.children),
-      (isNode(prevNode) && flattenChildren(prevNode?.children)) || undefined,
-      index,
-      context
-    ),
-  }) ||
-  node;
+// const updateNode = (
+//   element: DOMElement,
+//   node: AnyNode,
+//   prevNode?: AnyNode,
+//   index = 0,
+//   context?: Context
+// ): AnyNode | undefined =>
+//   (isNode(node) && {
+//     ...node,
+//     children: updateChildren(
+//       element,
+//       flattenChildren(node.children),
+//       (isNode(prevNode) && flattenChildren(prevNode?.children)) || undefined,
+//       index,
+//       context
+//     ),
+//   }) ||
+//   node;
 
 const handleError = (
   ex: Error,
@@ -204,6 +206,143 @@ const cleanupNode = (node: AnyNode) => {
   }
 };
 
+const exec = (node, prevNode, index, context) => {
+  if (!prevNode || hasChanged(node, prevNode)) {
+    activeHooks.setInsertMode(true);
+  } else {
+    activeHooks.setInsertMode(false);
+  }
+
+  activeHooks.beginCollect({
+    contexts: context?.contexts,
+  });
+
+  const componentNode = renderComponentNode(node, context);
+
+  console.error("*****",componentNode)
+
+  const componentHooks = activeHooks.collect();
+
+  const x = {
+    node: {
+      ...node,
+      // ...componentNode,
+      children: Array.isArray(componentNode) ? componentNode : [componentNode]// : [],
+    },
+    context: {
+      parent: context,
+      hooks: componentHooks,
+      contexts: [
+        ...componentHooks.byType<UseContextState<any>>(useContextState),
+        ...(context?.contexts || []),
+      ],
+      namespaceURI:
+        getElementNamespaceURI(componentNode) ??
+        context?.namespaceURI ??
+        null,
+    }
+  }
+
+  return x;
+  //
+  // const componentTree = updateTree(
+  //   element,
+  //   componentNode,
+  //   isNode(prevNode) ? prevNode?.children?.[0] : prevNode,
+  //   index,
+  //   {
+  //     parent: context,
+  //     hooks: componentHooks,
+  //     contexts: [
+  //       ...componentHooks.byType<UseContextState<any>>(useContextState),
+  //       ...(context?.contexts || []),
+  //     ],
+  //     namespaceURI:
+  //       getElementNamespaceURI(componentNode) ??
+  //       context?.namespaceURI ??
+  //       null,
+  //   }
+  // );
+  //
+  // return {
+  //   ...node,
+  //   children: componentTree ? [componentTree] : [],
+  //   hooks: componentHooks,
+  // };
+
+}
+
+export const updateTreeChildren = (
+  element: DOMElement,
+  node: AnyNode,
+  prevNode?: AnyNode,
+  index = 0,
+  context?: Context
+): AnyNode | undefined => {
+  if (isNode(node)) {
+
+    // node.children = flattenChildren(node.children)
+    // if (prevNode?.children) {
+    //   prevNode.children = flattenChildren(prevNode.children)
+    // }
+    const c = (node.children?.map((child, i) => {
+      if (isNode(child) && typeof child?.type === "function") {
+        return exec(child, prevNode?.children[i], index, context)
+        // return exec(child, prevNode?.children[i], index, context)
+      } else {
+        return {node: child, context}
+      }
+    }) || [])
+
+    // console.error(c,c.children)
+    // console.error(flattenChildren(c.node))
+
+    const x = flattenChildren(c.map(c => c.node))
+    // const x2 = flattenChildren(prevNode?.children)
+    // const x2 = isNode(prevNode) ? prevNode?.children ?? [] : []//flattenChildren(prevNode?.children)
+    const x2 = flattenChildren(prevNode?.children)
+    // console.error(c)
+
+    console.error(">>>", x)
+
+    let ii = 0;
+    const xx = x.map((n, i) => {
+      const p = prevNode?.children?.[i];
+      // console.error(n?.type || node, element, index)
+      // console.error("^^^^^", n, p)
+      const xxx = updateTree(
+        element,
+        n,
+        // undefined,
+        // isNode(p) && typeof p.type === "function" ? p?.children?.[0] : p,
+        // isNode(x2[i]) && typeof x2[i].type === "function" ? x2[i]?.children?.[0] : x2[i],
+        // prevNode?.children[i],
+        // x2[i],
+        p,
+        // p?.index ?? 0,
+        // ii += (p?.index?? 0),
+        ii,
+        c[i]?.context ?? context
+      )
+
+      ii = n?.index ?? ii++
+      return xxx
+    })
+
+    // console.error("@@", c.map(c => c.node))
+
+    return {
+      ...node,
+      // children: c.map(c => c.node)
+      children: xx
+    }
+  }
+
+  return node;
+
+  console.error("********",node)
+}
+
 export const updateTree = (
   element: DOMElement,
   node: AnyNode,
@@ -213,8 +352,9 @@ export const updateTree = (
 ): AnyNode | undefined => {
   // @TODO: temp workaround for root fragment nodes. This needs to process the fragment children on the current element managing the index correctly...
   if (isNode(node) && node.type === NODE_TYPE_FRAGMENT) {
-    node.type = "div";
-    node.props["data-type"] = NODE_TYPE_FRAGMENT;
+    return updateTreeChildren(element, node, prevNode, index, context)
+  //   node.type = "div";
+  //   node.props["data-type"] = NODE_TYPE_FRAGMENT;
   }
 
   if (isNode(node) && node?.type === "script") {
@@ -224,52 +364,61 @@ export const updateTree = (
     node = "";
   }
 
+  console.error("@@", element, index, node)
+
   const namespaceURI =
-    getElementNamespaceURI(node) ?? context?.namespaceURI ?? null;
+    context?.namespaceURI ?? getElementNamespaceURI(node) ?? null;
 
-  if (isNode(node) && typeof node?.type === "function") {
-    if (!prevNode || hasChanged(node, prevNode)) {
-      activeHooks.setInsertMode(true);
-    } else {
-      activeHooks.setInsertMode(false);
-    }
+  // console.error(namespaceURI)
 
-    activeHooks.beginCollect({
-      contexts: context?.contexts,
-    });
+  // if (isNode(node) && typeof node?.type === "function") {
+  //   if (!prevNode || hasChanged(node, prevNode)) {
+  //     activeHooks.setInsertMode(true);
+  //   } else {
+  //     activeHooks.setInsertMode(false);
+  //   }
+  //
+  //   activeHooks.beginCollect({
+  //     contexts: context?.contexts,
+  //   });
+  //
+  //   const componentNode = renderComponentNode(node, context);
+  //
+  //   const componentHooks = activeHooks.collect();
+  //
+  //   const componentTree = updateTree(
+  //     element,
+  //     componentNode,
+  //     isNode(prevNode) ? prevNode?.children?.[0] : prevNode,
+  //     index,
+  //     {
+  //       parent: context,
+  //       hooks: componentHooks,
+  //       contexts: [
+  //         ...componentHooks.byType<UseContextState<any>>(useContextState),
+  //         ...(context?.contexts || []),
+  //       ],
+  //       namespaceURI:
+  //         getElementNamespaceURI(componentNode) ??
+  //         context?.namespaceURI ??
+  //         null,
+  //     }
+  //   );
+  //
+  //   return {
+  //     ...node,
+  //     children: componentTree ? [componentTree] : [],
+  //     hooks: componentHooks,
+  //   };
+  // }
 
-    const componentNode = renderComponentNode(node, context);
-
-    const componentHooks = activeHooks.collect();
-
-    const componentTree = updateTree(
-      element,
-      componentNode,
-      isNode(prevNode) ? prevNode?.children?.[0] : prevNode,
-      index,
-      {
-        parent: context,
-        hooks: componentHooks,
-        contexts: [
-          ...componentHooks.byType<UseContextState<any>>(useContextState),
-          ...(context?.contexts || []),
-        ],
-        namespaceURI:
-          getElementNamespaceURI(componentNode) ??
-          context?.namespaceURI ??
-          null,
-      }
-    );
-
-    return {
-      ...node,
-      children: componentTree ? [componentTree] : [],
-      hooks: componentHooks,
-    };
-  }
+  let xx = element.childNodes[index] ?? element
+  let xindex = index
 
   if (prevNode === undefined) {
-    element.appendChild(createDocumentElement(node, namespaceURI));
+    xx = createDocumentElement(node, namespaceURI);
+    xindex = element.childNodes.length
+    element.appendChild(xx);
   } else if (node === undefined) {
     cleanupNode(prevNode);
 
@@ -278,30 +427,38 @@ export const updateTree = (
   } else if (hasChanged(node, prevNode)) {
     cleanupNode(prevNode);
 
+    let xx = createDocumentElement(node, namespaceURI)
     element.replaceChild(
-      createDocumentElement(node, namespaceURI),
+      xx,
       element.childNodes[index]
     );
 
-    return updateNode(element, node, undefined, index, context);
+    return updateTreeChildren(xx.nodeType === 3 ? element : xx, node, undefined, index, {
+      ...context || {},
+      namespaceURI: namespaceURI ?? context?.namespaceURI ?? null,
+    });
   } else if (isNode(node)) {
     updateAttributes(
       element.childNodes[index] as DOMElement,
       node.props,
       isNode(prevNode) ? prevNode.props : undefined
     );
-  } else if (element.childNodes[index].nodeValue !== node) {
-    element.childNodes[index].nodeValue = getTextNodeValue(node);
+  // } else if (element.childNodes[index]?.nodeValue !== node) {
+  //   try {
+  //     element.childNodes[index].nodeValue = getTextNodeValue(node);
+  //   } catch (ex) {
+  //     console.error(ex)
+  //   }
   }
 
-  return updateNode(
-    element,
-    node,
+  return updateTreeChildren(
+    xx.nodeType === 3 ? element : xx,
+    typeof node === "string" ? node : {...node, index: xindex},
     prevNode,
     index,
-    context && {
-      ...context,
-      namespaceURI,
+    {
+      ...context || {},
+      namespaceURI: namespaceURI ?? context?.namespaceURI ?? null,
     }
   );
 };
