@@ -319,13 +319,13 @@ export const updateTreeChildren = (
         // prevNode?.children[i],
         // x2[i],
         p,
-        // p?.index ?? 0,
+        p?.index ?? ii,
         // ii += (p?.index?? 0),
-        ii,
+        // ii,
         c[i]?.context ?? context
       )
 
-      ii = n?.index ?? ii++
+      ii = n?.index ? n.index + 1 : ii++
       return xxx
     })
 
