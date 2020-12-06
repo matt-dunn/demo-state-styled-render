@@ -113,6 +113,9 @@ const flattenChildren = (children: Children = []): Children =>
     if (isNode(child) && child.type === NODE_TYPE_FRAGMENT) {
       return [...children, ...flattenChildren(child.children)];
     }
+    if (isNode(child) && typeof child.type === "function" && child.children[0]?.type === NODE_TYPE_FRAGMENT) {
+      return [...children,  ...flattenChildren(child.children[0]?.children)];
+    }
     return [...children, child];
   }, [] as Children);
 
@@ -219,9 +222,9 @@ const exec = (node, prevNode, index, context) => {
 
   const componentNode = renderComponentNode(node, context);
 
-  console.error("*****",componentNode)
-
   const componentHooks = activeHooks.collect();
+
+  console.error("*****",componentNode, componentHooks)
 
   const x = {
     node: {
@@ -285,7 +288,8 @@ export const updateTreeChildren = (
     // if (prevNode?.children) {
     //   prevNode.children = flattenChildren(prevNode.children)
     // }
-    const c = (node.children?.map((child, i) => {
+
+    const c = ((node.children)?.map((child, i) => {
       if (isNode(child) && typeof child?.type === "function") {
         return exec(child, prevNode?.children[i], index, context)
         // return exec(child, prevNode?.children[i], index, context)
@@ -303,14 +307,14 @@ export const updateTreeChildren = (
     const x2 = flattenChildren(prevNode?.children)
     // console.error(c)
 
-    console.error(">>>", x)
+    console.error(">>>", c,x)
 
     let ii = 0;
     const xx = x.map((n, i) => {
-      const p = prevNode?.children?.[i];
+      const p = x2[i];
       // console.error(n?.type || node, element, index)
-      // console.error("^^^^^", n, p)
-      const xxx = updateTree(
+      // console.error("^^^^^", n, p, element)
+      return updateTree(
         element,
         n,
         // undefined,
@@ -319,14 +323,9 @@ export const updateTreeChildren = (
         // prevNode?.children[i],
         // x2[i],
         p,
-        p?.index ?? ii,
-        // ii += (p?.index?? 0),
-        // ii,
+        i,
         c[i]?.context ?? context
       )
-
-      ii = n?.index ? n.index + 1 : ii++
-      return xxx
     })
 
     // console.error("@@", c.map(c => c.node))
@@ -413,11 +412,11 @@ export const updateTree = (
   // }
 
   let xx = element.childNodes[index] ?? element
-  let xindex = index
+  // let xindex = index
 
   if (prevNode === undefined) {
     xx = createDocumentElement(node, namespaceURI);
-    xindex = element.childNodes.length
+    // xindex = element.childNodes.length
     element.appendChild(xx);
   } else if (node === undefined) {
     cleanupNode(prevNode);
@@ -453,7 +452,7 @@ export const updateTree = (
 
   return updateTreeChildren(
     xx.nodeType === 3 ? element : xx,
-    typeof node === "string" ? node : {...node, index: xindex},
+    node,
     prevNode,
     index,
     {

@@ -47,7 +47,7 @@ export const MxFactory = (): MxContainer => {
 
         // previousTree = xxxx
 
-        x.push(previousTree)
+        // x.push(previousTree)
 
         console.error("!!!END",previousTree);
 
