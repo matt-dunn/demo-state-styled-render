@@ -28,26 +28,26 @@ const X = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      // b(42)
+      b(42)
     }, 4000)
   }, [])
 
   return (
-    <>
+    <div>
       <div className="4">C1</div>
-      <>F1</>
+      <div>F1</div>
       <div className="5">C2 [{x}]</div>
-    </>
+    </div>
   );
 };
 Mx.render(
-  <>
+  <div>
   <div className="xx">
     x
     <div className="1">y</div>
-    <>
+    <div>
       1
-    </>
+    </div>
     <X/>
     <div className="2">
       <div>2.1</div>
@@ -63,6 +63,6 @@ Mx.render(
       </div>
     </div>
     END
-  </div></>)(el);
+  </div></div>)(el);
 
 // Mx.render(<div><App /></div>)(el);

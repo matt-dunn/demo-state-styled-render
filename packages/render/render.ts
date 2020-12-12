@@ -49,7 +49,7 @@ export const MxFactory = (): MxContainer => {
 
         // x.push(previousTree)
 
-        console.error("!!!END",previousTree);
+        console.error("!!!END", xxxx, previousTree);
 
         if (renderQueue.length > 0) {
           renderQueue.shift()?.();

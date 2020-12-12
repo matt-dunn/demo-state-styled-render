@@ -210,6 +210,7 @@ const cleanupNode = (node: AnyNode) => {
 };
 
 const exec = (node, prevNode, index, context) => {
+  console.error("###",node, prevNode)
   if (!prevNode || hasChanged(node, prevNode)) {
     activeHooks.setInsertMode(true);
   } else {
@@ -224,7 +225,7 @@ const exec = (node, prevNode, index, context) => {
 
   const componentHooks = activeHooks.collect();
 
-  console.error("*****",componentNode, componentHooks)
+  // console.error("*****",componentNode, componentHooks)
 
   const x = {
     node: {
@@ -276,70 +277,87 @@ const exec = (node, prevNode, index, context) => {
 }
 
 export const updateTreeChildren = (
-  element: DOMElement,
+  element: AnyDOMElement,
   node: AnyNode,
   prevNode?: AnyNode,
   index = 0,
-  context?: Context
+  context?: Context,
+  o= 0
 ): AnyNode | undefined => {
   if (isNode(node)) {
-
-    // node.children = flattenChildren(node.children)
-    // if (prevNode?.children) {
-    //   prevNode.children = flattenChildren(prevNode.children)
-    // }
+    let offset = 0
 
     const c = ((node.children)?.map((child, i) => {
+      // const currentIndex = index + i + offset;
+      // if (isNode(child) && child?.type === NODE_TYPE_FRAGMENT) {
+      //   const xxx = flattenChildren(child.children);
+      //
+      //   console.error("££",xxx)
+      //
+      //   const xx = updateTreeChildren(
+      //     element,
+      //     {
+      //       ...child,
+      //       children: xxx,
+      //       offset: xxx.length - 1
+      //     },
+      //     prevNode?.children[i],
+      //     index + i + offset,
+      //     context,
+      //     // offset,
+      //     // child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length + offset
+      //   )
+      //   // offset += xxx.length - 1;
+      //   // console.error("!!!!!",xx.offset)
+      //   // offset += xx.offset;
+      //   // offset += child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length
+      //   return xx;
+      // }
+
+      // offset += node.offset ?? 0
+      // console.error("----", offset, node.offset ?? 0)
+
       if (isNode(child) && typeof child?.type === "function") {
-        return exec(child, prevNode?.children[i], index, context)
-        // return exec(child, prevNode?.children[i], index, context)
+        const x = exec(child, prevNode?.children[i], index, context);
+
+         return updateTreeChildren(
+          element,
+          x.node,
+          prevNode?.children[i],
+          index + i + offset,
+          x.context,
+        );
       } else {
-        return {node: child, context}
+        console.error("@@@", element, index + i + offset, offset, child, prevNode?.children[i])
+        const e = updateTree(
+          element,
+          child,
+          prevNode?.children[i],
+          index + i + offset,
+          context,
+        )
+        if (isNode(child)) {
+          return updateTreeChildren(
+            e,
+            child,
+            prevNode?.children[i],
+            0,
+            context,
+          )
+        }
       }
+      return child
     }) || [])
-
-    // console.error(c,c.children)
-    // console.error(flattenChildren(c.node))
-
-    const x = flattenChildren(c.map(c => c.node))
-    // const x2 = flattenChildren(prevNode?.children)
-    // const x2 = isNode(prevNode) ? prevNode?.children ?? [] : []//flattenChildren(prevNode?.children)
-    const x2 = flattenChildren(prevNode?.children)
-    // console.error(c)
-
-    console.error(">>>", c,x)
-
-    let ii = 0;
-    const xx = x.map((n, i) => {
-      const p = x2[i];
-      // console.error(n?.type || node, element, index)
-      // console.error("^^^^^", n, p, element)
-      return updateTree(
-        element,
-        n,
-        // undefined,
-        // isNode(p) && typeof p.type === "function" ? p?.children?.[0] : p,
-        // isNode(x2[i]) && typeof x2[i].type === "function" ? x2[i]?.children?.[0] : x2[i],
-        // prevNode?.children[i],
-        // x2[i],
-        p,
-        i,
-        c[i]?.context ?? context
-      )
-    })
-
-    // console.error("@@", c.map(c => c.node))
 
     return {
       ...node,
-      // children: c.map(c => c.node)
-      children: xx
-    }
+      // offset: isNode(node) && node?.type === NODE_TYPE_FRAGMENT ? node.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length + offset: offset,
+      // offset: isNode(node) ? node.children?.length || 0: 0,
+      children: c
+    };
   }
 
   return node;
-
-  console.error("********",node)
 }
 
 export const updateTree = (
@@ -348,13 +366,13 @@ export const updateTree = (
   prevNode?: AnyNode,
   index = 0,
   context?: Context
-): AnyNode | undefined => {
+): AnyDOMElement | undefined => {
   // @TODO: temp workaround for root fragment nodes. This needs to process the fragment children on the current element managing the index correctly...
-  if (isNode(node) && node.type === NODE_TYPE_FRAGMENT) {
-    return updateTreeChildren(element, node, prevNode, index, context)
+  // if (isNode(node) && node.type === NODE_TYPE_FRAGMENT) {
+  //   return updateTreeChildren(element, node, prevNode, index, context)
   //   node.type = "div";
   //   node.props["data-type"] = NODE_TYPE_FRAGMENT;
-  }
+  // }
 
   if (isNode(node) && node?.type === "script") {
     if (process.env.NODE_ENV !== "production") {
@@ -363,7 +381,7 @@ export const updateTree = (
     node = "";
   }
 
-  console.error("@@", element, index, node)
+  // console.error("@@", element, index, node)
 
   const namespaceURI =
     context?.namespaceURI ?? getElementNamespaceURI(node) ?? null;
@@ -411,53 +429,37 @@ export const updateTree = (
   //   };
   // }
 
-  let xx = element.childNodes[index] ?? element
-  // let xindex = index
+  let xx = element.childNodes[index] as AnyDOMElement //?? element
 
   if (prevNode === undefined) {
     xx = createDocumentElement(node, namespaceURI);
-    // xindex = element.childNodes.length
     element.appendChild(xx);
   } else if (node === undefined) {
     cleanupNode(prevNode);
 
     element.removeChild(element.childNodes[index]);
-    return undefined;
+    xx = undefined
   } else if (hasChanged(node, prevNode)) {
     cleanupNode(prevNode);
 
-    let xx = createDocumentElement(node, namespaceURI)
+    xx = createDocumentElement(node, namespaceURI)
     element.replaceChild(
       xx,
       element.childNodes[index]
     );
-
-    return updateTreeChildren(xx.nodeType === 3 ? element : xx, node, undefined, index, {
-      ...context || {},
-      namespaceURI: namespaceURI ?? context?.namespaceURI ?? null,
-    });
   } else if (isNode(node)) {
     updateAttributes(
       element.childNodes[index] as DOMElement,
       node.props,
       isNode(prevNode) ? prevNode.props : undefined
     );
-  // } else if (element.childNodes[index]?.nodeValue !== node) {
-  //   try {
-  //     element.childNodes[index].nodeValue = getTextNodeValue(node);
-  //   } catch (ex) {
-  //     console.error(ex)
-  //   }
+  } else if (element.childNodes[index]?.nodeValue !== node) {
+    try {
+      element.childNodes[index].nodeValue = getTextNodeValue(node);
+    } catch (ex) {
+      console.error(ex, element, index)
+    }
   }
 
-  return updateTreeChildren(
-    xx.nodeType === 3 ? element : xx,
-    node,
-    prevNode,
-    index,
-    {
-      ...context || {},
-      namespaceURI: namespaceURI ?? context?.namespaceURI ?? null,
-    }
-  );
+  return xx;
 };
