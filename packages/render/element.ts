@@ -289,30 +289,30 @@ export const updateTreeChildren = (
 
     const c = ((node.children)?.map((child, i) => {
       // const currentIndex = index + i + offset;
-      // if (isNode(child) && child?.type === NODE_TYPE_FRAGMENT) {
-      //   const xxx = flattenChildren(child.children);
-      //
-      //   console.error("££",xxx)
-      //
-      //   const xx = updateTreeChildren(
-      //     element,
-      //     {
-      //       ...child,
-      //       children: xxx,
-      //       offset: xxx.length - 1
-      //     },
-      //     prevNode?.children[i],
-      //     index + i + offset,
-      //     context,
-      //     // offset,
-      //     // child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length + offset
-      //   )
-      //   // offset += xxx.length - 1;
-      //   // console.error("!!!!!",xx.offset)
-      //   // offset += xx.offset;
-      //   // offset += child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length
-      //   return xx;
-      // }
+      if (isNode(child) && child?.type === NODE_TYPE_FRAGMENT) {
+        const xxx = flattenChildren(child.children);
+
+        console.error("££",xxx)
+
+        const xx = updateTreeChildren(
+          element,
+          {
+            ...child,
+            children: xxx,
+            // offset: xxx.length - 1
+          },
+          prevNode?.children[i],
+          index + i + offset,
+          context,
+          // offset,
+          // child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length + offset
+        )
+        // offset += xxx.length - 1;
+        // console.error("!!!!!",xx.offset)
+        // offset += xx.offset;
+        // offset += child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length
+        return xx;
+      }
 
       // offset += node.offset ?? 0
       // console.error("----", offset, node.offset ?? 0)
