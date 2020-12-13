@@ -291,8 +291,7 @@ export const updateTreeChildren = (
       // const currentIndex = index + i + offset;
       if (isNode(child) && child?.type === NODE_TYPE_FRAGMENT) {
         const xxx = flattenChildren(child.children);
-
-        console.error("££",xxx)
+        console.error("******",xxx.length)
 
         const xx = updateTreeChildren(
           element,
@@ -311,6 +310,7 @@ export const updateTreeChildren = (
         // console.error("!!!!!",xx.offset)
         // offset += xx.offset;
         // offset += child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length
+        offset += xxx.length - 1
         return xx;
       }
 
@@ -320,13 +320,17 @@ export const updateTreeChildren = (
       if (isNode(child) && typeof child?.type === "function") {
         const x = exec(child, prevNode?.children[i], index, context);
 
-         return updateTreeChildren(
+         const xxx =  updateTreeChildren(
           element,
           x.node,
           prevNode?.children[i],
           index + i + offset,
           x.context,
         );
+
+        console.error("*****===*",x.node.children[0].children.length)
+        offset += x.node.children[0].children.length - 1
+        return xxx;
       } else {
         console.error("@@@", element, index + i + offset, offset, child, prevNode?.children[i])
         const e = updateTree(

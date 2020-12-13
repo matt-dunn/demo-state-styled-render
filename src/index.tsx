@@ -33,21 +33,21 @@ const X = () => {
   }, [])
 
   return (
-    <div>
+    <>
       <div className="4">C1</div>
-      <div>F1</div>
+      <>F1</>
       <div className="5">C2 [{x}]</div>
-    </div>
+    </>
   );
 };
 Mx.render(
-  <div>
+  <>
   <div className="xx">
     x
     <div className="1">y</div>
-    <div>
+    <>
       1
-    </div>
+    </>
     <X/>
     <div className="2">
       <div>2.1</div>
@@ -63,6 +63,6 @@ Mx.render(
       </div>
     </div>
     END
-  </div></div>)(el);
+  </div></>)(el);
 
 // Mx.render(<div><App /></div>)(el);
