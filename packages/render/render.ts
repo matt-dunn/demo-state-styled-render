@@ -31,12 +31,6 @@ export const MxFactory = (): MxContainer => {
 
         const xxxx = typeof component === "function" ? component({}) : component;
 
-        const z = {
-          type: "#fragment",
-           children: [xxxx]
-        }
-
-        console.error("!!!",xxxx)
         rendering = true;
         previousTree = updateTreeChildren(
           mountPoint,
@@ -45,11 +39,7 @@ export const MxFactory = (): MxContainer => {
         );
         rendering = false;
 
-        // previousTree = xxxx
-
-        // x.push(previousTree)
-
-        console.error("!!!END", xxxx, previousTree);
+        console.error("END", xxxx, previousTree);
 
         if (renderQueue.length > 0) {
           renderQueue.shift()?.();

@@ -72,71 +72,22 @@ const createDocumentElement = (
 
 const hasChanged = (node: AnyNode, prevNode: AnyNode) =>
   typeof node !== typeof prevNode ||
+  // node !== null && prevNode === null ||
+  // node === null && prevNode !== null ||
   // node !== prevNode ||
   (typeof node === "string" && node !== prevNode) ||
   (isNode(node) && node.type) !== (isNode(prevNode) && prevNode.type);
-
-// const updateChildren = (
-//   element: DOMElement,
-//   children: Children = [],
-//   prevChildren: Children = [],
-//   index: number,
-//   context?: Context
-// ) => {
-//   const nodeChildrenLength = children.length;
-//   const prevNodeChildrenLength = prevChildren.length;
-//   const nodes: Children = [];
-//
-//   for (
-//     let childIndex = 0;
-//     childIndex < nodeChildrenLength || childIndex < prevNodeChildrenLength;
-//     childIndex++
-//   ) {
-//     const node = updateTree(
-//       element.childNodes[index] as DOMElement,
-//       children[childIndex],
-//       prevChildren[childIndex],
-//       childIndex,
-//       context
-//     );
-//
-//     if (node !== undefined) {
-//       nodes.push(node);
-//     }
-//   }
-//
-//   return nodes;
-// };
 
 const flattenChildren = (children: Children = []): Children =>
   children.reduce((children, child) => {
     if (isNode(child) && child.type === NODE_TYPE_FRAGMENT) {
       return [...children, ...flattenChildren(child.children)];
     }
-    if (isNode(child) && typeof child.type === "function" && child.children[0]?.type === NODE_TYPE_FRAGMENT) {
-      return [...children,  ...flattenChildren(child.children[0]?.children)];
-    }
+    // if (isNode(child) && typeof child.type === "function" && child.children[0]?.type === NODE_TYPE_FRAGMENT) {
+    //   return [...children,  ...flattenChildren(child.children[0]?.children)];
+    // }
     return [...children, child];
   }, [] as Children);
-
-// const updateNode = (
-//   element: DOMElement,
-//   node: AnyNode,
-//   prevNode?: AnyNode,
-//   index = 0,
-//   context?: Context
-// ): AnyNode | undefined =>
-//   (isNode(node) && {
-//     ...node,
-//     children: updateChildren(
-//       element,
-//       flattenChildren(node.children),
-//       (isNode(prevNode) && flattenChildren(prevNode?.children)) || undefined,
-//       index,
-//       context
-//     ),
-//   }) ||
-//   node;
 
 const handleError = (
   ex: Error,
@@ -182,7 +133,8 @@ const renderComponentNode = (node: Node, context?: Context): AnyNode => {
           ...node.props,
           children:
             node.children?.length === 1 ? node.children[0] : node.children,
-        }) || " " // Return a placeholder if null returned from component
+        })
+        // Return a placeholder if null returned from component
       );
     } else {
       return node;
@@ -210,7 +162,6 @@ const cleanupNode = (node: AnyNode) => {
 };
 
 const exec = (node, prevNode, index, context) => {
-  console.error("###",node, prevNode)
   if (!prevNode || hasChanged(node, prevNode)) {
     activeHooks.setInsertMode(true);
   } else {
@@ -225,13 +176,12 @@ const exec = (node, prevNode, index, context) => {
 
   const componentHooks = activeHooks.collect();
 
-  // console.error("*****",componentNode, componentHooks)
-
-  const x = {
+  return {
     node: {
       ...node,
       // ...componentNode,
-      children: Array.isArray(componentNode) ? componentNode : [componentNode]// : [],
+      children: componentNode === null ?  null : flattenChildren(Array.isArray(componentNode) ? componentNode : [componentNode])// : [],
+      // children: Array.isArray(componentNode) ? componentNode : [componentNode]// : [],
     },
     context: {
       parent: context,
@@ -246,34 +196,6 @@ const exec = (node, prevNode, index, context) => {
         null,
     }
   }
-
-  return x;
-  //
-  // const componentTree = updateTree(
-  //   element,
-  //   componentNode,
-  //   isNode(prevNode) ? prevNode?.children?.[0] : prevNode,
-  //   index,
-  //   {
-  //     parent: context,
-  //     hooks: componentHooks,
-  //     contexts: [
-  //       ...componentHooks.byType<UseContextState<any>>(useContextState),
-  //       ...(context?.contexts || []),
-  //     ],
-  //     namespaceURI:
-  //       getElementNamespaceURI(componentNode) ??
-  //       context?.namespaceURI ??
-  //       null,
-  //   }
-  // );
-  //
-  // return {
-  //   ...node,
-  //   children: componentTree ? [componentTree] : [],
-  //   hooks: componentHooks,
-  // };
-
 }
 
 export const updateTreeChildren = (
@@ -283,68 +205,102 @@ export const updateTreeChildren = (
   index = 0,
   context?: Context,
   o= 0
-): AnyNode | undefined => {
+): AnyNode => {
   if (isNode(node)) {
     let offset = 0
 
-    const c = ((node.children)?.map((child, i) => {
-      // const currentIndex = index + i + offset;
-      if (isNode(child) && child?.type === NODE_TYPE_FRAGMENT) {
-        const xxx = flattenChildren(child.children);
-        console.error("******",xxx.length)
+    const c = node.children?.filter(x => x).map((child, i) => {
+      const prevChild = prevNode?.children?.[i] || undefined;
+      // if (hasChanged(node, prevNode)) {
+      //   prevChild = undefined;
+      // }
+      if (isNode(child) && child?.type === NODE_TYPE_FRAGMENT) {//} || isNode(prevChild) && prevChild?.type === NODE_TYPE_FRAGMENT) {
+        // child.type = "div";
+        // const xxx = flattenChildren(child?.children);
+        // const xxx2 = flattenChildren(prevChild?.children);
+        const xxx = flattenChildren(child?.children);
+        const xxx2 = flattenChildren(prevChild?.children);
+
+        console.error(child, prevChild, xxx?.length , xxx2?.length)
 
         const xx = updateTreeChildren(
           element,
-          {
+          isNode(child) ? {
             ...child,
             children: xxx,
-            // offset: xxx.length - 1
-          },
-          prevNode?.children[i],
+          } : node,
+          // child,
+          // prevChild,
+          isNode(prevChild) ? {
+            ...prevChild,
+            children: xxx2
+          } : prevChild,
           index + i + offset,
           context,
-          // offset,
-          // child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length + offset
         )
-        // offset += xxx.length - 1;
-        // console.error("!!!!!",xx.offset)
-        // offset += xx.offset;
-        // offset += child.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length
+
+        // if (xxx.length)
         offset += xxx.length - 1
         return xx;
       }
 
-      // offset += node.offset ?? 0
-      // console.error("----", offset, node.offset ?? 0)
+      // if (isNode(prevChild) && prevChild?.type === NODE_TYPE_FRAGMENT) {//} || isNode(prevChild) && prevChild?.type === NODE_TYPE_FRAGMENT) {
+      //   // child.type = "div";
+      //   // const xxx = flattenChildren(child?.children);
+      //   // const xxx2 = flattenChildren(prevChild?.children);
+      //   const xxx = flattenChildren(child?.children);
+      //   const xxx2 = flattenChildren(prevChild?.children);
+      //
+      //   console.error(child, prevChild, xxx?.length , xxx2?.length)
+      //
+      //   const xx = updateTreeChildren(
+      //     element,
+      //     // isNode(child) ? {
+      //     //   ...child,
+      //     //   children: xxx,
+      //     // } : node,
+      //     child,
+      //     // prevChild,
+      //     isNode(prevChild) ? {
+      //       ...prevChild,
+      //       children: xxx2
+      //     } : prevChild,
+      //     index + i + offset,
+      //     context,
+      //   )
+      //
+      //   // if (xxx.length)
+      //   offset += xxx.length - 1
+      //   return xx;
+      // }
 
       if (isNode(child) && typeof child?.type === "function") {
-        const x = exec(child, prevNode?.children[i], index, context);
+        const x = exec(child, prevChild, index, context);
 
-         const xxx =  updateTreeChildren(
+        const xxx =  updateTreeChildren(
           element,
           x.node,
-          prevNode?.children[i],
+          prevChild,
           index + i + offset,
           x.context,
         );
 
-        console.error("*****===*",x.node.children[0].children.length)
-        offset += x.node.children[0].children.length - 1
+         // console.error(x)
+        // offset += (x.node.children?.[0]?.children?.length - 1) ?? 0
         return xxx;
       } else {
-        console.error("@@@", element, index + i + offset, offset, child, prevNode?.children[i])
         const e = updateTree(
           element,
           child,
-          prevNode?.children[i],
+          prevChild,
           index + i + offset,
           context,
         )
-        if (isNode(child)) {
+        if (e && isNode(child)) {
           return updateTreeChildren(
             e,
             child,
-            prevNode?.children[i],
+            prevChild,
             0,
             context,
           )
@@ -355,8 +311,6 @@ export const updateTreeChildren = (
 
     return {
       ...node,
-      // offset: isNode(node) && node?.type === NODE_TYPE_FRAGMENT ? node.children?.filter(child => child.type !== NODE_TYPE_FRAGMENT).length + offset: offset,
-      // offset: isNode(node) ? node.children?.length || 0: 0,
       children: c
     };
   }
@@ -365,19 +319,12 @@ export const updateTreeChildren = (
 }
 
 export const updateTree = (
-  element: DOMElement,
+  element: AnyDOMElement,
   node: AnyNode,
   prevNode?: AnyNode,
   index = 0,
   context?: Context
 ): AnyDOMElement | undefined => {
-  // @TODO: temp workaround for root fragment nodes. This needs to process the fragment children on the current element managing the index correctly...
-  // if (isNode(node) && node.type === NODE_TYPE_FRAGMENT) {
-  //   return updateTreeChildren(element, node, prevNode, index, context)
-  //   node.type = "div";
-  //   node.props["data-type"] = NODE_TYPE_FRAGMENT;
-  // }
-
   if (isNode(node) && node?.type === "script") {
     if (process.env.NODE_ENV !== "production") {
       console.warn("Script element found in tree and removed", node);
@@ -385,59 +332,15 @@ export const updateTree = (
     node = "";
   }
 
-  // console.error("@@", element, index, node)
-
   const namespaceURI =
     context?.namespaceURI ?? getElementNamespaceURI(node) ?? null;
 
-  // console.error(namespaceURI)
-
-  // if (isNode(node) && typeof node?.type === "function") {
-  //   if (!prevNode || hasChanged(node, prevNode)) {
-  //     activeHooks.setInsertMode(true);
-  //   } else {
-  //     activeHooks.setInsertMode(false);
-  //   }
-  //
-  //   activeHooks.beginCollect({
-  //     contexts: context?.contexts,
-  //   });
-  //
-  //   const componentNode = renderComponentNode(node, context);
-  //
-  //   const componentHooks = activeHooks.collect();
-  //
-  //   const componentTree = updateTree(
-  //     element,
-  //     componentNode,
-  //     isNode(prevNode) ? prevNode?.children?.[0] : prevNode,
-  //     index,
-  //     {
-  //       parent: context,
-  //       hooks: componentHooks,
-  //       contexts: [
-  //         ...componentHooks.byType<UseContextState<any>>(useContextState),
-  //         ...(context?.contexts || []),
-  //       ],
-  //       namespaceURI:
-  //         getElementNamespaceURI(componentNode) ??
-  //         context?.namespaceURI ??
-  //         null,
-  //     }
-  //   );
-  //
-  //   return {
-  //     ...node,
-  //     children: componentTree ? [componentTree] : [],
-  //     hooks: componentHooks,
-  //   };
-  // }
-
-  let xx = element.childNodes[index] as AnyDOMElement //?? element
+  let xx = element.childNodes[index] as AnyDOMElement;
 
   if (prevNode === undefined) {
     xx = createDocumentElement(node, namespaceURI);
     element.appendChild(xx);
+    // element.insertBefore(xx, element.childNodes[index + 1])
   } else if (node === undefined) {
     cleanupNode(prevNode);
 
@@ -452,6 +355,7 @@ export const updateTree = (
       element.childNodes[index]
     );
   } else if (isNode(node)) {
+    if (element.childNodes[index])
     updateAttributes(
       element.childNodes[index] as DOMElement,
       node.props,
@@ -461,7 +365,7 @@ export const updateTree = (
     try {
       element.childNodes[index].nodeValue = getTextNodeValue(node);
     } catch (ex) {
-      console.error(ex, element, index)
+      console.error(ex, element, node,index)
     }
   }
 

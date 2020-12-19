@@ -60,23 +60,23 @@ const Todos = ({ todos, createTodo, deleteTodo, updateTodo }: TodosProps) => (
       <pre style={{ fontSize: "0.85rem" }}>
         {JSON.stringify(todos, undefined, 1)}
       </pre>
-      <Suspense Fallback={FallbackOuter}>
-        {todos.length >= 0 && (
-          <div
-            style={{
-              height: "50px",
-              marginBottom: "1rem",
-              display: "flex",
-            }}
-          >
-            <Suspense Fallback={Fallback}>
-              <TestSVG empty={todos.length === 0} />
-            </Suspense>
-            <TestSVG empty={todos.length === 0} />
-            <TestSVG empty={todos.length === 0} />
-          </div>
-        )}
-      </Suspense>
+      {/*<Suspense Fallback={FallbackOuter}>*/}
+      {/*  {todos.length >= 0 && (*/}
+      {/*    <div*/}
+      {/*      style={{*/}
+      {/*        height: "50px",*/}
+      {/*        marginBottom: "1rem",*/}
+      {/*        display: "flex",*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      <Suspense Fallback={Fallback}>*/}
+      {/*        <TestSVG empty={todos.length === 0} />*/}
+      {/*      </Suspense>*/}
+      {/*      <TestSVG empty={todos.length === 0} />*/}
+      {/*      <TestSVG empty={todos.length === 0} />*/}
+      {/*    </div>*/}
+      {/*  )}*/}
+      {/*</Suspense>*/}
     </div>
   </main>
 );

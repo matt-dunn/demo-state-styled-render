@@ -5,7 +5,7 @@
  * @licence MIT
  */
 
-import { Node } from "./";
+import {AnyNode, Node} from "./";
 import { useEffect, useState } from "./hooks";
 
 type DelayProps = {
@@ -13,7 +13,7 @@ type DelayProps = {
   children: Node;
 };
 
-export const Delay = ({ delay = 500, children }: DelayProps) => {
+export const Delay = ({ delay = 500, children }: DelayProps): AnyNode => {
   const [waiting, setWaiting] = useState(delay !== 0);
 
   useEffect(() => {

@@ -60,19 +60,19 @@ export const TodoList = ({
   className,
 }: TodoListProps) => (
   <TodoList$ className={className}>
-    {todos.length > 3 && <TodoInput createTodo={createTodo} />}
+    {/*{todos.length > 3 && <TodoInput createTodo={createTodo} />}*/}
     <TodoListHeader$>
       <ErrorBoundary>
         <TodoInput createTodo={createTodo} autoFocus={true} />
       </ErrorBoundary>
-      <Delay delay={4000}>
+      {/*<Delay delay={4000}>*/}
         <p>
           You have <strong>{todos.length}</strong> todo
           {(todos.length !== 1 && "s") || ""}
         </p>
-      </Delay>
+      {/*</Delay>*/}
     </TodoListHeader$>
-    {todos.length > 4 && <TodoInput createTodo={createTodo} />}
+    {/*{todos.length > 4 && <TodoInput createTodo={createTodo} />}*/}
     <main>
       <Todos$ todos={todos}>
         {(todo) => (

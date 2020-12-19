@@ -54,6 +54,8 @@ export const TodoInput = ({ createTodo, autoFocus }: TodoInputProps) => {
     throw new Error("Example boundary caught error");
   }
 
+  console.error(">>",value)
+
   return (
     <TodoListForm$
       onSubmit={(e: any) => {
@@ -73,6 +75,7 @@ export const TodoInput = ({ createTodo, autoFocus }: TodoInputProps) => {
           placeholder="Add new todo"
           className="form-control"
           onInput={(e: any) => {
+            console.error("****")
             setValue(e.target.value);
           }}
         />
