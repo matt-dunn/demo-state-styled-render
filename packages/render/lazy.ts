@@ -51,8 +51,10 @@ export const lazy = <T, P>(
               );
             }
 
-            setComponent(() => resolvedComponent);
-            resolve(resolvedComponent);
+            setTimeout(() => {
+              setComponent(() => resolvedComponent);
+              resolve(resolvedComponent);
+            }, 2000);
           } catch (ex) {
             reject(ex);
           }
