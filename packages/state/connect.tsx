@@ -15,6 +15,7 @@ import {
   useState,
   useContext,
   createContext,
+  getComponentName,
 } from "packages/render";
 
 import { Store, Dispatch, InferableComponentEnhancerWithProps } from "./types";
@@ -71,53 +72,63 @@ export function connect<
   TStateProps & TDispatchProps,
   TOwnProps
 > {
-  return (Component) => (ownProps) => {
-    const store = useContext(StoreContext);
+  return (Component) => {
+    const ConnectedComponent = (ownProps: TOwnProps) => {
+      const store = useContext(StoreContext);
 
-    if (!store) {
-      throw TypeError("No store provider configured");
-    }
-
-    // @TODO: memorise the actions...
-    // const actions = useMemo(() => {
-    const getActions = () => {
-      if (isMapDispatchToPropsFunction(mapDispatchToProps)) {
-        return mapDispatchToProps(store.dispatch);
+      if (!store) {
+        throw TypeError("No store provider configured");
       }
 
-      if (isMapDispatchToProps(mapDispatchToProps)) {
-        return Object.keys(mapDispatchToProps).reduce(
-          (currentActions, key) => ({
-            [key]: (...args: any[]) =>
-              store.dispatch(mapDispatchToProps[key](...args)),
-            ...currentActions,
-          }),
-          {} as DispatchMap
-        );
-      }
+      // @TODO: memorise the actions...
+      // const actions = useMemo(() => {
+      const getActions = () => {
+        if (isMapDispatchToPropsFunction(mapDispatchToProps)) {
+          return mapDispatchToProps(store.dispatch);
+        }
 
-      return {};
-    };
-    // }, [store]);
+        if (isMapDispatchToProps(mapDispatchToProps)) {
+          return Object.keys(mapDispatchToProps).reduce(
+            (currentActions, key) => ({
+              [key]: (...args: any[]) =>
+                store.dispatch(mapDispatchToProps[key](...args)),
+              ...currentActions,
+            }),
+            {} as DispatchMap
+          );
+        }
 
-    const actions = getActions();
-
-    const [props, setProps] = useState(mapStateToProps(store.getState()));
-
-    useEffect(() => {
-      const cb = (state: TState) => setProps(mapStateToProps(state));
-
-      store.subscribe(cb);
-
-      return () => {
-        store.unsubscribe(cb);
+        return {};
       };
-    }, [store]);
+      // }, [store]);
 
-    return createElement(Component, {
-      ...ownProps,
-      ...props,
-      ...actions,
+      const actions = getActions();
+
+      const [props, setProps] = useState(() =>
+        mapStateToProps(store.getState())
+      );
+
+      useEffect(() => {
+        const cb = (state: TState) => setProps(mapStateToProps(state));
+
+        store.subscribe(cb);
+
+        return () => {
+          store.unsubscribe(cb);
+        };
+      }, [store]);
+
+      return createElement(Component, {
+        ...ownProps,
+        ...props,
+        ...actions,
+      });
+    };
+
+    Object.defineProperty(ConnectedComponent, "name", {
+      value: `connect(${getComponentName(Component)})`,
     });
+
+    return ConnectedComponent;
   };
 }

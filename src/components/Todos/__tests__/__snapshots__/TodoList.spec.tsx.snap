@@ -4,6 +4,7 @@ exports[`TodoList: Example of using mount should render component with > 1 items
 <section
   class=" ms__brMznf"
 >
+  
   <header
     class=" ms__jVxsUK"
   >
@@ -35,9 +36,10 @@ exports[`TodoList: Example of using mount should render component with > 1 items
       s
     </p>
   </header>
+  
   <main>
     <ul
-      class=" ms__hUhVje"
+      class=" ms__kcZOTY ms__hUhVje"
     >
       <li
         class=" ms__hsUUbt"
@@ -91,6 +93,7 @@ exports[`TodoList: Example of using mount should render component with 1 items 1
 <section
   class=" ms__brMznf"
 >
+  
   <header
     class=" ms__jVxsUK"
   >
@@ -122,9 +125,10 @@ exports[`TodoList: Example of using mount should render component with 1 items 1
       
     </p>
   </header>
+  
   <main>
     <ul
-      class=" ms__hUhVje"
+      class=" ms__kcZOTY ms__hUhVje"
     >
       <li
         class=" ms__hsUUbt"
@@ -159,6 +163,7 @@ exports[`TodoList: Example of using mount should render component with no items 
 <section
   class=" ms__brMznf"
 >
+  
   <header
     class=" ms__jVxsUK"
   >
@@ -190,9 +195,10 @@ exports[`TodoList: Example of using mount should render component with no items 
       s
     </p>
   </header>
+  
   <main>
     <ul
-      class=" ms__hUhVje"
+      class=" ms__bMruvD ms__hUhVje"
     />
   </main>
 </section>

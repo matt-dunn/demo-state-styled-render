@@ -9,28 +9,46 @@ import activeHooks, { HookImplementation } from "./index";
 
 const HOOK_TYPE = "useState";
 
+type Setter<S> =
+  | S
+  | {
+      (currentValue: S): S;
+    };
+
 type UseState<S> = {
   value: S;
-  setter: (newValue: S) => S;
+  setter: (newValue: Setter<S>) => S;
 } & HookImplementation;
 
-export const useState = <S = any>(initialState: S): [S, (newValue: S) => S] => {
+export const useState = <S>(
+  initialState: S | (() => S)
+): [S, (newValue: Setter<S>) => S] => {
   const hook = activeHooks.getCurrent<UseState<S>>();
 
   const currentState = hook.getValue();
 
   const updatedState = hook.setValue({
     type: HOOK_TYPE,
-    value: currentState?.value ?? initialState,
-    setter(newValue: S) {
-      if (updatedState.value !== newValue) {
+    value: currentState
+      ? currentState.value
+      : typeof initialState === "function"
+      ? (initialState as () => S)()
+      : initialState,
+    setter(newValue) {
+      const currentValue = hook.getValue()?.value;
+      const updatedValue =
+        typeof newValue === "function"
+          ? (newValue as (currentValue?: S) => S)(currentValue)
+          : newValue;
+
+      if (currentValue !== updatedValue) {
         hook.setValue({
           ...updatedState,
-          value: newValue,
+          value: updatedValue,
         });
         hook.options.render();
       }
-      return newValue;
+      return updatedValue;
     },
   });
 

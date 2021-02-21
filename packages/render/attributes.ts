@@ -5,13 +5,13 @@
  * @licence MIT
  */
 
-import { AnyFunc, HTMLElementMap, Props } from "./types";
-import { propertyMap } from "./utils";
+import { AnyFunc, DOMElement, Props } from "./types";
+import { isHTMLElement, isValidElementAttribute, propertyMap } from "./utils";
 
 export const setAttribute = (
-  element: HTMLElementMap,
+  element: DOMElement,
   name: string,
-  value: string | AnyFunc
+  value: string | number | boolean | AnyFunc
 ) => {
   const propertyName = propertyMap(name);
 
@@ -23,28 +23,37 @@ export const setAttribute = (
     Object.entries(value).forEach(
       ([key, value]) => ((<any>element.style)[key] = value)
     );
-  } else if (typeof value === "function") {
+  } else if (isHTMLElement(element) && typeof value === "function") {
     element[propertyName] = value;
-  } else {
-    if (value) {
-      element.setAttribute(propertyName, value);
-    } else {
-      element.removeAttribute(propertyName);
+  } else if (isValidElementAttribute(element, propertyName)) {
+    if (
+      typeof value === "string" ||
+      typeof value === "number" ||
+      typeof value === "boolean"
+    ) {
+      if (value) {
+        element.setAttributeNS(null, propertyName, value.toString());
+      } else {
+        element.removeAttributeNS(null, propertyName);
+      }
     }
-    element[propertyName] = value;
+
+    if (isHTMLElement(element)) {
+      element[propertyName] = value;
+    }
   }
 };
 
-export const setAttributes = (element: HTMLElement, props: Props) =>
-  Object.keys(props || {}).forEach((name) =>
-    setAttribute(element, name, props[name])
-  );
+export const setAttributes = (element: DOMElement, props: Props) =>
+  Object.keys(props || {})
+    .filter((name) => isValidElementAttribute(element, name))
+    .forEach((name) => setAttribute(element, name, props[name]));
 
-export const removeAttribute = (element: HTMLElement, name: string) =>
+export const removeAttribute = (element: DOMElement, name: string) =>
   element.removeAttribute(propertyMap(name));
 
 export const updateAttribute = (
-  element: HTMLElement,
+  element: DOMElement,
   name: string,
   value: string,
   prevValue: string
@@ -59,7 +68,7 @@ export const updateAttribute = (
 };
 
 export const updateAttributes = (
-  element: HTMLElement,
+  element: DOMElement,
   props: Props,
   prevProps: Props = {}
 ) =>

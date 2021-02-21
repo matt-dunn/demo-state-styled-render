@@ -5,7 +5,9 @@
  * @licence MIT
  */
 
-import Mx from "packages/render";
+/** @jsx jsx **/
+
+import Mx, { jsx } from "packages/render";
 
 import { App } from "./App";
 
@@ -20,4 +22,4 @@ const el = document.createElement("div");
 
 document.body.append(el);
 
-Mx.render(App)(el);
+Mx.render(<App />)(el);

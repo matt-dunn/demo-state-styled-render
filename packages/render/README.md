@@ -15,13 +15,16 @@ Features:
 - ErrorBoundary component support - re-renders a component tree that contains exceptions; supports nested boundaries
 - Simple implementation of hooks:
     - [```useState```](./hooks/useState.ts)
-    - [```useEffect```](./hooks/useEffect.ts) (does not have full support for unmounting components)
+    - [```useEffect```](./hooks/useEffect.ts)
     - [```useContext```](./hooks/useContext.ts)
     - [```useError```](./hooks/useError.ts) (used in custom error boundary components, see below)
 - JSX Fragments support
 - [Context](./context.ts) with providers
-- [Mount](./test-utils/mount.ts) test utility and jest [snapshot serialization](./test-utils/jest/serialize-to-json.js).
 - [Lazy](./lazy.ts) component loading
+- [Suspense](./Suspense.tsx)
+- [Delay](./Delay.ts)
+- [Mount](./test-utils/mount.ts) test utility and jest [snapshot serialization](./test-utils/jest/serialize-to-json.js)
+- SVG support
 
 ---
 

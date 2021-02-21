@@ -5,11 +5,14 @@
  * @licence MIT
  */
 
-import { Context, getValueSymbol } from "../context";
+import { Context } from "../context";
+import activeHooks from "./index";
 
 const HOOK_TYPE = "useContext";
 
-export const useContext = <T = any>(context: Context<T>): T | undefined =>
-  context[getValueSymbol]();
+export const useContext = <T = any>(context: Context<T>): T =>
+  activeHooks
+    .getActive()
+    ?.context?.contexts?.find((c) => c.value.context === context)?.value.value;
 
 useContext.type = HOOK_TYPE;

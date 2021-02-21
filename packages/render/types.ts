@@ -5,6 +5,9 @@
  * @licence MIT
  */
 
+import { State } from "./hooks";
+import { LooseRef } from "./utils";
+
 export const NODE_TYPE_FRAGMENT = "#fragment";
 
 export type AnyFunc = (...args: any[]) => any;
@@ -20,27 +23,30 @@ export type NodeType<P = any> =
   | typeof NODE_TYPE_FRAGMENT
   | FC<P>;
 
-type Ref = (el: HTMLElement) => void;
+type Ref<T> = (value: T) => void;
 
-type BaseProps = {
+export type BaseProps<T = any> = {
   style?: {
     [P in keyof CSSStyleDeclaration]: CSSStyleDeclaration[P];
   };
-  ref?: Ref;
+  ref?: Ref<T> | LooseRef<T>;
 };
 
-export type Node<P = Record<string, any>> = {
+export type Node<P = any> = {
   type: NodeType<P>;
-  props: P & BaseProps;
+  props: P & BaseProps<P>;
   children?: Children;
   key: Key;
+  hooks?: State<any>;
 };
 
 export type Children<P = any> = AnyNode<P>[];
 
-export type AnyNode<P = any> = Node<P> | string | null;
+export type AnyNode<P = any> = Node<P> | string | number | null | false;
 
 export type FC<P = any> = (props: P) => Node<P> | null;
+
+export type Component<P = any> = (props: P) => AnyNode<P>;
 
 export interface HTMLElementMap extends HTMLElement {
   [key: string]: any;
@@ -51,3 +57,9 @@ export type Props<P = any> = {
 };
 
 export type AnyCallback = (() => void) | void;
+
+export type DOMElement = HTMLElementMap | SVGElement;
+
+export type AnyDOMElement = DOMElement | Text;
+
+export type NamespaceURI = string | null;

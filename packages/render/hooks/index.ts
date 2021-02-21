@@ -5,6 +5,9 @@
  * @licence MIT
  */
 
+import { AnyCallback } from "../types";
+import { ContextValue, UseContextState } from "./useContextState";
+
 export type HookID = number;
 
 type HookOptions = {
@@ -12,12 +15,14 @@ type HookOptions = {
 };
 
 export type HookImplementation = {
-  id: HookID;
   type: string;
+  cleanup?: AnyCallback;
 };
 
-class State extends Array<HookImplementation> {
-  constructor(...items: HookImplementation[]) {
+export type HookImplementations = Array<HookImplementation | null>;
+
+export class State<T> extends Array<HookContainer<T>> {
+  constructor(...items: HookContainer<T>[]) {
     super(...items);
 
     Object.setPrototypeOf(this, State.prototype);
@@ -27,48 +32,73 @@ class State extends Array<HookImplementation> {
     ...types: Omit<HookImplementation, "id">[]
   ): T[] {
     const filterType = types.map(({ type }) => type);
-    return this.filter(({ type }) => filterType.indexOf(type) !== -1) as T[];
+    return this.filter(
+      (item) =>
+        (item._value && filterType.indexOf(item._value.type) !== -1) || false
+    ).map((item) => item._value) as T[];
   }
 }
 
-type Hook = {
+type Context = {
+  contexts?: UseContextState<ContextValue<any>>[];
+};
+
+type Hook<T> = {
   index: number;
-  state: State;
+  state: State<T>;
   options: HookOptions;
+  context?: Context;
 };
 
-type Hooks = Hook[] & {
-  [key: number]: Hook;
+export type Hooks<T> = Hook<T>[] & {
+  [key: number]: Hook<T>;
 };
 
-type HookContainer<T> = {
+export type HookContainer<T> = {
+  _value: HookImplementation | null;
   options: HookOptions;
   getValue: () => T | undefined;
   setValue: (value: Omit<T, "id">) => T;
 };
 
 type HooksContainer = {
+  setInsertMode: (insert: boolean) => void;
   register: (options: HookOptions) => HookID;
   setActive: (id: HookID) => void;
-  getActive: () => Hook;
+  getActive: <T>() => Hook<T>;
   getCurrent: <T = any>() => HookContainer<T>;
   inspectActive: <T = any>() => HookContainer<T> | undefined;
-  beginCollect: () => void;
-  collect: () => State;
+  beginCollect: (context: Context) => void;
+  collect: () => State<any>;
+  removeHooks: (count: number) => void;
 };
 
-const hook = (options: HookOptions): Hook => ({
+const hook = <T>(options: HookOptions): Hook<T> => ({
   index: 0,
   state: new State(),
   options,
 });
 
+const hookContainer = (hook: Hook<any>): HookContainer<any> => ({
+  options: hook.options,
+  _value: null,
+  getValue() {
+    return this._value;
+  },
+  setValue(value: Omit<HookImplementation, "id">) {
+    this._value = value;
+
+    return value;
+  },
+});
+
 const ActiveHooks = (): HooksContainer => {
   let activeId: HookID | undefined;
-  let hooks: Hooks = [];
+  let hooks: Hooks<any> = [];
   let collectedHookStartIndex: number;
+  let insertMode = false;
 
-  const getActiveHook = (activeId?: HookID): Hook => {
+  const getActiveHook = (activeId?: HookID): Hook<any> => {
     if (activeId === undefined) {
       throw new TypeError("No active hooks");
     }
@@ -82,22 +112,24 @@ const ActiveHooks = (): HooksContainer => {
   ): HookContainer<any> => {
     const hook = getActiveHook(activeId);
     const currentIndex = activeIndex ?? hook.index;
+
+    if (insertMode) {
+      hook.state.splice(currentIndex, 0, hookContainer(hook));
+    }
+
     const hookState = hook.state[currentIndex];
 
-    return {
-      options: hook.options,
-      getValue: () => hookState,
-      setValue: (value: Omit<HookImplementation, "id">) => {
-        hook.state[currentIndex] = {
-          id: currentIndex,
-          ...value,
-        };
-        return value;
-      },
-    };
+    if (!hookState) {
+      hook.state[currentIndex] = hookContainer(hook);
+    }
+
+    return hook.state[currentIndex];
   };
 
   return {
+    setInsertMode(insert) {
+      insertMode = insert;
+    },
     register(options) {
       hooks = [...hooks, hook(options)];
       return hooks.length - 1;
@@ -117,7 +149,9 @@ const ActiveHooks = (): HooksContainer => {
     inspectActive() {
       return getActiveHookContainer(activeId, this.getActive().index - 1);
     },
-    beginCollect() {
+    beginCollect(context) {
+      this.getActive().context = context;
+
       collectedHookStartIndex = this.getActive().index;
     },
     collect() {
@@ -128,11 +162,15 @@ const ActiveHooks = (): HooksContainer => {
         return new State(
           ...hook.state
             .slice(collectedHookStartIndex, currentIndex)
-            .map((state) => ({ ...state }))
+            .map((state) => state && { ...state })
         );
       }
 
       return new State();
+    },
+    removeHooks(count) {
+      const hook = this.getActive();
+      hook.state.splice(hook.index, count);
     },
   };
 };
@@ -143,3 +181,4 @@ export * from "./useState";
 export * from "./useEffect";
 export * from "./useContext";
 export * from "./useError";
+export * from "./useRef";

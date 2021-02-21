@@ -5,7 +5,13 @@
  * @licence MIT
  */
 
-import { Children, createElement, FC } from "packages/render";
+import {
+  Children,
+  createElement,
+  FC,
+  getComponentName,
+  useRef,
+} from "packages/render";
 
 import { cssWithProps, MyStyledTemplate } from "./css";
 
@@ -26,22 +32,31 @@ type ComponentProps<P> = Omit<P, "className">;
 
 export const myStyled = <P, O = ComponentProps<P>>(
   Component: MyStyledComponent<P>
-): MyStyled<O, MyStyledTemplate<O>> => (strings, ...args) => ({
-  children,
-  className,
-  ...props
-}: MyStyledComponentProps) => {
-  // @TODO keep track of previous class name...
-  // const prevClassName = useRef<string>("");
-  // prevClassName.current = css<P>(props as P, prevClassName.current)(strings, ...args);
+): MyStyled<O, MyStyledTemplate<O>> => (strings, ...args) => {
+  const StyledComponent = ({
+    children,
+    className,
+    ...props
+  }: MyStyledComponentProps) => {
+    const currentClassName = useRef<string | undefined>(undefined);
 
-  const templateClassName = cssWithProps(props as O)(strings, ...args);
+    currentClassName.current = cssWithProps(
+      props as O,
+      currentClassName.current
+    )(strings, ...args);
 
-  return createElement(
-    Component,
-    { ...props, className: [className, templateClassName].join(" ") },
-    children
-  );
+    return createElement(
+      Component,
+      { ...props, className: [className, currentClassName.current].join(" ") },
+      children
+    );
+  };
+
+  Object.defineProperty(StyledComponent, "name", {
+    value: `myStyled(${getComponentName(Component)})`,
+  });
+
+  return StyledComponent;
 };
 
 // @TODO: type this...!

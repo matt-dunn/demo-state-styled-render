@@ -15,8 +15,8 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import { Todos } from "./Todos";
 import { TodoItems } from "./types";
 import { Actions as TodoActions } from "./duck";
-import { TodoInput } from "./TodoInput";
 import { Todo } from "./Todo";
+import { TodoInput } from "./TodoInput";
 
 type TodoListProps = {
   todos: TodoItems;
@@ -41,6 +41,16 @@ const TodoListHeader$ = styled("header")`
   margin-bottom: 1rem;
 `;
 
+const Todos$ = styled(Todos)`
+  ${({ todos }) =>
+    (todos.length > 0 &&
+      `
+    border: 1px dotted var(--secondary-color);
+    padding: 0.5rem;
+  `) ||
+    ""}
+`;
+
 export const TodoList = ({
   todos,
   createTodo,
@@ -49,21 +59,33 @@ export const TodoList = ({
   className,
 }: TodoListProps) => (
   <TodoList$ className={className}>
+    {todos.length > 3 && (
+      <TodoInput
+        createTodo={createTodo}
+        placeholder="Conditional component (>3 items)"
+      />
+    )}
     <TodoListHeader$>
       <ErrorBoundary>
-        <TodoInput createTodo={createTodo} />
+        <TodoInput createTodo={createTodo} autoFocus={true} />
       </ErrorBoundary>
       <p>
         You have <strong>{todos.length}</strong> todo
         {(todos.length !== 1 && "s") || ""}
       </p>
     </TodoListHeader$>
+    {todos.length > 4 && (
+      <TodoInput
+        createTodo={createTodo}
+        placeholder="Conditional component (>4 items)"
+      />
+    )}
     <main>
-      <Todos todos={todos}>
+      <Todos$ todos={todos}>
         {(todo) => (
           <Todo todo={todo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
         )}
-      </Todos>
+      </Todos$>
     </main>
   </TodoList$>
 );
