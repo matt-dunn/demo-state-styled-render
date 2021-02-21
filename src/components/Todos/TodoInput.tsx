@@ -15,6 +15,7 @@ import { Actions as TodoActions } from "./duck";
 type TodoInputProps = {
   createTodo: TodoActions["createTodo"];
   autoFocus?: boolean;
+  placeholder?: string;
 };
 
 // Quick fix to allow stylelint to do it's thing:
@@ -38,7 +39,11 @@ const TodoListForm$ = styled("form")`
   }
 `;
 
-export const TodoInput = ({ createTodo, autoFocus }: TodoInputProps) => {
+export const TodoInput = ({
+  createTodo,
+  autoFocus,
+  placeholder = "Add new todo",
+}: TodoInputProps) => {
   const [value, setValue] = useState("");
   const input = useRef<HTMLInputElement | null>(null);
 
@@ -70,7 +75,7 @@ export const TodoInput = ({ createTodo, autoFocus }: TodoInputProps) => {
           ref={input}
           value={value}
           type="text"
-          placeholder="Add new todo"
+          placeholder={placeholder}
           className="form-control"
           onInput={(e: any) => {
             setValue(e.target.value);

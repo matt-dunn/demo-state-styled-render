@@ -59,7 +59,12 @@ export const TodoList = ({
   className,
 }: TodoListProps) => (
   <TodoList$ className={className}>
-    {todos.length > 3 && <TodoInput createTodo={createTodo} />}
+    {todos.length > 3 && (
+      <TodoInput
+        createTodo={createTodo}
+        placeholder="Conditional component (>3 items)"
+      />
+    )}
     <TodoListHeader$>
       <ErrorBoundary>
         <TodoInput createTodo={createTodo} autoFocus={true} />
@@ -69,7 +74,12 @@ export const TodoList = ({
         {(todos.length !== 1 && "s") || ""}
       </p>
     </TodoListHeader$>
-    {todos.length > 4 && <TodoInput createTodo={createTodo} />}
+    {todos.length > 4 && (
+      <TodoInput
+        createTodo={createTodo}
+        placeholder="Conditional component (>4 items)"
+      />
+    )}
     <main>
       <Todos$ todos={todos}>
         {(todo) => (
