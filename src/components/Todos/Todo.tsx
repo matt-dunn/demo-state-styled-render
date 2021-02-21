@@ -52,10 +52,10 @@ export const Todo = ({
   updateTodo,
 }: TodoProps) => {
   useEffect(() => {
-    console.error("*** MOUNT: Todo", id, text);
+    console.log("*** MOUNT: Todo", id, text);
 
     return () => {
-      console.error("*** UNMOUNT: Todo", id, text);
+      console.log("*** UNMOUNT: Todo", id, text);
     };
   }, []);
 

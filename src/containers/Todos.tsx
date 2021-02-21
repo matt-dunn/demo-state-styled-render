@@ -35,11 +35,11 @@ type TodosProps = {
   updateTodo: TodoActions["updateTodo"];
 };
 
-const Fallback = () => (
-  <Delay delay={0}>
-    <SubtleLoader>Loading…</SubtleLoader>
-  </Delay>
-);
+// const Fallback = () => (
+//   <Delay delay={0}>
+//     <SubtleLoader>Loading…</SubtleLoader>
+//   </Delay>
+// );
 
 const FallbackOuter = ({ pendingCount }: { pendingCount: number }) => (
   <Delay>
@@ -60,20 +60,20 @@ const Todos = ({ todos, createTodo, deleteTodo, updateTodo }: TodosProps) => (
       <pre style={{ fontSize: "0.85rem" }}>
         {JSON.stringify(todos, undefined, 1)}
       </pre>
+
       <Suspense Fallback={FallbackOuter}>
         {todos.length >= 0 && (
           <div
             style={{
-              height: "50px",
+              // height: "20px",
               marginBottom: "1rem",
               display: "flex",
+              border: "1px solid var(--secondary-color)",
+              padding: "0.5rem",
             }}
           >
-            <Suspense Fallback={Fallback}>
-              <TestSVG empty={todos.length === 0} />
-            </Suspense>
-            <TestSVG empty={todos.length === 0} />
-            <TestSVG empty={todos.length === 0} />
+            <span style={{ flexShrink: 0 }}>SVG Example:</span>
+            <TestSVG empty={todos.length === 0} size={20} />
           </div>
         )}
       </Suspense>

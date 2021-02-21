@@ -9,7 +9,6 @@
 
 import { jsx } from "packages/render";
 import myStyled from "packages/myStyled";
-import { Delay } from "packages/render/Delay";
 
 import { ErrorBoundary } from "./ErrorBoundary";
 
@@ -65,12 +64,10 @@ export const TodoList = ({
       <ErrorBoundary>
         <TodoInput createTodo={createTodo} autoFocus={true} />
       </ErrorBoundary>
-      <Delay delay={4000}>
-        <p>
-          You have <strong>{todos.length}</strong> todo
-          {(todos.length !== 1 && "s") || ""}
-        </p>
-      </Delay>
+      <p>
+        You have <strong>{todos.length}</strong> todo
+        {(todos.length !== 1 && "s") || ""}
+      </p>
     </TodoListHeader$>
     {todos.length > 4 && <TodoInput createTodo={createTodo} />}
     <main>

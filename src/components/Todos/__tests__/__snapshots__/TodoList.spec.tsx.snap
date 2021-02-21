@@ -27,7 +27,14 @@ exports[`TodoList: Example of using mount should render component with > 1 items
         Add
       </button>
     </form>
-     
+    <p>
+      You have 
+      <strong>
+        2
+      </strong>
+       todo
+      s
+    </p>
   </header>
   
   <main>
@@ -109,7 +116,14 @@ exports[`TodoList: Example of using mount should render component with 1 items 1
         Add
       </button>
     </form>
-     
+    <p>
+      You have 
+      <strong>
+        1
+      </strong>
+       todo
+      
+    </p>
   </header>
   
   <main>
@@ -172,7 +186,14 @@ exports[`TodoList: Example of using mount should render component with no items 
         Add
       </button>
     </form>
-     
+    <p>
+      You have 
+      <strong>
+        0
+      </strong>
+       todo
+      s
+    </p>
   </header>
   
   <main>

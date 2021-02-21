@@ -10,7 +10,7 @@ import { FC } from "./types";
 import { createElement } from "./element";
 import { createContext } from "./context";
 
-type Module<T> = T;
+type Module<T> = T & { default?: any };
 
 type GetModule<T> = () => Promise<Module<T>>;
 
@@ -29,12 +29,10 @@ export const lazy = <T, P>(
 
     useEffect(() => {
       const promise = new Promise((resolve, reject) => {
-        const module = getModule() as Promise<Module<T> & { default: any }>;
+        const module = getModule();
 
         if (!module?.then) {
-          return reject(
-            new TypeError("Invalid value returned from getModule()")
-          );
+          reject(new TypeError("Invalid value returned from getModule()"));
         }
 
         module.then((module) => {
@@ -44,19 +42,17 @@ export const lazy = <T, P>(
               : module.default;
 
             if (!resolvedComponent) {
-              return reject(
+              reject(
                 new TypeError(
                   `Unable to load component. Available exports: [${Object.keys(
                     module
-                  )}]`
+                  ).join(", ")}]`
                 )
               );
             }
 
-            setTimeout(() => {
-              setComponent(() => resolvedComponent);
-              resolve(resolvedComponent);
-            }, 2000);
+            setComponent(() => resolvedComponent);
+            resolve(resolvedComponent);
           } catch (ex) {
             reject(ex);
           }

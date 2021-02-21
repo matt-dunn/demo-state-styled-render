@@ -20,12 +20,16 @@ export const Suspense = ({ children, Fallback }: SuspenseProps) => {
   const [pendingCount, setPendingCount] = useState(0);
   const [error, setError] = useState<Error | undefined>(undefined);
 
-  const handlePromise = (promise: Promise<any>) => {
+  const handlePromise = async (promise: Promise<any>) => {
     setPendingCount((pendingCount) => pendingCount + 1);
 
-    promise
-      .catch(setError)
-      .finally(() => setPendingCount((pendingCount) => pendingCount - 1));
+    try {
+      await promise;
+    } catch (ex) {
+      setError(ex);
+    } finally {
+      setPendingCount((pendingCount) => pendingCount - 1);
+    }
   };
 
   if (error) {

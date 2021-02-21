@@ -100,7 +100,14 @@ exports[`App: Example of using mount should render component 1`] = `
             Add
           </button>
         </form>
-         
+        <p>
+          You have 
+          <strong>
+            2
+          </strong>
+           todo
+          s
+        </p>
       </header>
       
       <main>
@@ -177,19 +184,13 @@ exports[`App: Example of using mount should render component 1`] = `
       >
          
         <div
-          style="height: 50px; margin-bottom: 1rem; display: flex;"
+          style="margin-bottom: 1rem; display: flex; padding: 0.5rem;"
         >
-          <div
-            data-type="#fragment"
+          <span
+            style="flex-shrink: 0;"
           >
-            <div
-              class=" ms__pXdzm ms__fGYsBm"
-            >
-              Loading…
-            </div>
-             
-          </div>
-           
+            SVG Example:
+          </span>
            
         </div>
       </div>

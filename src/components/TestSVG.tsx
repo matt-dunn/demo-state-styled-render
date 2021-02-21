@@ -9,8 +9,14 @@
 
 import { jsx } from "packages/render";
 
-export const TestSVG = ({ empty }: { empty: boolean }) => (
-  <svg viewBox="0 0 1024 1024">
+export const TestSVG = ({
+  empty,
+  size = 40,
+}: {
+  empty: boolean;
+  size?: number;
+}) => (
+  <svg viewBox="0 0 1024 1024" style={{ height: `${size}px` }}>
     <path
       fill={empty ? "yellow" : "#fff"}
       style={{ cursor: "text" }}
